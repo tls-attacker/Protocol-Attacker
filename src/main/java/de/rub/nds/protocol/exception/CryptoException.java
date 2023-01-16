@@ -12,7 +12,7 @@ package de.rub.nds.protocol.exception;
 /**
  * Crypto exception
  */
-public class CryptoException extends Exception {
+public class CryptoException extends RuntimeException {
 
     public CryptoException() {
         super();
