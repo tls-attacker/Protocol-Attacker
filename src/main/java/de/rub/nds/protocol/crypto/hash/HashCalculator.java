@@ -1,5 +1,6 @@
 package de.rub.nds.protocol.crypto.hash;
 
+import de.rub.nds.protocol.constants.HashAlgorithm;
 import de.rub.nds.protocol.exception.CryptoException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -9,6 +10,23 @@ import java.util.logging.Logger;
 public class HashCalculator {
 
     private HashCalculator() {
+    }
+
+    public static byte[] compute(byte[] toHash, HashAlgorithm algorithm) {
+        switch (algorithm) {
+            case MD5:
+                return computeMd5(toHash);
+            case SHA1:
+                return computeSha1(toHash);
+            case SHA256:
+                return computeSha256(toHash);
+            case SHA384:
+                return computeSha384(toHash);
+            case SHA512:
+                return computeSha512(toHash);
+            default:
+                throw new UnsupportedOperationException("Hash function not implemented");
+        }
     }
 
     public static byte[] computeMd5(byte[] toHash) {

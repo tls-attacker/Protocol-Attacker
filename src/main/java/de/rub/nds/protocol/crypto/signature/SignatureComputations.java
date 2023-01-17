@@ -1,6 +1,8 @@
 package de.rub.nds.protocol.crypto.signature;
 
+import de.rub.nds.modifiablevariable.ModifiableVariableFactory;
 import de.rub.nds.modifiablevariable.bytearray.ModifiableByteArray;
+import java.math.BigInteger;
 
 public abstract class SignatureComputations {
 
@@ -8,9 +10,19 @@ public abstract class SignatureComputations {
 
     private ModifiableByteArray toBeSignedBytes;
 
-    private ModifiableByteArray hashedBytes;
+    private ModifiableByteArray digestBytes;
+
+    private Boolean signatureValid;
 
     public SignatureComputations() {
+    }
+
+    public Boolean getSignatureValid() {
+        return signatureValid;
+    }
+
+    public void setSignatureValid(Boolean signatureValid) {
+        this.signatureValid = signatureValid;
     }
 
     public ModifiableByteArray getSignatureBytes() {
@@ -21,6 +33,10 @@ public abstract class SignatureComputations {
         this.signatureBytes = signatureBytes;
     }
 
+    public void setSignatureBytes(byte[] signatureBytes) {
+        ModifiableVariableFactory.safelySetValue(this.signatureBytes, signatureBytes);
+    }
+
     public ModifiableByteArray getToBeSignedBytes() {
         return toBeSignedBytes;
     }
@@ -29,12 +45,20 @@ public abstract class SignatureComputations {
         this.toBeSignedBytes = toBeSignedBytes;
     }
 
-    public ModifiableByteArray getHashedBytes() {
-        return hashedBytes;
+    public void setToBeSignedBytes(byte[] toBeSignedBytes) {
+        ModifiableVariableFactory.safelySetValue(this.toBeSignedBytes, toBeSignedBytes);
     }
 
-    public void setHashedBytes(ModifiableByteArray hashedBytes) {
-        this.hashedBytes = hashedBytes;
+    public ModifiableByteArray getDigestBytes() {
+        return digestBytes;
+    }
+
+    public void setDigestBytes(ModifiableByteArray digestBytes) {
+        this.digestBytes = digestBytes;
+    }
+
+    public void setDigestBytes(byte[] digestBytes) {
+        ModifiableVariableFactory.safelySetValue(this.digestBytes, digestBytes);
     }
 
 }
