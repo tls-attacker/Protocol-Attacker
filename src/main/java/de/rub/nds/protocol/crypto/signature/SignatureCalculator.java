@@ -31,6 +31,15 @@ public class SignatureCalculator {
 
     public SignatureCalculator() {}
 
+    public void computeRsaPkcs1Signature(
+            RsaPkcs1SignatureComputations computations,
+            BigInteger privateKey,
+            BigInteger modulus,
+            byte[] toBeSignedBytes,
+            HashAlgorithm hashAlgorithm) {
+        
+    }
+    
     public void computeEcdsaSignature(
             EcdsaSignatureComputations computations,
             BigInteger privateKey,
