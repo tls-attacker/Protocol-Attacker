@@ -1,3 +1,11 @@
+/*
+ * Protocol-Attacker - A framework to create protocol analysis tools
+ *
+ * Copyright 2023-2023 Ruhr University Bochum, Paderborn University, Technology Innovation Institute and Hackmanit GmbH
+ *
+ * Licensed under Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
 package de.rub.nds.protocol.crypto.signature;
 
 import de.rub.nds.modifiablevariable.util.ArrayConverter;
@@ -9,29 +17,27 @@ import de.rub.nds.protocol.crypto.hash.HashCalculator;
 import de.rub.nds.protocol.exception.CryptoException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import static java.lang.Math.random;
 import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.logging.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Integer;
-import org.bouncycastle.asn1.ASN1OutputStream;
-import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.DERInteger;
 import org.bouncycastle.asn1.DERSequence;
 
 public class SignatureCalculator {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public SignatureCalculator() {
-    }
+    public SignatureCalculator() {}
 
-    public void computeEcdsaSignature(EcdsaSignatureComputations computations, BigInteger privateKey, byte[] toBeSignedBytes, BigInteger nonce, NamedEllipticCurveParameters ecParameters, HashAlgorithm hashAlgorithm) {
+    public void computeEcdsaSignature(
+            EcdsaSignatureComputations computations,
+            BigInteger privateKey,
+            byte[] toBeSignedBytes,
+            BigInteger nonce,
+            NamedEllipticCurveParameters ecParameters,
+            HashAlgorithm hashAlgorithm) {
         LOGGER.trace("Computing ECDSA signature");
         computations.setEcParameters(ecParameters);
         computations.setHashAlgorithm(hashAlgorithm);
@@ -56,16 +62,20 @@ public class SignatureCalculator {
         // z = e[0:l], with l bit length of group order
         byte[] truncatedHashBytes = Arrays.copyOfRange(hash, 0, Math.min(groupSize, hash.length));
         computations.setTruncatedHashBytes(truncatedHashBytes);
-        computations.setTruncatedHash(new BigInteger(1, (computations.getTruncatedHashBytes().getValue())));
+        computations.setTruncatedHash(
+                new BigInteger(1, (computations.getTruncatedHashBytes().getValue())));
         BigInteger truncatedHash = computations.getTruncatedHash().getValue();
-        LOGGER.debug("Truncated message digest" + ArrayConverter.bytesToHexString(truncatedHash.toByteArray()));
+        LOGGER.debug(
+                "Truncated message digest"
+                        + ArrayConverter.bytesToHexString(truncatedHash.toByteArray()));
 
         BigInteger inverseNonce;
         BigInteger r;
         BigInteger s;
 
         // generate values until both s and r aren't 0
-        //RM: I dont think we need to do this - the probability of that beein the case by chance should be close to 0
+        // RM: I dont think we need to do this - the probability of that beein the case by chance
+        // should be close to 0
         // and maybe we want this to happen...
         // (x1,y1) = k * G
         Point randomPoint = curve.mult(computations.getNonce().getValue(), basePoint);
@@ -87,7 +97,7 @@ public class SignatureCalculator {
         // ASN.1 encoding of signature as SEQUENCE: {r INTEGER, s INTEGER}
         ASN1Integer asn1IntegerR = new ASN1Integer(r);
         ASN1Integer asn1IntegerS = new ASN1Integer(s);
-        ASN1Encodable[] encodables = new ASN1Encodable[]{asn1IntegerR, asn1IntegerS};
+        ASN1Encodable[] encodables = new ASN1Encodable[] {asn1IntegerR, asn1IntegerS};
         DERSequence derSequence = new DERSequence(encodables);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

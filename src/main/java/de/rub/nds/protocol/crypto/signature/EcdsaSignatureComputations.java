@@ -1,3 +1,11 @@
+/*
+ * Protocol-Attacker - A framework to create protocol analysis tools
+ *
+ * Copyright 2023-2023 Ruhr University Bochum, Paderborn University, Technology Innovation Institute and Hackmanit GmbH
+ *
+ * Licensed under Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
 package de.rub.nds.protocol.crypto.signature;
 
 import de.rub.nds.modifiablevariable.ModifiableVariableFactory;
@@ -13,22 +21,21 @@ public class EcdsaSignatureComputations extends SignatureComputations {
 
     private HashAlgorithm hashAlgorithm;
 
-    private ModifiableBigInteger privateKey; //d
+    private ModifiableBigInteger privateKey; // d
 
-    private ModifiableBigInteger nonce; //k
+    private ModifiableBigInteger nonce; // k
 
-    private ModifiableBigInteger inverseNonce; //k^-1
+    private ModifiableBigInteger inverseNonce; // k^-1
 
-    private ModifiableBigInteger rX; //x coordinate of k*G
+    private ModifiableBigInteger rX; // x coordinate of k*G
 
-    private ModifiableBigInteger s; //s
+    private ModifiableBigInteger s; // s
 
     private ModifiableByteArray truncatedHashBytes;
 
     private ModifiableBigInteger truncatedHash;
 
-    public EcdsaSignatureComputations() {
-    }
+    public EcdsaSignatureComputations() {}
 
     public ModifiableByteArray getTruncatedHashBytes() {
         return truncatedHashBytes;

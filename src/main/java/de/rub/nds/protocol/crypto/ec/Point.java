@@ -1,7 +1,7 @@
 /*
- * TLS-Attacker - A Modular Penetration Testing Framework for TLS
+ * Protocol-Attacker - A framework to create protocol analysis tools
  *
- * Copyright 2014-2022 Ruhr University Bochum, Paderborn University, and Hackmanit GmbH
+ * Copyright 2023-2023 Ruhr University Bochum, Paderborn University, Technology Innovation Institute and Hackmanit GmbH
  *
  * Licensed under Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -28,11 +28,11 @@ import java.util.Objects;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Point implements Serializable {
-    public static Point createPoint(BigInteger x, BigInteger y, NamedEllipticCurveParameters curveParameters) {
+    public static Point createPoint(
+            BigInteger x, BigInteger y, NamedEllipticCurveParameters curveParameters) {
         EllipticCurve curve = curveParameters.getCurve();
         return curve.getPoint(x, y);
     }
-
 
     /*
      * Point objects are immutable. This should make deep copies in the methods of the EllipticCurve class unnecessary.

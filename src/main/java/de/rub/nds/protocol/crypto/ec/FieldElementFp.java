@@ -1,25 +1,20 @@
-/**
- * TLS-Attacker - A Modular Penetration Testing Framework for TLS
+/*
+ * Protocol-Attacker - A framework to create protocol analysis tools
  *
- * Copyright 2014-2022 Ruhr University Bochum, Paderborn University, Hackmanit GmbH
+ * Copyright 2023-2023 Ruhr University Bochum, Paderborn University, Technology Innovation Institute and Hackmanit GmbH
  *
  * Licensed under Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-
 package de.rub.nds.protocol.crypto.ec;
 
 import java.io.Serializable;
 import java.math.BigInteger;
 
-/**
- * An element of the field F_p (with p being a prime number).
- */
+/** An element of the field F_p (with p being a prime number). */
 public class FieldElementFp extends FieldElement implements Serializable {
 
-    /**
-     * Instantiates the element data in the field F_modulus. With modulus being a prime number.
-     */
+    /** Instantiates the element data in the field F_modulus. With modulus being a prime number. */
     public FieldElementFp(BigInteger data, BigInteger modulus) {
         super(data.mod(modulus), modulus);
     }

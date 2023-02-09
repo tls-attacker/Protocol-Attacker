@@ -1,7 +1,7 @@
-/**
- * TLS-Attacker - A Modular Penetration Testing Framework for TLS
+/*
+ * Protocol-Attacker - A framework to create protocol analysis tools
  *
- * Copyright 2014-2022 Ruhr University Bochum, Paderborn University, Hackmanit GmbH
+ * Copyright 2023-2023 Ruhr University Bochum, Paderborn University, Technology Innovation Institute and Hackmanit GmbH
  *
  * Licensed under Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -14,8 +14,9 @@ import java.math.BigInteger;
 public class EllipticCurveSECP112R1 extends EllipticCurveOverFp {
 
     public EllipticCurveSECP112R1() {
-        super(new BigInteger("DB7C2ABF62E35E668076BEAD2088", 16), 
-                new BigInteger("659EF8BA043916EEDE8911702B22", 16), 
+        super(
+                new BigInteger("DB7C2ABF62E35E668076BEAD2088", 16),
+                new BigInteger("659EF8BA043916EEDE8911702B22", 16),
                 new BigInteger("DB7C2ABF62E35E668076BEAD208B", 16),
                 new BigInteger("09487239995A5EE76B55F9C2F098", 16),
                 new BigInteger("A89CE5AF8724C0A23E0E0FF77500", 16),

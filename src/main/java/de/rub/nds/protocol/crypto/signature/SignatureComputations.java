@@ -1,8 +1,15 @@
+/*
+ * Protocol-Attacker - A framework to create protocol analysis tools
+ *
+ * Copyright 2023-2023 Ruhr University Bochum, Paderborn University, Technology Innovation Institute and Hackmanit GmbH
+ *
+ * Licensed under Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
 package de.rub.nds.protocol.crypto.signature;
 
 import de.rub.nds.modifiablevariable.ModifiableVariableFactory;
 import de.rub.nds.modifiablevariable.bytearray.ModifiableByteArray;
-import java.math.BigInteger;
 
 public abstract class SignatureComputations {
 
@@ -14,8 +21,7 @@ public abstract class SignatureComputations {
 
     private Boolean signatureValid;
 
-    public SignatureComputations() {
-    }
+    public SignatureComputations() {}
 
     public Boolean getSignatureValid() {
         return signatureValid;
@@ -60,5 +66,4 @@ public abstract class SignatureComputations {
     public void setDigestBytes(byte[] digestBytes) {
         ModifiableVariableFactory.safelySetValue(this.digestBytes, digestBytes);
     }
-
 }
