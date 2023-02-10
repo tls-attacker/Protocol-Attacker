@@ -15,9 +15,7 @@ import de.rub.nds.protocol.constants.HashAlgorithm;
 import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
 import java.math.BigInteger;
 
-/**
- * No idea if this makes sense, GOST is currently low prio
- */
+/** No idea if this makes sense, GOST is currently low prio */
 public class GostSignatureComputations extends SignatureComputations {
 
     private NamedEllipticCurveParameters ecParameters;

@@ -10,6 +10,5 @@ package de.rub.nds.protocol.crypto.signature;
 
 public class NoSignatureComputations extends SignatureComputations {
 
-    public NoSignatureComputations() {
-    }
+    public NoSignatureComputations() {}
 }

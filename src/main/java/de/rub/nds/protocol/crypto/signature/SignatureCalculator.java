@@ -36,10 +36,8 @@ public class SignatureCalculator {
             BigInteger privateKey,
             BigInteger modulus,
             byte[] toBeSignedBytes,
-            HashAlgorithm hashAlgorithm) {
-        
-    }
-    
+            HashAlgorithm hashAlgorithm) {}
+
     public void computeEcdsaSignature(
             EcdsaSignatureComputations computations,
             BigInteger privateKey,
