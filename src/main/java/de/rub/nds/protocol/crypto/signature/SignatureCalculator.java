@@ -23,6 +23,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Integer;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.DERSequence;
 
 public class SignatureCalculator {
@@ -36,7 +38,70 @@ public class SignatureCalculator {
             BigInteger privateKey,
             BigInteger modulus,
             byte[] toBeSignedBytes,
-            HashAlgorithm hashAlgorithm) {}
+            HashAlgorithm hashAlgorithm) {
+        computations.setPrivateKey(privateKey);
+        computations.setModulus(modulus);
+        computations.setToBeSignedBytes(toBeSignedBytes);
+        computations.setHashAlgorithm(hashAlgorithm);
+        byte[] digest = HashCalculator.compute(toBeSignedBytes, hashAlgorithm);
+        computations.setDigestBytes(digest);
+        digest = computations.getDigestBytes().getValue();
+        byte[] derEncoded = derEncodePkcs1(hashAlgorithm, digest);
+        computations.setDerEncodedDigest(derEncoded);
+        derEncoded = computations.getDerEncodedDigest().getValue();
+        byte[] padding =
+                computePkcs1Padding(
+                        derEncoded.length,
+                        computations.getModulus().getValue().bitLength()
+                                / 8); // TODO not sure this is correct;
+        computations.setPadding(padding);
+        padding = computations.getPadding().getValue();
+        byte[] plainData = ArrayConverter.concatenate(padding, derEncoded);
+        computations.setPlainToBeSigned(plainData);
+        plainData = computations.getPlainToBeSigned().getValue();
+        BigInteger plainInteger = new BigInteger(plainData); // Not sure this is correct
+        BigInteger signature =
+                plainInteger.modPow(
+                        computations.getPrivateKey().getValue(),
+                        computations.getModulus().getValue());
+        computations.setSignatureBytes(signature.toByteArray()); // Not sure this is correct
+    }
+
+    private byte[] computePkcs1Padding(int toBePaddedLength, int modLengthInByte) {
+        if (toBePaddedLength + 3 >= modLengthInByte) {
+            // Dont pad in this case
+            return new byte[0];
+        } else {
+            try {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                stream.write(new byte[] {0, 1});
+                while (stream.size()
+                        < modLengthInByte - toBePaddedLength - 1) // TODO not sure this is correct
+                {
+                    stream.write((byte) 0xFF);
+                }
+                stream.write(0);
+                return stream.toByteArray();
+            } catch (IOException ex) {
+                LOGGER.error("Could not generate padding", ex);
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
+    private byte[] derEncodePkcs1(HashAlgorithm algorithm, byte[] data) {
+        ASN1ObjectIdentifier asn1objectIdnetifier = new ASN1ObjectIdentifier("");
+        ASN1OctetString asn1octetString =
+                ASN1OctetString.getInstance(data); // TODO Not sure this is correct
+        ASN1Encodable[] encodables = new ASN1Encodable[] {asn1objectIdnetifier, asn1octetString};
+        DERSequence derSequence = new DERSequence(encodables);
+        try {
+            return derSequence.getEncoded();
+        } catch (IOException ex) {
+            LOGGER.error("Could not encode der sequence,ex");
+            throw new RuntimeException(ex);
+        }
+    }
 
     public void computeEcdsaSignature(
             EcdsaSignatureComputations computations,
