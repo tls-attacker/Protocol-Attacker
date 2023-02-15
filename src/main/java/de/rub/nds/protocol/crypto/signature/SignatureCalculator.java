@@ -31,8 +31,7 @@ public class SignatureCalculator {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public SignatureCalculator() {
-    }
+    public SignatureCalculator() {}
 
     public void computeRsaPkcs1Signature(
             RsaPkcs1SignatureComputations computations,
@@ -51,19 +50,19 @@ public class SignatureCalculator {
         byte[] derEncoded = derEncodePkcs1(hashAlgorithm, digest);
         computations.setDerEncodedDigest(derEncoded);
         derEncoded = computations.getDerEncodedDigest().getValue();
-        byte[] padding
-                = computePkcs1Padding(
+        byte[] padding =
+                computePkcs1Padding(
                         derEncoded.length,
                         computations.getModulus().getValue().bitLength()
-                        / 8); // TODO not sure this is correct;
+                                / 8); // TODO not sure this is correct;
         computations.setPadding(padding);
         padding = computations.getPadding().getValue();
         byte[] plainData = ArrayConverter.concatenate(padding, derEncoded);
         computations.setPlainToBeSigned(plainData);
         plainData = computations.getPlainToBeSigned().getValue();
         BigInteger plainInteger = new BigInteger(plainData); // Not sure this is correct
-        BigInteger signature
-                = plainInteger.modPow(
+        BigInteger signature =
+                plainInteger.modPow(
                         computations.getPrivateKey().getValue(),
                         computations.getModulus().getValue());
         computations.setSignatureBytes(signature.toByteArray()); // Not sure this is correct
@@ -76,7 +75,7 @@ public class SignatureCalculator {
         } else {
             try {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                stream.write(new byte[]{0, 1});
+                stream.write(new byte[] {0, 1});
                 while (stream.size()
                         < modLengthInByte - toBePaddedLength - 1) // TODO not sure this is correct
                 {
@@ -93,9 +92,9 @@ public class SignatureCalculator {
 
     private byte[] derEncodePkcs1(HashAlgorithm algorithm, byte[] data) {
         ASN1ObjectIdentifier asn1objectIdnetifier = new ASN1ObjectIdentifier("");
-        ASN1OctetString asn1octetString
-                = ASN1OctetString.getInstance(data); // TODO Not sure this is correct
-        ASN1Encodable[] encodables = new ASN1Encodable[]{asn1objectIdnetifier, asn1octetString};
+        ASN1OctetString asn1octetString =
+                ASN1OctetString.getInstance(data); // TODO Not sure this is correct
+        ASN1Encodable[] encodables = new ASN1Encodable[] {asn1objectIdnetifier, asn1octetString};
         DERSequence derSequence = new DERSequence(encodables);
         try {
             return derSequence.getEncoded();
@@ -127,20 +126,28 @@ public class SignatureCalculator {
         LOGGER.debug("q: " + computations.getQ().getValue());
         LOGGER.debug("Nonce: " + computations.getNonce().getValue());
         computations.setToBeSignedBytes(toBeSignedBytes);
-        byte[] digest = HashCalculator.compute(computations.getToBeSignedBytes().getValue(), hashAlgorithm);
+        byte[] digest =
+                HashCalculator.compute(computations.getToBeSignedBytes().getValue(), hashAlgorithm);
         computations.setDigestBytes(digest);
         digest = computations.getDigestBytes().getValue();
 
         LOGGER.debug("Digest: " + ArrayConverter.bytesToHexString(digest));
 
         // z = e[0:l], with l bit length of group order
-        byte[] truncatedHashBytes = Arrays.copyOfRange(digest, 0, Math.min(groupSize, digest.length));
+        byte[] truncatedHashBytes =
+                Arrays.copyOfRange(digest, 0, Math.min(groupSize, digest.length));
         computations.setTruncatedHashBytes(truncatedHashBytes);
-        BigInteger truncatedHashNumber = new BigInteger(1, computations.getTruncatedHashBytes().getValue());
+        BigInteger truncatedHashNumber =
+                new BigInteger(1, computations.getTruncatedHashBytes().getValue());
         LOGGER.debug("Truncated message digest: " + truncatedHashNumber);
 
         BigInteger randomKey = computations.getNonce().getValue();
-        BigInteger r = computations.getG().getValue().modPow(randomKey, computations.getP().getValue()).mod(computations.getQ().getValue());
+        BigInteger r =
+                computations
+                        .getG()
+                        .getValue()
+                        .modPow(randomKey, computations.getP().getValue())
+                        .mod(computations.getQ().getValue());
         computations.setR(r);
         r = computations.getR().getValue();
 
@@ -149,11 +156,19 @@ public class SignatureCalculator {
 
         computations.setInverseNonce(inverseNonce);
         inverseNonce = computations.getInverseNonce().getValue();
-        BigInteger xr = computations.getPrivateKey().getValue().multiply(r).mod(computations.getQ().getValue());
+        BigInteger xr =
+                computations
+                        .getPrivateKey()
+                        .getValue()
+                        .multiply(r)
+                        .mod(computations.getQ().getValue());
 
         computations.setXr(xr);
         xr = computations.getXr().getValue();
-        BigInteger s = inverseNonce.multiply(truncatedHashNumber.add(xr)).mod(computations.getQ().getValue());
+        BigInteger s =
+                inverseNonce
+                        .multiply(truncatedHashNumber.add(xr))
+                        .mod(computations.getQ().getValue());
 
         computations.setS(s);
         s = computations.getS().getValue();
@@ -163,7 +178,7 @@ public class SignatureCalculator {
 
         ASN1Integer asn1IntegerR = new ASN1Integer(r);
         ASN1Integer asn1IntegerS = new ASN1Integer(inverseNonce);
-        ASN1Encodable[] encodables = new ASN1Encodable[]{asn1IntegerR, asn1IntegerS};
+        ASN1Encodable[] encodables = new ASN1Encodable[] {asn1IntegerR, asn1IntegerS};
         DERSequence derSequence = new DERSequence(encodables);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -213,7 +228,7 @@ public class SignatureCalculator {
         BigInteger truncatedHash = computations.getTruncatedHash().getValue();
         LOGGER.debug(
                 "Truncated message digest"
-                + ArrayConverter.bytesToHexString(truncatedHash.toByteArray()));
+                        + ArrayConverter.bytesToHexString(truncatedHash.toByteArray()));
 
         BigInteger inverseNonce;
         BigInteger r;
@@ -243,7 +258,7 @@ public class SignatureCalculator {
         // ASN.1 encoding of signature as SEQUENCE: {r INTEGER, s INTEGER}
         ASN1Integer asn1IntegerR = new ASN1Integer(r);
         ASN1Integer asn1IntegerS = new ASN1Integer(s);
-        ASN1Encodable[] encodables = new ASN1Encodable[]{asn1IntegerR, asn1IntegerS};
+        ASN1Encodable[] encodables = new ASN1Encodable[] {asn1IntegerR, asn1IntegerS};
         DERSequence derSequence = new DERSequence(encodables);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

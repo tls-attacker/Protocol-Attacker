@@ -20,14 +20,13 @@ public class DsaSignatureComputations extends SignatureComputations {
     private ModifiableBigInteger g;
     private ModifiableBigInteger p;
     private ModifiableBigInteger r;
-    private ModifiableBigInteger inverseNonce;//k^-1
-    private ModifiableBigInteger s;// s = k^-1 * (H(m) + xr)
+    private ModifiableBigInteger inverseNonce; // k^-1
+    private ModifiableBigInteger s; // s = k^-1 * (H(m) + xr)
     private ModifiableBigInteger xr;
-    private ModifiableBigInteger nonce;//k
+    private ModifiableBigInteger nonce; // k
     private ModifiableByteArray truncatedHashBytes;
 
-    public DsaSignatureComputations() {
-    }
+    public DsaSignatureComputations() {}
 
     public ModifiableBigInteger getPrivateKey() {
         return privateKey;
@@ -148,5 +147,4 @@ public class DsaSignatureComputations extends SignatureComputations {
     public void setTruncatedHashBytes(byte[] truncatedHashBytes) {
         ModifiableVariableFactory.safelySetValue(this.truncatedHashBytes, truncatedHashBytes);
     }
-
 }
