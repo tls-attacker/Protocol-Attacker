@@ -9,10 +9,20 @@
 package de.rub.nds.protocol.constants;
 
 public enum HashAlgorithm {
-    NONE,
-    MD5,
-    SHA1,
-    SHA256,
-    SHA384,
-    SHA512,
+    MD2("1.2.840.113549.2.2"),
+    MD5("1.2.840.113549.2.5"),
+    SHA1("1.3.14.3.2.26"),
+    SHA256("2.16.840.1.101.3.4.2.1"),
+    SHA384("2.16.840.1.101.3.4.2.2"),
+    SHA512("2.16.840.1.101.3.4.2.3");
+
+    private String hashAlgorithmIdentifierOid;
+
+    private HashAlgorithm(String hashAlgorithmIdentifierOid) {
+        this.hashAlgorithmIdentifierOid = hashAlgorithmIdentifierOid;
+    }
+
+    public String getHashAlgorithmIdentifierOid() {
+        return hashAlgorithmIdentifierOid;
+    }
 }

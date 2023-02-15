@@ -39,7 +39,7 @@ public class RsaPkcs1SignatureComputations extends SignatureComputations {
     }
 
     public void setPrivateKey(BigInteger privateKey) {
-        ModifiableVariableFactory.safelySetValue(this.privateKey, privateKey);
+        this.privateKey = ModifiableVariableFactory.safelySetValue(this.privateKey, privateKey);
     }
 
     public ModifiableBigInteger getModulus() {
@@ -51,7 +51,7 @@ public class RsaPkcs1SignatureComputations extends SignatureComputations {
     }
 
     public void setModulus(BigInteger modulus) {
-        ModifiableVariableFactory.safelySetValue(this.modulus, modulus);
+        this.modulus = ModifiableVariableFactory.safelySetValue(this.modulus, modulus);
     }
 
     public ModifiableByteArray getPadding() {
@@ -63,7 +63,7 @@ public class RsaPkcs1SignatureComputations extends SignatureComputations {
     }
 
     public void setPadding(byte[] padding) {
-        ModifiableVariableFactory.safelySetValue(this.padding, padding);
+        this.padding = ModifiableVariableFactory.safelySetValue(this.padding, padding);
     }
 
     public ModifiableByteArray getPlainToBeSigned() {
@@ -75,7 +75,8 @@ public class RsaPkcs1SignatureComputations extends SignatureComputations {
     }
 
     public void setPlainToBeSigned(byte[] plainToBeSigned) {
-        ModifiableVariableFactory.safelySetValue(this.plainToBeSigned, plainToBeSigned);
+        this.plainToBeSigned =
+                ModifiableVariableFactory.safelySetValue(this.plainToBeSigned, plainToBeSigned);
     }
 
     public ModifiableByteArray getDerEncodedDigest() {
@@ -83,7 +84,8 @@ public class RsaPkcs1SignatureComputations extends SignatureComputations {
     }
 
     public void setDerEncodedDigest(byte[] derEncodedDigest) {
-        ModifiableVariableFactory.safelySetValue(this.derEncodedDigest, derEncodedDigest);
+        this.derEncodedDigest =
+                ModifiableVariableFactory.safelySetValue(this.derEncodedDigest, derEncodedDigest);
     }
 
     public HashAlgorithm getHashAlgorithm() {

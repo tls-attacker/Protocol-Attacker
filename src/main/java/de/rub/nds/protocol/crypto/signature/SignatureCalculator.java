@@ -25,6 +25,8 @@ import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.ASN1OctetString;
+import org.bouncycastle.asn1.DERNull;
+import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSequence;
 
 public class SignatureCalculator {
@@ -65,7 +67,8 @@ public class SignatureCalculator {
                 plainInteger.modPow(
                         computations.getPrivateKey().getValue(),
                         computations.getModulus().getValue());
-        computations.setSignatureBytes(signature.toByteArray()); // Not sure this is correct
+        computations.setSignatureBytes(ArrayConverter.bigIntegerToByteArray(signature));
+        computations.setSignatureValid(true);
     }
 
     private byte[] computePkcs1Padding(int toBePaddedLength, int modLengthInByte) {
@@ -91,13 +94,16 @@ public class SignatureCalculator {
     }
 
     private byte[] derEncodePkcs1(HashAlgorithm algorithm, byte[] data) {
-        ASN1ObjectIdentifier asn1objectIdnetifier = new ASN1ObjectIdentifier("");
-        ASN1OctetString asn1octetString =
-                ASN1OctetString.getInstance(data); // TODO Not sure this is correct
-        ASN1Encodable[] encodables = new ASN1Encodable[] {asn1objectIdnetifier, asn1octetString};
+        ASN1ObjectIdentifier asn1objectIdnetifier =
+                new ASN1ObjectIdentifier(algorithm.getHashAlgorithmIdentifierOid());
+        ASN1OctetString asn1octetString = new DEROctetString(data);
+        ASN1Encodable[] encodables = new ASN1Encodable[] {asn1objectIdnetifier, DERNull.INSTANCE};
         DERSequence derSequence = new DERSequence(encodables);
+        ASN1Encodable[] encodables2 = new ASN1Encodable[] {derSequence, asn1octetString};
+        DERSequence derSequence2 = new DERSequence(encodables2);
+
         try {
-            return derSequence.getEncoded();
+            return derSequence2.getEncoded();
         } catch (IOException ex) {
             LOGGER.error("Could not encode der sequence,ex");
             throw new RuntimeException(ex);

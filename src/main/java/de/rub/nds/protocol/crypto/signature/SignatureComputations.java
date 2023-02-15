@@ -40,7 +40,8 @@ public abstract class SignatureComputations {
     }
 
     public void setSignatureBytes(byte[] signatureBytes) {
-        ModifiableVariableFactory.safelySetValue(this.signatureBytes, signatureBytes);
+        this.signatureBytes =
+                ModifiableVariableFactory.safelySetValue(this.signatureBytes, signatureBytes);
     }
 
     public ModifiableByteArray getToBeSignedBytes() {
@@ -52,7 +53,8 @@ public abstract class SignatureComputations {
     }
 
     public void setToBeSignedBytes(byte[] toBeSignedBytes) {
-        ModifiableVariableFactory.safelySetValue(this.toBeSignedBytes, toBeSignedBytes);
+        this.toBeSignedBytes =
+                ModifiableVariableFactory.safelySetValue(this.toBeSignedBytes, toBeSignedBytes);
     }
 
     public ModifiableByteArray getDigestBytes() {
@@ -64,6 +66,6 @@ public abstract class SignatureComputations {
     }
 
     public void setDigestBytes(byte[] digestBytes) {
-        ModifiableVariableFactory.safelySetValue(this.digestBytes, digestBytes);
+        this.digestBytes = ModifiableVariableFactory.safelySetValue(this.digestBytes, digestBytes);
     }
 }
