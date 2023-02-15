@@ -123,6 +123,7 @@ public class SignatureCalculator {
         computations.setP(p);
         computations.setG(g);
         computations.setNonce(nonce);
+        computations.setPrivateKey(privateKey);
 
         LOGGER.trace("Computing DSA signature");
         int groupSize = q.bitLength() / 8;
@@ -171,6 +172,8 @@ public class SignatureCalculator {
 
         computations.setXr(xr);
         xr = computations.getXr().getValue();
+        LOGGER.debug("Xr: " + xr);
+
         BigInteger s =
                 inverseNonce
                         .multiply(truncatedHashNumber.add(xr))

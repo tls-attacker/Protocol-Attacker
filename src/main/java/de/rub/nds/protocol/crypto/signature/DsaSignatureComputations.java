@@ -37,7 +37,7 @@ public class DsaSignatureComputations extends SignatureComputations {
     }
 
     public void setPrivateKey(BigInteger privateKey) {
-        ModifiableVariableFactory.safelySetValue(this.privateKey, privateKey);
+        this.privateKey = ModifiableVariableFactory.safelySetValue(this.privateKey, privateKey);
     }
 
     public ModifiableBigInteger getQ() {
@@ -49,7 +49,7 @@ public class DsaSignatureComputations extends SignatureComputations {
     }
 
     public void setQ(BigInteger q) {
-        ModifiableVariableFactory.safelySetValue(this.q, q);
+        this.q = ModifiableVariableFactory.safelySetValue(this.q, q);
     }
 
     public ModifiableBigInteger getR() {
@@ -61,7 +61,7 @@ public class DsaSignatureComputations extends SignatureComputations {
     }
 
     public void setR(BigInteger r) {
-        ModifiableVariableFactory.safelySetValue(this.r, r);
+        this.r = ModifiableVariableFactory.safelySetValue(this.r, r);
     }
 
     public ModifiableBigInteger getS() {
@@ -73,7 +73,7 @@ public class DsaSignatureComputations extends SignatureComputations {
     }
 
     public void setS(BigInteger s) {
-        ModifiableVariableFactory.safelySetValue(this.s, s);
+        this.s = ModifiableVariableFactory.safelySetValue(this.s, s);
     }
 
     public ModifiableBigInteger getInverseNonce() {
@@ -85,7 +85,7 @@ public class DsaSignatureComputations extends SignatureComputations {
     }
 
     public void setInverseNonce(BigInteger inverseNonce) {
-        ModifiableVariableFactory.safelySetValue(this.inverseNonce, inverseNonce);
+        this.inverseNonce = ModifiableVariableFactory.safelySetValue(this.inverseNonce, inverseNonce);
     }
 
     public ModifiableBigInteger getXr() {
@@ -97,7 +97,7 @@ public class DsaSignatureComputations extends SignatureComputations {
     }
 
     public void setXr(BigInteger xr) {
-        ModifiableVariableFactory.safelySetValue(this.xr, xr);
+        this.xr = ModifiableVariableFactory.safelySetValue(this.xr, xr);
     }
 
     public ModifiableBigInteger getG() {
@@ -109,7 +109,7 @@ public class DsaSignatureComputations extends SignatureComputations {
     }
 
     public void setG(BigInteger g) {
-        ModifiableVariableFactory.safelySetValue(this.g, g);
+        this.g = ModifiableVariableFactory.safelySetValue(this.g, g);
     }
 
     public ModifiableBigInteger getP() {
@@ -121,7 +121,7 @@ public class DsaSignatureComputations extends SignatureComputations {
     }
 
     public void setP(BigInteger p) {
-        ModifiableVariableFactory.safelySetValue(this.p, p);
+        this.p = ModifiableVariableFactory.safelySetValue(this.p, p);
     }
 
     public ModifiableBigInteger getNonce() {
@@ -133,7 +133,7 @@ public class DsaSignatureComputations extends SignatureComputations {
     }
 
     public void setNonce(BigInteger nonce) {
-        ModifiableVariableFactory.safelySetValue(this.nonce, nonce);
+        this.nonce = ModifiableVariableFactory.safelySetValue(this.nonce, nonce);
     }
 
     public ModifiableByteArray getTruncatedHashBytes() {
@@ -145,6 +145,6 @@ public class DsaSignatureComputations extends SignatureComputations {
     }
 
     public void setTruncatedHashBytes(byte[] truncatedHashBytes) {
-        ModifiableVariableFactory.safelySetValue(this.truncatedHashBytes, truncatedHashBytes);
+        this.truncatedHashBytes = ModifiableVariableFactory.safelySetValue(this.truncatedHashBytes, truncatedHashBytes);
     }
 }
