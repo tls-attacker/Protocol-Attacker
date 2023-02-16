@@ -85,7 +85,8 @@ public class DsaSignatureComputations extends SignatureComputations {
     }
 
     public void setInverseNonce(BigInteger inverseNonce) {
-        this.inverseNonce = ModifiableVariableFactory.safelySetValue(this.inverseNonce, inverseNonce);
+        this.inverseNonce =
+                ModifiableVariableFactory.safelySetValue(this.inverseNonce, inverseNonce);
     }
 
     public ModifiableBigInteger getXr() {
@@ -145,6 +146,8 @@ public class DsaSignatureComputations extends SignatureComputations {
     }
 
     public void setTruncatedHashBytes(byte[] truncatedHashBytes) {
-        this.truncatedHashBytes = ModifiableVariableFactory.safelySetValue(this.truncatedHashBytes, truncatedHashBytes);
+        this.truncatedHashBytes =
+                ModifiableVariableFactory.safelySetValue(
+                        this.truncatedHashBytes, truncatedHashBytes);
     }
 }

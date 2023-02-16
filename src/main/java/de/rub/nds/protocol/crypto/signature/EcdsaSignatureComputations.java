@@ -27,9 +27,8 @@ public class EcdsaSignatureComputations extends SignatureComputations {
 
     private ModifiableBigInteger inverseNonce; // k^-1
 
-    private ModifiableBigInteger rX; // x coordinate of k*G
-
     private ModifiableBigInteger s; // s
+    private ModifiableBigInteger r; // r
 
     private ModifiableByteArray truncatedHashBytes;
 
@@ -46,7 +45,9 @@ public class EcdsaSignatureComputations extends SignatureComputations {
     }
 
     public void setTruncatedHashBytes(byte[] truncatedHashBytes) {
-        ModifiableVariableFactory.safelySetValue(this.truncatedHashBytes, truncatedHashBytes);
+        this.truncatedHashBytes =
+                ModifiableVariableFactory.safelySetValue(
+                        this.truncatedHashBytes, truncatedHashBytes);
     }
 
     public ModifiableBigInteger getTruncatedHash() {
@@ -58,7 +59,8 @@ public class EcdsaSignatureComputations extends SignatureComputations {
     }
 
     public void setTruncatedHash(BigInteger truncatedHash) {
-        ModifiableVariableFactory.safelySetValue(this.truncatedHash, truncatedHash);
+        this.truncatedHash =
+                ModifiableVariableFactory.safelySetValue(this.truncatedHash, truncatedHash);
     }
 
     public NamedEllipticCurveParameters getEcParameters() {
@@ -82,7 +84,7 @@ public class EcdsaSignatureComputations extends SignatureComputations {
     }
 
     public void setPrivateKey(BigInteger privateKey) {
-        ModifiableVariableFactory.safelySetValue(this.privateKey, privateKey);
+        this.privateKey = ModifiableVariableFactory.safelySetValue(this.privateKey, privateKey);
     }
 
     public void setPrivateKey(ModifiableBigInteger privateKey) {
@@ -94,7 +96,7 @@ public class EcdsaSignatureComputations extends SignatureComputations {
     }
 
     public void setNonce(BigInteger nonce) {
-        ModifiableVariableFactory.safelySetValue(this.nonce, nonce);
+        this.nonce = ModifiableVariableFactory.safelySetValue(this.nonce, nonce);
     }
 
     public void setNonce(ModifiableBigInteger nonce) {
@@ -106,23 +108,12 @@ public class EcdsaSignatureComputations extends SignatureComputations {
     }
 
     public void setInverseNonce(BigInteger inverseNonce) {
-        ModifiableVariableFactory.safelySetValue(this.inverseNonce, inverseNonce);
+        this.inverseNonce =
+                ModifiableVariableFactory.safelySetValue(this.inverseNonce, inverseNonce);
     }
 
     public void setInverseNonce(ModifiableBigInteger inverseNonce) {
         this.inverseNonce = inverseNonce;
-    }
-
-    public ModifiableBigInteger getrX() {
-        return rX;
-    }
-
-    public void setrX(BigInteger rX) {
-        ModifiableVariableFactory.safelySetValue(this.rX, rX);
-    }
-
-    public void setrX(ModifiableBigInteger rX) {
-        this.rX = rX;
     }
 
     public ModifiableBigInteger getS() {
@@ -130,10 +121,22 @@ public class EcdsaSignatureComputations extends SignatureComputations {
     }
 
     public void setS(BigInteger s) {
-        ModifiableVariableFactory.safelySetValue(this.s, s);
+        this.s = ModifiableVariableFactory.safelySetValue(this.s, s);
     }
 
     public void setS(ModifiableBigInteger s) {
         this.s = s;
+    }
+
+    public ModifiableBigInteger getR() {
+        return r;
+    }
+
+    public void setR(BigInteger r) {
+        this.r = ModifiableVariableFactory.safelySetValue(this.r, r);
+    }
+
+    public void setR(ModifiableBigInteger r) {
+        this.r = r;
     }
 }

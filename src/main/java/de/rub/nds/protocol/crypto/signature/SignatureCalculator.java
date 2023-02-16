@@ -54,15 +54,13 @@ public class SignatureCalculator {
         derEncoded = computations.getDerEncodedDigest().getValue();
         byte[] padding =
                 computePkcs1Padding(
-                        derEncoded.length,
-                        computations.getModulus().getValue().bitLength()
-                                / 8); // TODO not sure this is correct;
+                        derEncoded.length, computations.getModulus().getValue().bitLength() / 8);
         computations.setPadding(padding);
         padding = computations.getPadding().getValue();
         byte[] plainData = ArrayConverter.concatenate(padding, derEncoded);
         computations.setPlainToBeSigned(plainData);
         plainData = computations.getPlainToBeSigned().getValue();
-        BigInteger plainInteger = new BigInteger(plainData); // Not sure this is correct
+        BigInteger plainInteger = new BigInteger(plainData);
         BigInteger signature =
                 plainInteger.modPow(
                         computations.getPrivateKey().getValue(),
@@ -79,9 +77,7 @@ public class SignatureCalculator {
             try {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 stream.write(new byte[] {0, 1});
-                while (stream.size()
-                        < modLengthInByte - toBePaddedLength - 1) // TODO not sure this is correct
-                {
+                while (stream.size() < modLengthInByte - toBePaddedLength - 1) {
                     stream.write((byte) 0xFF);
                 }
                 stream.write(0);
@@ -224,7 +220,8 @@ public class SignatureCalculator {
         LOGGER.debug("Group size: " + groupSize);
 
         // e = Hash(m)
-        byte[] hash = HashCalculator.computeMd5(computations.getToBeSignedBytes().getValue());
+        byte[] hash =
+                HashCalculator.compute(computations.getToBeSignedBytes().getValue(), hashAlgorithm);
         computations.setDigestBytes(hash);
         hash = computations.getDigestBytes().getValue();
         LOGGER.debug("Digest: " + ArrayConverter.bytesToHexString(hash));
@@ -232,37 +229,49 @@ public class SignatureCalculator {
         // z = e[0:l], with l bit length of group order
         byte[] truncatedHashBytes = Arrays.copyOfRange(hash, 0, Math.min(groupSize, hash.length));
         computations.setTruncatedHashBytes(truncatedHashBytes);
+
+        LOGGER.debug(
+                "TruncatedHashBytes: "
+                        + ArrayConverter.bytesToHexString(
+                                computations.getTruncatedHashBytes().getValue()));
         computations.setTruncatedHash(
                 new BigInteger(1, (computations.getTruncatedHashBytes().getValue())));
         BigInteger truncatedHash = computations.getTruncatedHash().getValue();
-        LOGGER.debug(
-                "Truncated message digest"
-                        + ArrayConverter.bytesToHexString(truncatedHash.toByteArray()));
+        LOGGER.debug("Truncated hash: {}", truncatedHash);
 
         BigInteger inverseNonce;
         BigInteger r;
         BigInteger s;
 
-        // generate values until both s and r aren't 0
-        // RM: I dont think we need to do this - the probability of that beein the case by chance
-        // should be close to 0
-        // and maybe we want this to happen...
-        // (x1,y1) = k * G
         Point randomPoint = curve.mult(computations.getNonce().getValue(), basePoint);
 
-        r = randomPoint.getFieldX().getData().mod(groupOrder);
-        computations.setrX(r);
-        r = computations.getrX().getValue();
+        r = randomPoint.getFieldX().getData().mod(curve.getBasePointOrder());
+        computations.setR(r);
+        r = computations.getR().getValue();
 
-        inverseNonce = nonce.modInverse(groupOrder);
+        LOGGER.debug("R: " + r);
+        inverseNonce = nonce.modInverse(curve.getBasePointOrder());
+
         computations.setInverseNonce(inverseNonce);
         inverseNonce = computations.getInverseNonce().getValue();
-        s = inverseNonce.multiply(truncatedHash.add(r.multiply(privateKey))).mod(groupOrder);
+        LOGGER.debug("Inverse Nonce: " + inverseNonce);
+        LOGGER.debug("Verify: " + (inverseNonce.multiply(nonce)).mod(curve.getBasePointOrder()));
+        BigInteger rd = r.multiply(privateKey);
+        rd = rd.mod(curve.getBasePointOrder());
+        BigInteger multiplier = (rd.add(truncatedHash));
+        multiplier = multiplier.mod(curve.getBasePointOrder());
+        s = inverseNonce.multiply(multiplier);
+        s = s.mod(curve.getBasePointOrder());
+
         computations.setS(s);
         s = computations.getS().getValue();
 
-        LOGGER.debug("R: " + ArrayConverter.bytesToHexString(r.toByteArray()));
-        LOGGER.debug("S: " + ArrayConverter.bytesToHexString(s.toByteArray()));
+        LOGGER.debug("S: " + s);
+        LOGGER.debug(
+                "CurveBasePointOrder: "
+                        + ArrayConverter.bytesToHexString(curve.getBasePointOrder().toByteArray()));
+        LOGGER.debug(
+                "Modulus: " + ArrayConverter.bytesToHexString(curve.getModulus().toByteArray()));
 
         // ASN.1 encoding of signature as SEQUENCE: {r INTEGER, s INTEGER}
         ASN1Integer asn1IntegerR = new ASN1Integer(r);
