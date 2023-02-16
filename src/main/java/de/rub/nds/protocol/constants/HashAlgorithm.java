@@ -9,6 +9,7 @@
 package de.rub.nds.protocol.constants;
 
 public enum HashAlgorithm {
+    NONE(""),
     MD2("1.2.840.113549.2.2"),
     MD5("1.2.840.113549.2.5"),
     SHA1("1.3.14.3.2.26"),
