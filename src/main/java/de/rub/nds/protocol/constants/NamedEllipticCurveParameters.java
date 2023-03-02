@@ -259,7 +259,7 @@ public enum NamedEllipticCurveParameters implements GroupParameters {
             null,
             "secp160r2",
             EcCurveEquationType.SHORT_WEIERSTRASS,
-            150,
+            160,
             new EllipticCurveSECP160R2()),
     SECP192K1(
             "secp192k1",
