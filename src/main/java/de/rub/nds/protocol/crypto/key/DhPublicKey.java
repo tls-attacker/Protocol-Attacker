@@ -10,7 +10,7 @@ package de.rub.nds.protocol.crypto.key;
 
 import java.math.BigInteger;
 
-public class DhPublicKey {
+public class DhPublicKey implements PublicKeyContainer {
 
     private BigInteger modulus;
     private BigInteger generator;
