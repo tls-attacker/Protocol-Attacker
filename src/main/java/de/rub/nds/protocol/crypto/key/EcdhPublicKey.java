@@ -8,10 +8,9 @@
  */
 package de.rub.nds.protocol.crypto.key;
 
-import java.math.BigInteger;
-
 import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
 import de.rub.nds.protocol.crypto.ec.Point;
+import java.math.BigInteger;
 
 public class EcdhPublicKey implements PublicKeyContainer {
 
@@ -24,7 +23,10 @@ public class EcdhPublicKey implements PublicKeyContainer {
         this.parameters = parameters;
     }
 
-    public EcdhPublicKey(BigInteger publicPointX, BigInteger publicPointY, NamedEllipticCurveParameters parameters) {
+    public EcdhPublicKey(
+            BigInteger publicPointX,
+            BigInteger publicPointY,
+            NamedEllipticCurveParameters parameters) {
         this.publicPoint = parameters.getCurve().getPoint(publicPointX, publicPointY);
         this.parameters = parameters;
     }
