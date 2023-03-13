@@ -55,4 +55,9 @@ public class DsaPublicKey implements PublicKeyContainer {
     public void setX(BigInteger X) {
         this.X = X;
     }
+
+    @Override
+    public int length() {
+        return modulus.bitLength();
+    }
 }

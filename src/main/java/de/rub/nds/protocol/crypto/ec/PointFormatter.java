@@ -8,10 +8,6 @@
  */
 package de.rub.nds.protocol.crypto.ec;
 
-import static de.rub.nds.protocol.constants.PointFormat.ANSIX962_COMPRESSED_CHAR2;
-import static de.rub.nds.protocol.constants.PointFormat.ANSIX962_COMPRESSED_PRIME;
-import static de.rub.nds.protocol.constants.PointFormat.UNCOMPRESSED;
-
 import de.rub.nds.modifiablevariable.util.ArrayConverter;
 import de.rub.nds.protocol.constants.EcCurveEquationType;
 import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;

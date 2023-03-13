@@ -46,4 +46,9 @@ public class EcdhPublicKey implements PublicKeyContainer {
     public void setParameters(NamedEllipticCurveParameters parameters) {
         this.parameters = parameters;
     }
+
+    @Override
+    public int length() {
+        return parameters.getBitLength();
+    }
 }

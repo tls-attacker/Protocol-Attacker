@@ -45,4 +45,9 @@ public class DhPublicKey implements PublicKeyContainer {
     public void setPublicKey(BigInteger publicKey) {
         this.publicKey = publicKey;
     }
+
+    @Override
+    public int length() {
+        return modulus.bitLength();
+    }
 }

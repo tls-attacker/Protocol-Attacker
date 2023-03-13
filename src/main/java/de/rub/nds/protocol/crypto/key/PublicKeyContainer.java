@@ -8,4 +8,6 @@
  */
 package de.rub.nds.protocol.crypto.key;
 
-public interface PublicKeyContainer {}
+public interface PublicKeyContainer {
+    public int length();
+}

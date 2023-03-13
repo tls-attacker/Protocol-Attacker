@@ -36,4 +36,9 @@ public class RsaPublicKey implements PublicKeyContainer {
     public void setModulus(BigInteger modulus) {
         this.modulus = modulus;
     }
+
+    @Override
+    public int length() {
+        return modulus.bitLength();
+    }
 }
