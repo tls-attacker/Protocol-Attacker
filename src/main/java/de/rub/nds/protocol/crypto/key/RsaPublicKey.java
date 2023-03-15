@@ -53,23 +53,16 @@ public class RsaPublicKey implements PublicKeyContainer {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         RsaPublicKey other = (RsaPublicKey) obj;
         if (publicExponent == null) {
-            if (other.publicExponent != null)
-                return false;
-        } else if (!publicExponent.equals(other.publicExponent))
-            return false;
+            if (other.publicExponent != null) return false;
+        } else if (!publicExponent.equals(other.publicExponent)) return false;
         if (modulus == null) {
-            if (other.modulus != null)
-                return false;
-        } else if (!modulus.equals(other.modulus))
-            return false;
+            if (other.modulus != null) return false;
+        } else if (!modulus.equals(other.modulus)) return false;
         return true;
     }
 }

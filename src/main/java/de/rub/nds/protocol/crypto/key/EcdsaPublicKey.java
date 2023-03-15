@@ -54,20 +54,14 @@ public class EcdsaPublicKey implements PublicKeyContainer {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         EcdsaPublicKey other = (EcdsaPublicKey) obj;
         if (publicPoint == null) {
-            if (other.publicPoint != null)
-                return false;
-        } else if (!publicPoint.equals(other.publicPoint))
-            return false;
-        if (parameters != other.parameters)
-            return false;
+            if (other.publicPoint != null) return false;
+        } else if (!publicPoint.equals(other.publicPoint)) return false;
+        if (parameters != other.parameters) return false;
         return true;
     }
 }

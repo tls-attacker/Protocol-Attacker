@@ -63,28 +63,19 @@ public class DhPublicKey implements PublicKeyContainer {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         DhPublicKey other = (DhPublicKey) obj;
         if (modulus == null) {
-            if (other.modulus != null)
-                return false;
-        } else if (!modulus.equals(other.modulus))
-            return false;
+            if (other.modulus != null) return false;
+        } else if (!modulus.equals(other.modulus)) return false;
         if (generator == null) {
-            if (other.generator != null)
-                return false;
-        } else if (!generator.equals(other.generator))
-            return false;
+            if (other.generator != null) return false;
+        } else if (!generator.equals(other.generator)) return false;
         if (publicKey == null) {
-            if (other.publicKey != null)
-                return false;
-        } else if (!publicKey.equals(other.publicKey))
-            return false;
+            if (other.publicKey != null) return false;
+        } else if (!publicKey.equals(other.publicKey)) return false;
         return true;
-    } 
+    }
 }

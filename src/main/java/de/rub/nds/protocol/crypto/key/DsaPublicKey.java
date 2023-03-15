@@ -74,35 +74,22 @@ public class DsaPublicKey implements PublicKeyContainer {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         DsaPublicKey other = (DsaPublicKey) obj;
         if (modulus == null) {
-            if (other.modulus != null)
-                return false;
-        } else if (!modulus.equals(other.modulus))
-            return false;
+            if (other.modulus != null) return false;
+        } else if (!modulus.equals(other.modulus)) return false;
         if (generator == null) {
-            if (other.generator != null)
-                return false;
-        } else if (!generator.equals(other.generator))
-            return false;
+            if (other.generator != null) return false;
+        } else if (!generator.equals(other.generator)) return false;
         if (Q == null) {
-            if (other.Q != null)
-                return false;
-        } else if (!Q.equals(other.Q))
-            return false;
+            if (other.Q != null) return false;
+        } else if (!Q.equals(other.Q)) return false;
         if (X == null) {
-            if (other.X != null)
-                return false;
-        } else if (!X.equals(other.X))
-            return false;
+            if (other.X != null) return false;
+        } else if (!X.equals(other.X)) return false;
         return true;
     }
-
-    
 }
