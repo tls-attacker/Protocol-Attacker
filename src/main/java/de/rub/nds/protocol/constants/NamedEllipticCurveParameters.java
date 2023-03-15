@@ -10,6 +10,7 @@ package de.rub.nds.protocol.constants;
 
 import de.rub.nds.protocol.crypto.ec.EllipticCurve;
 import de.rub.nds.protocol.crypto.ec.EllipticCurve25519;
+import de.rub.nds.protocol.crypto.ec.EllipticCurve448;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP160R1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP160T1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP192R1;
@@ -454,7 +455,7 @@ public enum NamedEllipticCurveParameters implements GroupParameters {
             null,
             EcCurveEquationType.MONTGOMERY,
             448,
-            new EllipticCurve25519());
+            new EllipticCurve448());
 
     private String name; // The name referred by us
     private String x962name; // The name referred by ANSI X9.62
