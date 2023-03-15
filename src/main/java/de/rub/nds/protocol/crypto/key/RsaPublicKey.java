@@ -41,4 +41,35 @@ public class RsaPublicKey implements PublicKeyContainer {
     public int length() {
         return modulus.bitLength();
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((publicExponent == null) ? 0 : publicExponent.hashCode());
+        result = prime * result + ((modulus == null) ? 0 : modulus.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        RsaPublicKey other = (RsaPublicKey) obj;
+        if (publicExponent == null) {
+            if (other.publicExponent != null)
+                return false;
+        } else if (!publicExponent.equals(other.publicExponent))
+            return false;
+        if (modulus == null) {
+            if (other.modulus != null)
+                return false;
+        } else if (!modulus.equals(other.modulus))
+            return false;
+        return true;
+    }
 }

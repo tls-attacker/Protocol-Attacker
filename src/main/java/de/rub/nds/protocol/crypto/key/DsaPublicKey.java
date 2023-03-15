@@ -60,4 +60,49 @@ public class DsaPublicKey implements PublicKeyContainer {
     public int length() {
         return modulus.bitLength();
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((modulus == null) ? 0 : modulus.hashCode());
+        result = prime * result + ((generator == null) ? 0 : generator.hashCode());
+        result = prime * result + ((Q == null) ? 0 : Q.hashCode());
+        result = prime * result + ((X == null) ? 0 : X.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        DsaPublicKey other = (DsaPublicKey) obj;
+        if (modulus == null) {
+            if (other.modulus != null)
+                return false;
+        } else if (!modulus.equals(other.modulus))
+            return false;
+        if (generator == null) {
+            if (other.generator != null)
+                return false;
+        } else if (!generator.equals(other.generator))
+            return false;
+        if (Q == null) {
+            if (other.Q != null)
+                return false;
+        } else if (!Q.equals(other.Q))
+            return false;
+        if (X == null) {
+            if (other.X != null)
+                return false;
+        } else if (!X.equals(other.X))
+            return false;
+        return true;
+    }
+
+    
 }
