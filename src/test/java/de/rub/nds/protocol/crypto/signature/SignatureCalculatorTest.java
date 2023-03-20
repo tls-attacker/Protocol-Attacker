@@ -14,6 +14,9 @@ import de.rub.nds.modifiablevariable.util.ArrayConverter;
 import de.rub.nds.modifiablevariable.util.Modifiable;
 import de.rub.nds.protocol.constants.HashAlgorithm;
 import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
+import de.rub.nds.protocol.crypto.key.DsaPrivateKey;
+import de.rub.nds.protocol.crypto.key.EcdsaPrivateKey;
+import de.rub.nds.protocol.crypto.key.RsaPrivateKey;
 import java.math.BigInteger;
 import java.security.Security;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -45,7 +48,10 @@ public class SignatureCalculatorTest {
         HashAlgorithm hashAlgorithm = HashAlgorithm.SHA1;
         SignatureCalculator instance = new SignatureCalculator();
         instance.computeRsaPkcs1Signature(
-                computations, privateKey, modulus, toBeSignedBytes, hashAlgorithm);
+                computations,
+                new RsaPrivateKey(privateKey, modulus),
+                toBeSignedBytes,
+                hashAlgorithm);
         assertArrayEquals(toBeSignedBytes, computations.getToBeSignedBytes().getValue());
 
         assertArrayEquals(
@@ -109,7 +115,10 @@ public class SignatureCalculatorTest {
         HashAlgorithm hashAlgorithm = HashAlgorithm.SHA1;
         SignatureCalculator instance = new SignatureCalculator();
         instance.computeDsaSignature(
-                computations, privateKey, toBeSignedBytes, nonce, q, g, p, hashAlgorithm);
+                computations,
+                new DsaPrivateKey(q, privateKey, nonce, g, p),
+                toBeSignedBytes,
+                hashAlgorithm);
         computations.getDigestBytes();
         assertEquals(
                 new BigInteger(
@@ -205,7 +214,10 @@ public class SignatureCalculatorTest {
         HashAlgorithm hashAlgorithm = HashAlgorithm.SHA256;
         SignatureCalculator instance = new SignatureCalculator();
         instance.computeEcdsaSignature(
-                computations, privateKey, toBeSignedBytes, nonce, ecParameters, hashAlgorithm);
+                computations,
+                new EcdsaPrivateKey(privateKey, nonce, ecParameters),
+                toBeSignedBytes,
+                hashAlgorithm);
 
         // assertArrayEquals(ArrayConverter.hexStringToByteArray(""),
         // computations.getDigestBytes().getValue());

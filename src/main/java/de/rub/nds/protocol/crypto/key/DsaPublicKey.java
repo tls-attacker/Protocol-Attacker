@@ -15,11 +15,11 @@ public class DsaPublicKey implements PublicKeyContainer {
     private BigInteger modulus;
     private BigInteger generator;
     private BigInteger Q;
-    private BigInteger X;
+    private BigInteger Y;
 
-    public DsaPublicKey(BigInteger Q, BigInteger X, BigInteger generator, BigInteger modulus) {
+    public DsaPublicKey(BigInteger Q, BigInteger Y, BigInteger generator, BigInteger modulus) {
         this.Q = Q;
-        this.X = X;
+        this.Y = Y;
         this.generator = generator;
         this.modulus = modulus;
     }
@@ -48,12 +48,12 @@ public class DsaPublicKey implements PublicKeyContainer {
         this.Q = Q;
     }
 
-    public BigInteger getX() {
-        return X;
+    public BigInteger getY() {
+        return Y;
     }
 
-    public void setX(BigInteger X) {
-        this.X = X;
+    public void setY(BigInteger X) {
+        this.Y = X;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class DsaPublicKey implements PublicKeyContainer {
         result = prime * result + ((modulus == null) ? 0 : modulus.hashCode());
         result = prime * result + ((generator == null) ? 0 : generator.hashCode());
         result = prime * result + ((Q == null) ? 0 : Q.hashCode());
-        result = prime * result + ((X == null) ? 0 : X.hashCode());
+        result = prime * result + ((Y == null) ? 0 : Y.hashCode());
         return result;
     }
 
@@ -87,9 +87,9 @@ public class DsaPublicKey implements PublicKeyContainer {
         if (Q == null) {
             if (other.Q != null) return false;
         } else if (!Q.equals(other.Q)) return false;
-        if (X == null) {
-            if (other.X != null) return false;
-        } else if (!X.equals(other.X)) return false;
+        if (Y == null) {
+            if (other.Y != null) return false;
+        } else if (!Y.equals(other.Y)) return false;
         return true;
     }
 }

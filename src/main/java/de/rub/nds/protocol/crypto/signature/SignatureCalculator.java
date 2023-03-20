@@ -10,10 +10,14 @@ package de.rub.nds.protocol.crypto.signature;
 
 import de.rub.nds.modifiablevariable.util.ArrayConverter;
 import de.rub.nds.protocol.constants.HashAlgorithm;
-import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
+import de.rub.nds.protocol.constants.SignatureAlgorithm;
 import de.rub.nds.protocol.crypto.ec.EllipticCurve;
 import de.rub.nds.protocol.crypto.ec.Point;
 import de.rub.nds.protocol.crypto.hash.HashCalculator;
+import de.rub.nds.protocol.crypto.key.DsaPrivateKey;
+import de.rub.nds.protocol.crypto.key.EcdsaPrivateKey;
+import de.rub.nds.protocol.crypto.key.PrivateKeyContainer;
+import de.rub.nds.protocol.crypto.key.RsaPrivateKey;
 import de.rub.nds.protocol.exception.CryptoException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,15 +39,63 @@ public class SignatureCalculator {
 
     public SignatureCalculator() {}
 
+    public void computeSignature(
+            SignatureComputations computations,
+            PrivateKeyContainer privateKey,
+            byte[] toBeSignedBytes,
+            SignatureAlgorithm signatureAlgorithm,
+            HashAlgorithm hashAlgorithm) {
+        if (computations instanceof RsaPssSignatureComputations) {
+            // Check That parameters are compatible
+            if (!(privateKey instanceof RsaPrivateKey)) {
+                throw new IllegalArgumentException(
+                        "RSA SignatureComputations must be used with a RSA PrivateKey");
+            }
+            computeRsaPssSignature(
+                    (RsaPssSignatureComputations) computations,
+                    (RsaPrivateKey) privateKey,
+                    toBeSignedBytes,
+                    hashAlgorithm);
+        } else if (computations instanceof RsaPkcs1SignatureComputations) {
+            // Check That parameters are compatible
+            if (!(privateKey instanceof RsaPrivateKey)) {
+                throw new IllegalArgumentException(
+                        "RSA SignatureComputations must be used with a RSA PrivateKey");
+            }
+            computeRsaPkcs1Signature(
+                    (RsaPkcs1SignatureComputations) computations,
+                    (RsaPrivateKey) privateKey,
+                    toBeSignedBytes,
+                    hashAlgorithm);
+        } else if (computations instanceof DsaSignatureComputations) {
+            // Check That parameters are compatible
+        } else if (computations instanceof EcdsaSignatureComputations) {
+            // Check That parameters are compatible
+        } else if (computations instanceof EdwardsSignatureComputations) {
+            // Check That parameters are compatible
+        } else if (computations instanceof GostSignatureComputations) {
+            throw new UnsupportedOperationException("Unsupported operation");
+        } else if (computations instanceof NoSignatureComputations) {
+            // Nothing to do
+        } else {
+            throw new UnsupportedOperationException("Unsupported operation");
+        }
+    }
+
+    public void computeRsaPssSignature(
+            RsaPssSignatureComputations computations,
+            RsaPrivateKey privateKey,
+            byte[] toBeSignedBytes,
+            HashAlgorithm hashAlgorithm) {}
+
     public void computeRsaPkcs1Signature(
             RsaPkcs1SignatureComputations computations,
-            BigInteger privateKey,
-            BigInteger modulus,
+            RsaPrivateKey privateKey,
             byte[] toBeSignedBytes,
             HashAlgorithm hashAlgorithm) {
         LOGGER.trace("Computing RSA signature");
-        computations.setPrivateKey(privateKey);
-        computations.setModulus(modulus);
+        computations.setPrivateKey(privateKey.getPrivateExponent());
+        computations.setModulus(privateKey.getModulus());
         computations.setToBeSignedBytes(toBeSignedBytes);
         computations.setHashAlgorithm(hashAlgorithm);
         byte[] digest = HashCalculator.compute(toBeSignedBytes, hashAlgorithm);
@@ -108,21 +160,17 @@ public class SignatureCalculator {
 
     public void computeDsaSignature(
             DsaSignatureComputations computations,
-            BigInteger privateKey,
+            DsaPrivateKey privateKey,
             byte[] toBeSignedBytes,
-            BigInteger nonce,
-            BigInteger q,
-            BigInteger g,
-            BigInteger p,
             HashAlgorithm hashAlgorithm) {
-        computations.setQ(q);
-        computations.setP(p);
-        computations.setG(g);
-        computations.setNonce(nonce);
-        computations.setPrivateKey(privateKey);
+        computations.setQ(privateKey.getQ());
+        computations.setP(privateKey.getModulus());
+        computations.setG(privateKey.getGenerator());
+        computations.setNonce(privateKey.getK());
+        computations.setPrivateKey(privateKey.getX());
 
         LOGGER.trace("Computing DSA signature");
-        int groupSize = q.bitLength() / 8;
+        int groupSize = privateKey.getQ().bitLength() / 8;
         // not persisted in computation as they can be set before the calculation
         LOGGER.debug("g: " + computations.getG().getValue());
         LOGGER.debug("p: " + computations.getP().getValue());
@@ -199,19 +247,17 @@ public class SignatureCalculator {
 
     public void computeRawEcdsaSignature(
             EcdsaSignatureComputations computations,
-            BigInteger privateKey,
+            EcdsaPrivateKey privateKey,
             byte[] toBeSignedBytes,
-            BigInteger nonce,
-            NamedEllipticCurveParameters ecParameters,
             HashAlgorithm hashAlgorithm) {
         LOGGER.trace("Computing ECDSA signature");
-        computations.setEcParameters(ecParameters);
+        computations.setEcParameters(privateKey.getParameters());
         computations.setHashAlgorithm(hashAlgorithm);
-        computations.setNonce(nonce);
-        computations.setPrivateKey(privateKey);
+        computations.setNonce(privateKey.getNonce());
+        computations.setPrivateKey(privateKey.getPrivateKey());
         computations.setToBeSignedBytes(toBeSignedBytes);
 
-        EllipticCurve curve = ecParameters.getCurve();
+        EllipticCurve curve = computations.getEcParameters().getCurve();
         Point basePoint = curve.getBasePoint();
 
         BigInteger groupOrder = curve.getBasePointOrder();
@@ -249,13 +295,17 @@ public class SignatureCalculator {
         r = computations.getR().getValue();
 
         LOGGER.debug("R: " + r);
-        inverseNonce = nonce.modInverse(curve.getBasePointOrder());
+        inverseNonce =
+                computations.getPrivateKey().getValue().modInverse(curve.getBasePointOrder());
 
         computations.setInverseNonce(inverseNonce);
         inverseNonce = computations.getInverseNonce().getValue();
         LOGGER.debug("Inverse Nonce: " + inverseNonce);
-        LOGGER.debug("Verify: " + (inverseNonce.multiply(nonce)).mod(curve.getBasePointOrder()));
-        BigInteger rd = r.multiply(privateKey);
+        LOGGER.debug(
+                "Verify: "
+                        + (inverseNonce.multiply(computations.getNonce().getValue()))
+                                .mod(curve.getBasePointOrder()));
+        BigInteger rd = r.multiply(privateKey.getPrivateKey());
         rd = rd.mod(curve.getBasePointOrder());
         BigInteger multiplier = (rd.add(truncatedHash));
         multiplier = multiplier.mod(curve.getBasePointOrder());
@@ -286,19 +336,17 @@ public class SignatureCalculator {
 
     public void computeEcdsaSignature(
             EcdsaSignatureComputations computations,
-            BigInteger privateKey,
+            EcdsaPrivateKey privateKey,
             byte[] toBeSignedBytes,
-            BigInteger nonce,
-            NamedEllipticCurveParameters ecParameters,
             HashAlgorithm hashAlgorithm) {
         LOGGER.trace("Computing ECDSA signature");
-        computations.setEcParameters(ecParameters);
+        computations.setEcParameters(privateKey.getParameters());
         computations.setHashAlgorithm(hashAlgorithm);
-        computations.setNonce(nonce);
-        computations.setPrivateKey(privateKey);
+        computations.setNonce(privateKey.getNonce());
+        computations.setPrivateKey(privateKey.getPrivateKey());
         computations.setToBeSignedBytes(toBeSignedBytes);
 
-        EllipticCurve curve = ecParameters.getCurve();
+        EllipticCurve curve = computations.getEcParameters().getCurve();
         Point basePoint = curve.getBasePoint();
 
         BigInteger groupOrder = curve.getBasePointOrder();
@@ -336,13 +384,17 @@ public class SignatureCalculator {
         r = computations.getR().getValue();
 
         LOGGER.debug("R: " + r);
-        inverseNonce = nonce.modInverse(curve.getBasePointOrder());
+        inverseNonce = computations.getNonce().getValue().modInverse(curve.getBasePointOrder());
 
         computations.setInverseNonce(inverseNonce);
         inverseNonce = computations.getInverseNonce().getValue();
         LOGGER.debug("Inverse Nonce: " + inverseNonce);
-        LOGGER.debug("Verify: " + (inverseNonce.multiply(nonce)).mod(curve.getBasePointOrder()));
-        BigInteger rd = r.multiply(privateKey);
+        LOGGER.debug(
+                "Verify: "
+                        + inverseNonce
+                                .multiply(computations.getNonce().getValue())
+                                .mod(curve.getBasePointOrder()));
+        BigInteger rd = r.multiply(privateKey.getPrivateKey());
         rd = rd.mod(curve.getBasePointOrder());
         BigInteger multiplier = (rd.add(truncatedHash));
         multiplier = multiplier.mod(curve.getBasePointOrder());
@@ -374,5 +426,32 @@ public class SignatureCalculator {
         byte[] completeSignature = outputStream.toByteArray();
         computations.setSignatureBytes(completeSignature);
         computations.setSignatureValid(true);
+    }
+
+    public SignatureComputations createSignatureComputations(
+            SignatureAlgorithm signatureAlgorithm) {
+        if (signatureAlgorithm == null) {
+            return new NoSignatureComputations();
+        }
+        switch (signatureAlgorithm) {
+            case DSA:
+                return new DsaSignatureComputations();
+            case ECDSA:
+                return new EcdsaSignatureComputations();
+            case ED25519:
+            case ED448:
+                return new EdwardsSignatureComputations();
+            case GOSTR34102001:
+            case GOSTR34102012_256:
+            case GOSTR34102012_512:
+                return new GostSignatureComputations();
+            case RSA_PKCS1:
+                return new RsaPkcs1SignatureComputations();
+            case RSA_PSS:
+                return new RsaPssSignatureComputations();
+            default:
+                throw new UnsupportedOperationException(
+                        "Unsupported signature algorithm: " + signatureAlgorithm);
+        }
     }
 }
