@@ -20,6 +20,7 @@ public class Pair<L, R> {
     private L leftElement;
     private R rightElement;
 
+    @SuppressWarnings("unused")
     private Pair() {}
 
     public Pair(L leftElement, R rightElement) {
