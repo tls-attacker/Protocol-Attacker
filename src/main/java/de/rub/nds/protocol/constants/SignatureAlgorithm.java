@@ -9,13 +9,23 @@
 package de.rub.nds.protocol.constants;
 
 public enum SignatureAlgorithm {
-    RSA_PKCS1,
-    DSA,
-    ECDSA,
-    RSA_PSS,
-    ED25519,
-    ED448,
-    GOSTR34102001,
-    GOSTR34102012_256,
-    GOSTR34102012_512,
+    RSA_PKCS1 ("RSA PKCS#1.5"),
+    DSA ("DSA (DSS)"),
+    ECDSA ("ECDSA)"),
+    RSA_PSS ("RSA PSS"),
+    ED25519("Ed25519"),
+    ED448("Ed448"),
+    GOSTR34102001("GOSTR34102001"),
+    GOSTR34102012_256("GOSTR34102012 (256 bit)"),
+    GOSTR34102012_512("GOSTR34102012 (512 bit)");
+
+    private String humanReadable;
+
+    private SignatureAlgorithm(String humanReadable) {
+        this.humanReadable = humanReadable;
+    }
+
+    public String getHumanReadable() {
+        return humanReadable;
+    }
 }
