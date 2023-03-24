@@ -37,7 +37,7 @@ If you want to use this project as a dependency, you do not have to compile it y
 
 # Acknowledgements
 
-The framework was initially created by Robert Merget (robert.merget@tii.de) from the Technology Innovation Institute for Technology for the TLS-Attacker framework. 
+The framework was initially created by Robert Merget (robert.merget@tii.de) from the Technology Innovation Institute for Technology for the TLS-Attacker framework.
 
 # Projects
 
