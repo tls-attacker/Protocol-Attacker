@@ -118,7 +118,7 @@ public class PointFormatter {
             LOGGER.warn(
                     "Cannot decode byte[] to point of "
                             + curveParameters
-                            + ". Returning Basepoint");
+                            + ". Returning base point");
             return curve.getBasePoint();
         }
         ByteArrayInputStream inputStream = new ByteArrayInputStream(pointBytes);
@@ -128,7 +128,7 @@ public class PointFormatter {
             inputStream.read(coordX);
             inputStream.read(coordY);
         } catch (IOException ex) {
-            LOGGER.warn("Could not read from byteArrayStream. Returning Basepoint", ex);
+            LOGGER.warn("Could not read from byteArrayStream. Returning base point", ex);
             return curve.getBasePoint();
         }
         return curve.getPoint(new BigInteger(1, coordX), new BigInteger(1, coordY));
@@ -140,7 +140,7 @@ public class PointFormatter {
         EllipticCurve curve = curveParameters.getCurve();
         int elementLength = ArrayConverter.bigIntegerToByteArray(curve.getModulus()).length;
         if (compressedPoint.length == 0) {
-            LOGGER.warn("Could not parse point. Point is empty. Returning Basepoint");
+            LOGGER.warn("Could not parse point. Point is empty. Returning base point");
             return curve.getBasePoint();
         }
         if (curveParameters.getEquationType() == EcCurveEquationType.SHORT_WEIERSTRASS) {
@@ -155,14 +155,14 @@ public class PointFormatter {
                                         + (elementLength + 1)
                                         + " bytes long, but was "
                                         + compressedPoint.length
-                                        + "bytes long. Returning Basepoint");
+                                        + "bytes long. Returning base point");
 
                         return curve.getBasePoint();
                     }
                     try {
                         inputStream.read(coordX);
                     } catch (IOException ex) {
-                        LOGGER.warn("Could not read from byteArrayStream. Returning Basepoint", ex);
+                        LOGGER.warn("Could not read from byteArrayStream. Returning base point", ex);
                         return curve.getBasePoint();
                     }
                     Point decompressedPoint = curve.createAPointOnCurve(new BigInteger(1, coordX));
@@ -178,7 +178,7 @@ public class PointFormatter {
                                         + (elementLength * 2 + 1)
                                         + " bytes long, but was "
                                         + compressedPoint.length
-                                        + "bytes long. Returning Basepoint");
+                                        + "bytes long. Returning base point");
                         return curve.getBasePoint();
                     }
 
@@ -187,7 +187,7 @@ public class PointFormatter {
                         inputStream.read(coordX);
                         inputStream.read(coordY);
                     } catch (IOException ex) {
-                        LOGGER.warn("Could not read from byteArrayStream. Returning Basepoint", ex);
+                        LOGGER.warn("Could not read from byteArrayStream. Returning base point", ex);
                         return curve.getBasePoint();
                     }
                     return curve.getPoint(new BigInteger(1, coordX), new BigInteger(1, coordY));
@@ -203,14 +203,14 @@ public class PointFormatter {
                                 + elementLength
                                 + " bytes long, but was "
                                 + compressedPoint.length
-                                + "bytes long. Returning Basepoint");
+                                + "bytes long. Returning base point");
                 return curve.getBasePoint();
             }
             byte[] coordX = new byte[elementLength];
             try {
                 inputStream.read(coordX);
             } catch (IOException ex) {
-                LOGGER.warn("Could not read from byteArrayStream. Returning Basepoint", ex);
+                LOGGER.warn("Could not read from byteArrayStream. Returning base point", ex);
                 return curve.getBasePoint();
             }
             RFC7748Curve computation = (RFC7748Curve) curve;
