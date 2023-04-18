@@ -162,7 +162,8 @@ public class PointFormatter {
                     try {
                         inputStream.read(coordX);
                     } catch (IOException ex) {
-                        LOGGER.warn("Could not read from byteArrayStream. Returning base point", ex);
+                        LOGGER.warn(
+                                "Could not read from byteArrayStream. Returning base point", ex);
                         return curve.getBasePoint();
                     }
                     Point decompressedPoint = curve.createAPointOnCurve(new BigInteger(1, coordX));
@@ -187,7 +188,8 @@ public class PointFormatter {
                         inputStream.read(coordX);
                         inputStream.read(coordY);
                     } catch (IOException ex) {
-                        LOGGER.warn("Could not read from byteArrayStream. Returning base point", ex);
+                        LOGGER.warn(
+                                "Could not read from byteArrayStream. Returning base point", ex);
                         return curve.getBasePoint();
                     }
                     return curve.getPoint(new BigInteger(1, coordX), new BigInteger(1, coordY));
