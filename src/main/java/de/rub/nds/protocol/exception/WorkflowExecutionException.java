@@ -8,7 +8,7 @@
  */
 package de.rub.nds.protocol.exception;
 
-/** Thrown when problems by in the TLS workflow appear. */
+/** Thrown when problems in the workflow appear. */
 public class WorkflowExecutionException extends RuntimeException {
 
     public WorkflowExecutionException() {
