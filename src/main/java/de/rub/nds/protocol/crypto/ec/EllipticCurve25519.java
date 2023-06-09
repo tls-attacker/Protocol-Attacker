@@ -12,7 +12,6 @@ import de.rub.nds.modifiablevariable.util.ArrayConverter;
 import java.math.BigInteger;
 import org.apache.commons.lang3.ArrayUtils;
 
-/** X25519 */
 public class EllipticCurve25519 extends RFC7748Curve {
 
     @SuppressWarnings("SpellCheckingInspection")
