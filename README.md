@@ -37,7 +37,7 @@ If you want to use this project as a dependency, you do not have to compile it y
 
 # Acknowledgements
 
-The framework is developed, funded and maintained by the Ruhr University Bochum (RUB), Univerisity Paderborn (UPB), Technology Innovation Institute (TII), and the Hackmanit GmbH.
+The framework is developed, funded and maintained by the Ruhr University Bochum (RUB), Paderborn University (UPB), Technology Innovation Institute (TII), and the Hackmanit GmbH.
 
 # Projects
 
