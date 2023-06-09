@@ -8,9 +8,7 @@
  */
 package de.rub.nds.protocol.constants;
 
-/**
- * Metadata for hash algorithms. 
- */
+/** Metadata for hash algorithms. */
 public enum HashAlgorithm {
     NONE(null, 0),
     MD2("1.2.840.113549.2.2", 128),
@@ -22,13 +20,9 @@ public enum HashAlgorithm {
     SHA512("2.16.840.1.101.3.4.2.3", 512),
     SHA512_224("2.16.840.1.101.3.4.2.5", 224);
 
-    /**
-     * OID of the hash algorithm.
-     */
+    /** OID of the hash algorithm. */
     private String hashAlgorithmIdentifierOid;
-    /**
-     * The length of a hash
-     */
+    /** The length of a hash */
     private int bitLength;
 
     private HashAlgorithm(String hashAlgorithmIdentifierOid, int bitStrength) {

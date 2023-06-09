@@ -16,6 +16,7 @@ import de.rub.nds.protocol.crypto.ec.Point;
 import de.rub.nds.protocol.crypto.hash.HashCalculator;
 import de.rub.nds.protocol.crypto.key.DsaPrivateKey;
 import de.rub.nds.protocol.crypto.key.EcdsaPrivateKey;
+import de.rub.nds.protocol.crypto.key.EddsaPrivateKey;
 import de.rub.nds.protocol.crypto.key.PrivateKeyContainer;
 import de.rub.nds.protocol.crypto.key.RsaPrivateKey;
 import de.rub.nds.protocol.exception.CryptoException;
@@ -69,10 +70,37 @@ public class SignatureCalculator {
                     hashAlgorithm);
         } else if (computations instanceof DsaSignatureComputations) {
             // Check That parameters are compatible
+            if (!(privateKey instanceof DsaPrivateKey)) {
+                throw new IllegalArgumentException(
+                        "DSA SignatureComputations must be used with a DSA PrivateKey");
+            }
+            computeDsaSignature(
+                    (DsaSignatureComputations) computations,
+                    (DsaPrivateKey) privateKey,
+                    toBeSignedBytes,
+                    hashAlgorithm);
         } else if (computations instanceof EcdsaSignatureComputations) {
             // Check That parameters are compatible
-        } else if (computations instanceof EdwardsSignatureComputations) {
+            if (!(privateKey instanceof EcdsaPrivateKey)) {
+                throw new IllegalArgumentException(
+                        "ECDSA SignatureComputations must be used with a ECDSA PrivateKey");
+            }
+            computeEcdsaSignature(
+                    (EcdsaSignatureComputations) computations,
+                    (EcdsaPrivateKey) privateKey,
+                    toBeSignedBytes,
+                    hashAlgorithm);
+        } else if (computations instanceof EddsaSignatureComputations) {
             // Check That parameters are compatible
+            if (!(privateKey instanceof EddsaPrivateKey)) {
+                throw new IllegalArgumentException(
+                        "EdDSA SignatureComputations must be used with a EdDSA PrivateKey");
+            }
+            computeEddsaSignature(
+                    (EddsaSignatureComputations) computations,
+                    (EddsaPrivateKey) privateKey,
+                    toBeSignedBytes,
+                    hashAlgorithm);
         } else if (computations instanceof GostSignatureComputations) {
             throw new UnsupportedOperationException("Unsupported operation");
         } else if (computations instanceof NoSignatureComputations) {
@@ -82,11 +110,21 @@ public class SignatureCalculator {
         }
     }
 
+    public void computeEddsaSignature(
+            EddsaSignatureComputations computations,
+            EddsaPrivateKey privateKey,
+            byte[] toBeSignedBytes,
+            HashAlgorithm hashAlgorithm) {
+        throw new UnsupportedOperationException("Unsupported operation");
+    }
+
     public void computeRsaPssSignature(
             RsaPssSignatureComputations computations,
             RsaPrivateKey privateKey,
             byte[] toBeSignedBytes,
-            HashAlgorithm hashAlgorithm) {}
+            HashAlgorithm hashAlgorithm) {
+        throw new UnsupportedOperationException("Unsupported operation");
+    }
 
     public void computeRsaPkcs1Signature(
             RsaPkcs1SignatureComputations computations,
@@ -440,7 +478,7 @@ public class SignatureCalculator {
                 return new EcdsaSignatureComputations();
             case ED25519:
             case ED448:
-                return new EdwardsSignatureComputations();
+                return new EddsaSignatureComputations();
             case GOSTR34102001:
             case GOSTR34102012_256:
             case GOSTR34102012_512:

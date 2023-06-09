@@ -58,9 +58,8 @@ import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT409K1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT409R1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT571K1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT571R1;
-/**
- * Metainformation for named elliptic curves.
- */
+
+/** Metainformation for named elliptic curves. */
 public enum NamedEllipticCurveParameters implements GroupParameters {
     /*
      * ###############################
@@ -475,33 +474,19 @@ public enum NamedEllipticCurveParameters implements GroupParameters {
             448,
             new EllipticCurve448());
 
-    /**
-     * The name referred by us internally, always present
-     */
+    /** The name referred by us internally, always present */
     private String name;
-    /**
-     * The name referred by ANSI X9.62, may be null if not defined
-     */
+    /** The name referred by ANSI X9.62, may be null if not defined */
     private String x962name;
-    /**
-     * The name referred by NIST, may be null if not defined
-     */
+    /** The name referred by NIST, may be null if not defined */
     private String nistName;
-    /**
-     * The name referred by SEC 2, may be null if not defined
-     */
+    /** The name referred by SEC 2, may be null if not defined */
     private String secName;
-    /**
-     * The type of the equation that is used to define the curve
-     */
+    /** The type of the equation that is used to define the curve */
     private EcCurveEquationType equationType;
-    /**
-     * The length in bit of an individual element of the curve
-     */
+    /** The length in bit of an individual element of the curve */
     private int bitLength;
-    /**
-     * The concrete curve that is behind these parameters
-     */
+    /** The concrete curve that is behind these parameters */
     private EllipticCurve curve;
 
     private NamedEllipticCurveParameters(
