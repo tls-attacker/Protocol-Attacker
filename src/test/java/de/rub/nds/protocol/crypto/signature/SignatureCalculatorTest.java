@@ -8,7 +8,9 @@
  */
 package de.rub.nds.protocol.crypto.signature;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.rub.nds.modifiablevariable.util.ArrayConverter;
 import de.rub.nds.modifiablevariable.util.Modifiable;
@@ -85,7 +87,6 @@ public class SignatureCalculatorTest {
     @Test
     public void testComputeDsaSignature() {
         DsaSignatureComputations computations = new DsaSignatureComputations();
-        // computations.setDigestBytes(Modifiable.explicit(new byte[]{3}));
         BigInteger privateKey =
                 new BigInteger(
                         1,
@@ -219,12 +220,8 @@ public class SignatureCalculatorTest {
                 toBeSignedBytes,
                 hashAlgorithm);
 
-        // assertArrayEquals(ArrayConverter.hexStringToByteArray(""),
-        // computations.getDigestBytes().getValue());
         assertEquals(NamedEllipticCurveParameters.SECP256R1, computations.getEcParameters());
         assertEquals(HashAlgorithm.SHA256, computations.getHashAlgorithm());
-        //  assertEquals(new BigInteger(1, ArrayConverter.hexStringToByteArray("")),
-        // computations.getInverseNonce().getValue());
         assertEquals(
                 new BigInteger(
                         1,
@@ -264,11 +261,6 @@ public class SignatureCalculatorTest {
                         ArrayConverter.hexStringToByteArray(
                                 "8bf77819ca05a6b2786c76262bf7371cef97b218e96f175a3ccdda2acc058903")),
                 computations.getS().getValue());
-        // assertArrayEquals(ArrayConverter.hexStringToByteArray(""),
-        // computations.getSignatureBytes().getValue());
         assertTrue(computations.getSignatureValid());
-        //   assertEquals(new BigInteger(1, ArrayConverter.hexStringToByteArray("")),
-        // computations.getrX().getValue());
-
     }
 }
