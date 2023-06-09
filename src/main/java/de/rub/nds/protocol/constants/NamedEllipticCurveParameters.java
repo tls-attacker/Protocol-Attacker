@@ -58,9 +58,15 @@ import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT409K1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT409R1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT571K1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT571R1;
-
+/**
+ * Metainformation for named elliptic curves.
+ */
 public enum NamedEllipticCurveParameters implements GroupParameters {
-    // SECT
+    /*
+     * ###############################
+     * SECT
+     * ###############################
+     */
     SECT113R1(
             "sect113r1",
             null,
@@ -205,7 +211,11 @@ public enum NamedEllipticCurveParameters implements GroupParameters {
             EcCurveEquationType.SHORT_WEIERSTRASS,
             571,
             new EllipticCurveSECT571R1()),
-    // SECP
+    /*
+     * ###############################
+     * SECT
+     * ###############################
+     */
     SECP112R1(
             "secp112r1",
             null,
@@ -326,7 +336,11 @@ public enum NamedEllipticCurveParameters implements GroupParameters {
             EcCurveEquationType.SHORT_WEIERSTRASS,
             521,
             new EllipticCurveSECP521R1()),
-    // BRAINPOOL
+    /*
+     * ###############################
+     * BRAINPOOL
+     * ###############################
+     */
     BRAINPOOLP160R1(
             "brainpoolp160r1",
             null,
@@ -439,7 +453,11 @@ public enum NamedEllipticCurveParameters implements GroupParameters {
             EcCurveEquationType.SHORT_WEIERSTRASS,
             512,
             new EllipticCurveBrainpoolP512T1()),
-    // DJB
+    /*
+     * ###############################
+     * Montgomery (Djb)
+     * ###############################
+     */
     CURVE_X25519(
             "CurveX25519",
             null,
@@ -457,12 +475,33 @@ public enum NamedEllipticCurveParameters implements GroupParameters {
             448,
             new EllipticCurve448());
 
-    private String name; // The name referred by us
-    private String x962name; // The name referred by ANSI X9.62
-    private String nistName; // The name referred by NIST
-    private String secName; // The Name reffered by SEC 2
+    /**
+     * The name referred by us internally, always present
+     */
+    private String name;
+    /**
+     * The name referred by ANSI X9.62, may be null if not defined
+     */
+    private String x962name;
+    /**
+     * The name referred by NIST, may be null if not defined
+     */
+    private String nistName;
+    /**
+     * The name referred by SEC 2, may be null if not defined
+     */
+    private String secName;
+    /**
+     * The type of the equation that is used to define the curve
+     */
     private EcCurveEquationType equationType;
+    /**
+     * The length in bit of an individual element of the curve
+     */
     private int bitLength;
+    /**
+     * The concrete curve that is behind these parameters
+     */
     private EllipticCurve curve;
 
     private NamedEllipticCurveParameters(
