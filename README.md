@@ -20,7 +20,7 @@ Protocol-Attacker as follows.
 
 ```bash
 $ git clone https://github.com/tls-attacker/Protocol-Attacker.git
-$ cd ASN.1-Tool
+$ cd Protocol-Attacker
 $ mvn clean install
 ```
 
@@ -37,7 +37,7 @@ If you want to use this project as a dependency, you do not have to compile it y
 
 # Acknowledgements
 
-The framework was initially created by Robert Merget (robert.merget@tii.de) from the Technology Innovation Institute for Technology for the TLS-Attacker framework.
+The framework is developed, funded and maintained by the Ruhr University Bochum (RUB), Univerisity Paderborn (UPB), Technology Innovation Institute (TII), and the Hackmanit GmbH.
 
 # Projects
 
