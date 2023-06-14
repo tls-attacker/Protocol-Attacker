@@ -8,8 +8,8 @@
  */
 package de.rub.nds.protocol.crypto.ec;
 
-import java.io.Serializable;
 import java.math.BigInteger;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,8 +20,9 @@ import org.apache.logging.log4j.Logger;
  * These polynomials are represented by BigInteger bit-strings, where the i-th bit represents the
  * i-th coefficient.
  */
-public class FieldElementF2m extends FieldElement implements Serializable {
+public class FieldElementF2m extends FieldElement {
 
+    @SuppressWarnings("unused")
     private static final Logger LOGGER = LogManager.getLogger();
 
     /**

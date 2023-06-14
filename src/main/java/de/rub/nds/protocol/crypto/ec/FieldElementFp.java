@@ -8,11 +8,10 @@
  */
 package de.rub.nds.protocol.crypto.ec;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 
 /** An element of the field F_p (with p being a prime number). */
-public class FieldElementFp extends FieldElement implements Serializable {
+public class FieldElementFp extends FieldElement {
 
     /** Instantiates the element data in the field F_modulus. With modulus being a prime number. */
     public FieldElementFp(BigInteger data, BigInteger modulus) {
