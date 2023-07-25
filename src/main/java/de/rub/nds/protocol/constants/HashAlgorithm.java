@@ -25,6 +25,8 @@ public enum HashAlgorithm {
     /** The length of a hash */
     private int bitLength;
 
+    private int secruityStrength;
+
     private HashAlgorithm(String hashAlgorithmIdentifierOid, int bitStrength) {
         this.hashAlgorithmIdentifierOid = hashAlgorithmIdentifierOid;
         this.bitLength = bitStrength;
@@ -36,5 +38,9 @@ public enum HashAlgorithm {
 
     public int getBitLength() {
         return bitLength;
+    }
+
+    public int getSecurityStrength() {
+        return bitLength / 2; //This is true right now, might change in the future
     }
 }
