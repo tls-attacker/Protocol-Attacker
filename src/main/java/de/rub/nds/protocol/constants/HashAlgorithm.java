@@ -41,6 +41,6 @@ public enum HashAlgorithm {
     }
 
     public int getSecurityStrength() {
-        return bitLength / 2; //This is true right now, might change in the future
+        return bitLength / 2; // This is true right now, might change in the future
     }
 }
