@@ -8,6 +8,7 @@
  */
 package de.rub.nds.protocol.crypto.key;
 
+import de.rub.nds.protocol.constants.AsymmetricAlgorithmType;
 import java.math.BigInteger;
 
 public class DsaPublicKey implements PublicKeyContainer {
@@ -91,5 +92,10 @@ public class DsaPublicKey implements PublicKeyContainer {
             if (other.Y != null) return false;
         } else if (!Y.equals(other.Y)) return false;
         return true;
+    }
+
+    @Override
+    public AsymmetricAlgorithmType getAlgorithmType() {
+        return AsymmetricAlgorithmType.DSA;
     }
 }

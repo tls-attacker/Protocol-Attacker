@@ -6,12 +6,13 @@
  * Licensed under Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  */
-package de.rub.nds.protocol.crypto.key;
+package de.rub.nds.protocol.constants;
 
-import de.rub.nds.protocol.constants.AsymmetricAlgorithmType;
-
-public interface PublicKeyContainer {
-    public int length();
-
-    public AsymmetricAlgorithmType getAlgorithmType();
+public enum AsymmetricAlgorithmType {
+    RSA,
+    ECDSA,
+    EDDSA,
+    DSA,
+    DH,
+    ECDH,
 }

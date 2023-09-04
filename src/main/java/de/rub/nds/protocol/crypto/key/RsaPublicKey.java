@@ -8,6 +8,7 @@
  */
 package de.rub.nds.protocol.crypto.key;
 
+import de.rub.nds.protocol.constants.AsymmetricAlgorithmType;
 import java.math.BigInteger;
 
 public class RsaPublicKey implements PublicKeyContainer {
@@ -64,5 +65,10 @@ public class RsaPublicKey implements PublicKeyContainer {
             if (other.modulus != null) return false;
         } else if (!modulus.equals(other.modulus)) return false;
         return true;
+    }
+
+    @Override
+    public AsymmetricAlgorithmType getAlgorithmType() {
+        return AsymmetricAlgorithmType.RSA;
     }
 }

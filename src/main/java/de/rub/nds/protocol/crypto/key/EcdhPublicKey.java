@@ -8,6 +8,7 @@
  */
 package de.rub.nds.protocol.crypto.key;
 
+import de.rub.nds.protocol.constants.AsymmetricAlgorithmType;
 import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
 import de.rub.nds.protocol.crypto.ec.Point;
 import java.math.BigInteger;
@@ -72,5 +73,10 @@ public class EcdhPublicKey implements PublicKeyContainer {
         } else if (!publicPoint.equals(other.publicPoint)) return false;
         if (parameters != other.parameters) return false;
         return true;
+    }
+
+    @Override
+    public AsymmetricAlgorithmType getAlgorithmType() {
+        return AsymmetricAlgorithmType.ECDH;
     }
 }
