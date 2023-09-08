@@ -338,11 +338,11 @@ public class SignatureCalculator {
 
         computations.setInverseNonce(inverseNonce);
         inverseNonce = computations.getInverseNonce().getValue();
-        LOGGER.debug("Inverse Nonce: " + inverseNonce);
+        LOGGER.debug("Inverse Nonce: {}", inverseNonce);
         LOGGER.debug(
-                "Verify: "
-                        + (inverseNonce.multiply(computations.getNonce().getValue()))
-                                .mod(curve.getBasePointOrder()));
+                "Verify: {}",
+                (inverseNonce.multiply(computations.getNonce().getValue()))
+                        .mod(curve.getBasePointOrder()));
         BigInteger rd = r.multiply(privateKey.getPrivateKey());
         rd = rd.mod(curve.getBasePointOrder());
         BigInteger multiplier = (rd.add(truncatedHash));
@@ -353,12 +353,9 @@ public class SignatureCalculator {
         computations.setS(s);
         s = computations.getS().getValue();
 
-        LOGGER.debug("S: " + s);
-        LOGGER.debug(
-                "CurveBasePointOrder: "
-                        + ArrayConverter.bytesToHexString(curve.getBasePointOrder().toByteArray()));
-        LOGGER.debug(
-                "Modulus: " + ArrayConverter.bytesToHexString(curve.getModulus().toByteArray()));
+        LOGGER.debug("S: {}", s);
+        LOGGER.debug("CurveBasePointOrder: {}", curve.getBasePointOrder().toByteArray());
+        LOGGER.debug("Modulus: {}", curve.getModulus().toByteArray());
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
@@ -421,17 +418,17 @@ public class SignatureCalculator {
         computations.setR(r);
         r = computations.getR().getValue();
 
-        LOGGER.debug("R: " + r);
+        LOGGER.debug("R: {}", r);
         inverseNonce = computations.getNonce().getValue().modInverse(curve.getBasePointOrder());
 
         computations.setInverseNonce(inverseNonce);
         inverseNonce = computations.getInverseNonce().getValue();
-        LOGGER.debug("Inverse Nonce: " + inverseNonce);
+        LOGGER.debug("Inverse Nonce: {}", inverseNonce);
         LOGGER.debug(
-                "Verify: "
-                        + inverseNonce
-                                .multiply(computations.getNonce().getValue())
-                                .mod(curve.getBasePointOrder()));
+                "Verify: {}",
+                inverseNonce
+                        .multiply(computations.getNonce().getValue())
+                        .mod(curve.getBasePointOrder()));
         BigInteger rd = r.multiply(privateKey.getPrivateKey());
         rd = rd.mod(curve.getBasePointOrder());
         BigInteger multiplier = (rd.add(truncatedHash));
@@ -442,12 +439,9 @@ public class SignatureCalculator {
         computations.setS(s);
         s = computations.getS().getValue();
 
-        LOGGER.debug("S: " + s);
-        LOGGER.debug(
-                "CurveBasePointOrder: "
-                        + ArrayConverter.bytesToHexString(curve.getBasePointOrder().toByteArray()));
-        LOGGER.debug(
-                "Modulus: " + ArrayConverter.bytesToHexString(curve.getModulus().toByteArray()));
+        LOGGER.debug("S: {}", s);
+        LOGGER.debug("CurveBasePointOrder: {}", curve.getBasePointOrder().toByteArray());
+        LOGGER.debug("Modulus: {}", curve.getModulus().toByteArray());
 
         // ASN.1 encoding of signature as SEQUENCE: {r INTEGER, s INTEGER}
         ASN1Integer asn1IntegerR = new ASN1Integer(r);
