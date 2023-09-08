@@ -8,4 +8,25 @@
  */
 package de.rub.nds.protocol.crypto.key;
 
-public class DhPrivateKey implements PrivateKeyContainer {}
+import de.rub.nds.protocol.constants.GroupParameters;
+import java.math.BigInteger;
+
+public class DhPrivateKey implements PrivateKeyContainer {
+
+    private BigInteger privateKey;
+
+    private GroupParameters parameters;
+
+    public DhPrivateKey(BigInteger privateKey, GroupParameters parameters) {
+        this.privateKey = privateKey;
+        this.parameters = parameters;
+    }
+
+    public BigInteger getPrivateKey() {
+        return privateKey;
+    }
+
+    public GroupParameters getParameters() {
+        return parameters;
+    }
+}
