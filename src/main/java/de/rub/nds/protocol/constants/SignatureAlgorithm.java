@@ -11,7 +11,7 @@ package de.rub.nds.protocol.constants;
 public enum SignatureAlgorithm {
     RSA_PKCS1("RSA PKCS#1.5"),
     DSA("DSA (DSS)"),
-    ECDSA("ECDSA)"),
+    ECDSA("ECDSA"),
     RSA_PSS("RSA PSS"),
     ED25519("Ed25519"),
     ED448("Ed448"),
