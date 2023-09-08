@@ -191,7 +191,7 @@ public class SignatureCalculator {
         try {
             return derSequence2.getEncoded();
         } catch (IOException ex) {
-            LOGGER.error("Could not encode der sequence,ex");
+            LOGGER.error("Could not encode der sequence", ex);
             throw new RuntimeException(ex);
         }
     }
