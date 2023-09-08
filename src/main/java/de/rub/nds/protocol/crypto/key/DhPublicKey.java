@@ -9,55 +9,48 @@
 package de.rub.nds.protocol.crypto.key;
 
 import de.rub.nds.protocol.constants.AsymmetricAlgorithmType;
+import de.rub.nds.protocol.constants.FfdhGoupParameters;
+import de.rub.nds.protocol.crypto.ffdh.ExplicitFfdhGroup;
 import java.math.BigInteger;
 
 public class DhPublicKey implements PublicKeyContainer {
 
-    private BigInteger modulus;
-    private BigInteger generator;
+    private FfdhGoupParameters parameters;
+
     private BigInteger publicKey;
 
     public DhPublicKey(BigInteger publicKey, BigInteger generator, BigInteger modulus) {
-        this.modulus = modulus;
-        this.generator = generator;
+        this.parameters = new ExplicitFfdhGroup(modulus, generator);
+        this.publicKey = publicKey;
+    }
+
+    public DhPublicKey(BigInteger publicKey, FfdhGoupParameters parameters) {
+        this.parameters = parameters;
         this.publicKey = publicKey;
     }
 
     public BigInteger getModulus() {
-        return modulus;
-    }
-
-    public void setModulus(BigInteger modulus) {
-        this.modulus = modulus;
+        return parameters.getModulus();
     }
 
     public BigInteger getGenerator() {
-        return generator;
-    }
-
-    public void setGenerator(BigInteger generator) {
-        this.generator = generator;
+        return parameters.getGenerator();
     }
 
     public BigInteger getPublicKey() {
         return publicKey;
     }
 
-    public void setPublicKey(BigInteger publicKey) {
-        this.publicKey = publicKey;
-    }
-
     @Override
     public int length() {
-        return modulus.bitLength();
+        return getModulus().bitLength();
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((modulus == null) ? 0 : modulus.hashCode());
-        result = prime * result + ((generator == null) ? 0 : generator.hashCode());
+        result = prime * result + ((parameters == null) ? 0 : parameters.hashCode());
         result = prime * result + ((publicKey == null) ? 0 : publicKey.hashCode());
         return result;
     }
@@ -68,12 +61,9 @@ public class DhPublicKey implements PublicKeyContainer {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         DhPublicKey other = (DhPublicKey) obj;
-        if (modulus == null) {
-            if (other.modulus != null) return false;
-        } else if (!modulus.equals(other.modulus)) return false;
-        if (generator == null) {
-            if (other.generator != null) return false;
-        } else if (!generator.equals(other.generator)) return false;
+        if (parameters == null) {
+            if (other.parameters != null) return false;
+        } else if (!parameters.equals(other.parameters)) return false;
         if (publicKey == null) {
             if (other.publicKey != null) return false;
         } else if (!publicKey.equals(other.publicKey)) return false;

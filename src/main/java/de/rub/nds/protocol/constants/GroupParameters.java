@@ -10,5 +10,10 @@ package de.rub.nds.protocol.constants;
 
 public interface GroupParameters {
 
+    /**
+     * Returns the size of and element in the group in bits.
+     *
+     * @return The size of an element in the group in bits.
+     */
     public abstract int getElementSize();
 }

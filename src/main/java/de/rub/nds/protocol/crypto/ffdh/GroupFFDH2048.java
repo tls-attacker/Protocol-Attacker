@@ -10,9 +10,9 @@ package de.rub.nds.protocol.crypto.ffdh;
 
 import java.math.BigInteger;
 
-public class GroupFFDHE2048 extends FFDHEGroup {
+public class GroupFFDH2048 extends FFDHGroup {
 
-    public GroupFFDHE2048() {
+    public GroupFFDH2048() {
         super(
                 new BigInteger("2", 16),
                 new BigInteger(
