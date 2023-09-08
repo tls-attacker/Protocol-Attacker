@@ -10,17 +10,17 @@ package de.rub.nds.protocol.constants;
 
 /** Metadata for hash algorithms. */
 public enum HashAlgorithm {
-    NONE(null, 0),
-    MD2("1.2.840.113549.2.2", 128),
-    MD4("1.2.840.113549.2.4", 128),
-    MD5("1.2.840.113549.2.5", 128),
-    SHA1("1.3.14.3.2.26", 160),
-    SHA256("2.16.840.1.101.3.4.2.1", 256),
-    SHA384("2.16.840.1.101.3.4.2.2", 384),
-    SHA512("2.16.840.1.101.3.4.2.3", 512),
-    SHA512_224("2.16.840.1.101.3.4.2.5", 224),
-    SM3("1.0.10118.3.0.65", 256),
-    SHA3_256("2.16.840.1.101.3.4.2.8", 256);
+    NONE(null, 0, 0),
+    MD2("1.2.840.113549.2.2", 128, 64),
+    MD4("1.2.840.113549.2.4", 128, 64),
+    MD5("1.2.840.113549.2.5", 128, 64),
+    SHA1("1.3.14.3.2.26", 160, 80),
+    SHA256("2.16.840.1.101.3.4.2.1", 256, 128),
+    SHA384("2.16.840.1.101.3.4.2.2", 384, 192),
+    SHA512("2.16.840.1.101.3.4.2.3", 512, 256),
+    SHA512_224("2.16.840.1.101.3.4.2.5", 224, 112),
+    SM3("1.0.10118.3.0.65", 256, 128),
+    SHA3_256("2.16.840.1.101.3.4.2.8", 256, 128);
 
     /** OID of the hash algorithm. */
     private String hashAlgorithmIdentifierOid;
@@ -29,9 +29,11 @@ public enum HashAlgorithm {
 
     private int secruityStrength;
 
-    private HashAlgorithm(String hashAlgorithmIdentifierOid, int bitStrength) {
+    private HashAlgorithm(
+            String hashAlgorithmIdentifierOid, int bitStrength, int securityStrength) {
         this.hashAlgorithmIdentifierOid = hashAlgorithmIdentifierOid;
         this.bitLength = bitStrength;
+        this.secruityStrength = securityStrength;
     }
 
     public String getHashAlgorithmIdentifierOid() {
@@ -43,6 +45,6 @@ public enum HashAlgorithm {
     }
 
     public int getSecurityStrength() {
-        return bitLength / 2; // This is true right now, might change in the future
+        return secruityStrength;
     }
 }
