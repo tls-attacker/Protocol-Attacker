@@ -8,10 +8,10 @@
  */
 package de.rub.nds.protocol.crypto.ffdh;
 
-import de.rub.nds.protocol.constants.FFDHGroupParameters;
+import de.rub.nds.protocol.constants.FfdhGoupParameters;
 import java.math.BigInteger;
 
-public abstract class FFDHGroup implements FFDHGroupParameters {
+public abstract class FFDHGroup implements FfdhGoupParameters {
 
     private final BigInteger generator;
     private final BigInteger modulus;

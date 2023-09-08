@@ -10,7 +10,7 @@ package de.rub.nds.protocol.constants;
 
 import java.math.BigInteger;
 
-public interface DhGroupParameters extends GroupParameters {
+public interface FfdhGoupParameters extends GroupParameters {
     public BigInteger getModulus();
 
     public BigInteger getGenerator();
