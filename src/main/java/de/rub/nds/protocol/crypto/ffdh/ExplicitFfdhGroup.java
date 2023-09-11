@@ -32,7 +32,7 @@ public class ExplicitFfdhGroup implements FfdhGoupParameters {
     }
 
     @Override
-    public int getElementSize() {
+    public int getElementSizeBits() {
         return modulus.bitLength();
     }
 

@@ -15,5 +15,5 @@ public interface GroupParameters {
      *
      * @return The size of an element in the group in bits.
      */
-    public abstract int getElementSize();
+    public abstract int getElementSizeBits();
 }

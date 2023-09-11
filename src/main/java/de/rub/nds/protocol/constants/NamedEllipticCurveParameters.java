@@ -573,7 +573,7 @@ public enum NamedEllipticCurveParameters implements GroupParameters {
     }
 
     @Override
-    public int getElementSize() {
+    public int getElementSizeBits() {
         return bitLength;
     }
 }
