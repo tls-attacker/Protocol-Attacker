@@ -41,7 +41,7 @@ public class EcdsaPublicKey implements PublicKeyContainer {
 
     @Override
     public int length() {
-        return parameters.getBitLength();
+        return parameters.getElementSizeBits();
     }
 
     @Override

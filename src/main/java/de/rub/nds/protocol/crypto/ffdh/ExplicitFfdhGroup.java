@@ -37,6 +37,11 @@ public class ExplicitFfdhGroup implements FfdhGoupParameters {
     }
 
     @Override
+    public int getElementSizeBytes() {
+        return (int) Math.ceil(((double) getElementSizeBits()) / 8);
+    }
+
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;

@@ -489,19 +489,19 @@ public enum NamedEllipticCurveParameters implements GroupParameters {
             new EllipticCurveSM2());
 
     /** The name referred by us internally, always present */
-    private String name;
+    private final String name;
     /** The name referred by ANSI X9.62, may be null if not defined */
-    private String x962name;
+    private final String x962name;
     /** The name referred by NIST, may be null if not defined */
-    private String nistName;
+    private final String nistName;
     /** The name referred by SEC 2, may be null if not defined */
-    private String secName;
+    private final String secName;
     /** The type of the equation that is used to define the curve */
-    private EcCurveEquationType equationType;
+    private final EcCurveEquationType equationType;
     /** The length in bit of an individual element of the curve */
-    private int bitLength;
+    private final int bitLength;
     /** The concrete curve that is behind these parameters */
-    private EllipticCurve curve;
+    private final EllipticCurve curve;
 
     private NamedEllipticCurveParameters(
             String name,
@@ -524,56 +524,33 @@ public enum NamedEllipticCurveParameters implements GroupParameters {
         return curve;
     }
 
-    public int getBitLength() {
-        return bitLength;
-    }
-
-    public void setBitLength(int bitLength) {
-        this.bitLength = bitLength;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getX962name() {
         return x962name;
     }
 
-    public void setX962name(String x962name) {
-        this.x962name = x962name;
-    }
-
     public String getNistName() {
         return nistName;
-    }
-
-    public void setNistName(String nistName) {
-        this.nistName = nistName;
     }
 
     public String getSecName() {
         return secName;
     }
 
-    public void setSecName(String secName) {
-        this.secName = secName;
-    }
-
     public EcCurveEquationType getEquationType() {
         return equationType;
-    }
-
-    public void setEquationType(EcCurveEquationType equationType) {
-        this.equationType = equationType;
     }
 
     @Override
     public int getElementSizeBits() {
         return bitLength;
+    }
+
+    @Override
+    public int getElementSizeBytes() {
+        return (int) Math.ceil(((double) getElementSizeBits()) / 8);
     }
 }

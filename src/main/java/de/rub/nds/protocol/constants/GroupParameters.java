@@ -16,4 +16,12 @@ public interface GroupParameters {
      * @return The size of an element in the group in bits.
      */
     public abstract int getElementSizeBits();
+
+    /**
+     * Returns the size of and element in the group in bytes. If an element would be 13 bits, then
+     * this method would return 2.
+     *
+     * @return The size of an element in the group in bytes.
+     */
+    public abstract int getElementSizeBytes();
 }
