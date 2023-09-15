@@ -9,7 +9,17 @@
 package de.rub.nds.protocol.constants;
 
 public enum PointFormat {
-    UNCOMPRESSED,
-    ANSIX962_COMPRESSED_CHAR2,
-    ANSIX962_COMPRESSED_PRIME,
+    UNCOMPRESSED((byte) 0x04),
+    ANSIX962_COMPRESSED_CHAR2((byte) 0x03),
+    ANSIX962_COMPRESSED_PRIME((byte) 0x02);
+
+    private final byte ansiX961formatIdentifier;
+
+    private PointFormat(byte formatIdentifier) {
+        this.ansiX961formatIdentifier = formatIdentifier;
+    }
+
+    public byte getAnsiX961formatIdentifier() {
+        return ansiX961formatIdentifier;
+    }
 }
