@@ -22,4 +22,13 @@ public enum PointFormat {
     public byte getAnsiX961formatIdentifier() {
         return ansiX961formatIdentifier;
     }
+
+    public static PointFormat fromAnsiX509FormatIdentifier(byte formatIdentifier) {
+        for (PointFormat pointFormat : PointFormat.values()) {
+            if (pointFormat.getAnsiX961formatIdentifier() == formatIdentifier) {
+                return pointFormat;
+            }
+        }
+        return null;
+    }
 }
