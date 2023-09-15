@@ -47,8 +47,7 @@ public class PointFormatter {
                         throw new PreparationException("Could not serialize ec point", ex);
                     }
                     return stream.toByteArray();
-                case ANSIX962_COMPRESSED_CHAR2:
-                case ANSIX962_COMPRESSED_PRIME:
+                case COMPRESSED:
                     EllipticCurve curve = curveParameters.getCurve();
                     if (curve.createAPointOnCurve(point.getFieldX().getData())
                             .getFieldY()
@@ -218,6 +217,14 @@ public class PointFormatter {
             RFC7748Curve computation = (RFC7748Curve) curve;
             return curve.createAPointOnCurve(
                     computation.decodeCoordinate(new BigInteger(1, coordX)));
+        }
+    }
+
+    public PointFormat getPointFormat(byte[] encodedPointBytes) {
+        if (encodedPointBytes.length == 0) {
+            return PointFormat.UNCOMPRESSED;
+        } else {
+            return encodedPointBytes[0] == 0x04 ? PointFormat.UNCOMPRESSED : PointFormat.COMPRESSED;
         }
     }
 
