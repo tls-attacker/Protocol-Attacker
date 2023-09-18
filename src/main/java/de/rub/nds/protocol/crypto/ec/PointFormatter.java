@@ -220,7 +220,7 @@ public class PointFormatter {
         }
     }
 
-    public PointFormat getPointFormat(byte[] encodedPointBytes) {
+    public static PointFormat getPointFormat(byte[] encodedPointBytes) {
         if (encodedPointBytes.length == 0) {
             return PointFormat.UNCOMPRESSED;
         } else {
