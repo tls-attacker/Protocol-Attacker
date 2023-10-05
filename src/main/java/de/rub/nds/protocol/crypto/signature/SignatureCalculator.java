@@ -295,7 +295,7 @@ public class SignatureCalculator {
         computations.setPrivateKey(privateKey.getPrivateKey());
         computations.setToBeSignedBytes(toBeSignedBytes);
 
-        EllipticCurve curve = computations.getEcParameters().getCurve();
+        EllipticCurve curve = computations.getEcParameters().getGroup();
         Point basePoint = curve.getBasePoint();
 
         BigInteger groupOrder = curve.getBasePointOrder();
@@ -381,7 +381,7 @@ public class SignatureCalculator {
         computations.setPrivateKey(privateKey.getPrivateKey());
         computations.setToBeSignedBytes(toBeSignedBytes);
 
-        EllipticCurve curve = computations.getEcParameters().getCurve();
+        EllipticCurve curve = computations.getEcParameters().getGroup();
         Point basePoint = curve.getBasePoint();
 
         BigInteger groupOrder = curve.getBasePointOrder();

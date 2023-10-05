@@ -59,9 +59,10 @@ import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT409R1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT571K1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT571R1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveSM2;
+import de.rub.nds.protocol.crypto.ec.Point;
 
 /** Metainformation for named elliptic curves. */
-public enum NamedEllipticCurveParameters implements GroupParameters {
+public enum NamedEllipticCurveParameters implements GroupParameters<Point> {
     /*
      * ###############################
      * SECT
@@ -520,10 +521,6 @@ public enum NamedEllipticCurveParameters implements GroupParameters {
         this.curve = curve;
     }
 
-    public EllipticCurve getCurve() {
-        return curve;
-    }
-
     public String getName() {
         return name;
     }
@@ -552,5 +549,10 @@ public enum NamedEllipticCurveParameters implements GroupParameters {
     @Override
     public int getElementSizeBytes() {
         return (int) Math.ceil(((double) getElementSizeBits()) / 8);
+    }
+
+    @Override
+    public EllipticCurve getGroup() {
+        return curve;
     }
 }

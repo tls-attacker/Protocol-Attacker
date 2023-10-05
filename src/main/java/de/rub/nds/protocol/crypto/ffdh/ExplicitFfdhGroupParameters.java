@@ -8,17 +8,16 @@
  */
 package de.rub.nds.protocol.crypto.ffdh;
 
-import de.rub.nds.protocol.constants.FfdhGoupParameters;
+import de.rub.nds.protocol.constants.FfdhGroupParameters;
 import java.math.BigInteger;
 
-public class ExplicitFfdhGroup implements FfdhGoupParameters {
+public class ExplicitFfdhGroupParameters extends FfdhGroupParameters {
 
-    private BigInteger modulus;
     private BigInteger generator;
+    private BigInteger modulus;
 
-    public ExplicitFfdhGroup(BigInteger modulus, BigInteger generator) {
-        this.modulus = modulus;
-        this.generator = generator;
+    public ExplicitFfdhGroupParameters(BigInteger generator, BigInteger modulus) {
+        super(generator, modulus);
     }
 
     @Override
@@ -55,7 +54,7 @@ public class ExplicitFfdhGroup implements FfdhGoupParameters {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        ExplicitFfdhGroup other = (ExplicitFfdhGroup) obj;
+        ExplicitFfdhGroupParameters other = (ExplicitFfdhGroupParameters) obj;
         if (modulus == null) {
             if (other.modulus != null) return false;
         } else if (!modulus.equals(other.modulus)) return false;

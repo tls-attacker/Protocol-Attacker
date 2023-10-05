@@ -9,22 +9,22 @@
 package de.rub.nds.protocol.crypto.key;
 
 import de.rub.nds.protocol.constants.AsymmetricAlgorithmType;
-import de.rub.nds.protocol.constants.FfdhGoupParameters;
-import de.rub.nds.protocol.crypto.ffdh.ExplicitFfdhGroup;
+import de.rub.nds.protocol.constants.FfdhGroupParameters;
+import de.rub.nds.protocol.crypto.ffdh.ExplicitFfdhGroupParameters;
 import java.math.BigInteger;
 
 public class DhPublicKey implements PublicKeyContainer {
 
-    private FfdhGoupParameters parameters;
+    private FfdhGroupParameters parameters;
 
     private BigInteger publicKey;
 
     public DhPublicKey(BigInteger publicKey, BigInteger generator, BigInteger modulus) {
-        this.parameters = new ExplicitFfdhGroup(modulus, generator);
+        this.parameters = new ExplicitFfdhGroupParameters(modulus, generator);
         this.publicKey = publicKey;
     }
 
-    public DhPublicKey(BigInteger publicKey, FfdhGoupParameters parameters) {
+    public DhPublicKey(BigInteger publicKey, FfdhGroupParameters parameters) {
         this.parameters = parameters;
         this.publicKey = publicKey;
     }

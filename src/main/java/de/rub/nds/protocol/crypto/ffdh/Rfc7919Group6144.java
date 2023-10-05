@@ -8,11 +8,12 @@
  */
 package de.rub.nds.protocol.crypto.ffdh;
 
+import de.rub.nds.protocol.constants.FfdhGroupParameters;
 import java.math.BigInteger;
 
-public class GroupFFDH6144 extends FFDHGroup {
+public class Rfc7919Group6144 extends FfdhGroupParameters {
 
-    public GroupFFDH6144() {
+    public Rfc7919Group6144() {
         super(
                 new BigInteger("2", 16),
                 new BigInteger(

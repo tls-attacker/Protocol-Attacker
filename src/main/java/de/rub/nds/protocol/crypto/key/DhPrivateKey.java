@@ -8,16 +8,16 @@
  */
 package de.rub.nds.protocol.crypto.key;
 
-import de.rub.nds.protocol.constants.FfdhGoupParameters;
+import de.rub.nds.protocol.constants.FfdhGroupParameters;
 import java.math.BigInteger;
 
 public class DhPrivateKey implements PrivateKeyContainer {
 
     private BigInteger privateKey;
 
-    private FfdhGoupParameters parameters;
+    private FfdhGroupParameters parameters;
 
-    public DhPrivateKey(BigInteger privateKey, FfdhGoupParameters parameters) {
+    public DhPrivateKey(BigInteger privateKey, FfdhGroupParameters parameters) {
         this.privateKey = privateKey;
         this.parameters = parameters;
     }
@@ -26,7 +26,7 @@ public class DhPrivateKey implements PrivateKeyContainer {
         return privateKey;
     }
 
-    public FfdhGoupParameters getParameters() {
+    public FfdhGroupParameters getParameters() {
         return parameters;
     }
 }

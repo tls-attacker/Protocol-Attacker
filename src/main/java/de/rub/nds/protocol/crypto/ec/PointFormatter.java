@@ -48,7 +48,7 @@ public class PointFormatter {
                     }
                     return stream.toByteArray();
                 case COMPRESSED:
-                    EllipticCurve curve = curveParameters.getCurve();
+                    EllipticCurve curve = curveParameters.getGroup();
                     if (curve.createAPointOnCurve(point.getFieldX().getData())
                             .getFieldY()
                             .getData()
@@ -111,7 +111,7 @@ public class PointFormatter {
      */
     public static Point fromRawFormat(
             NamedEllipticCurveParameters curveParameters, byte[] pointBytes) {
-        EllipticCurve curve = curveParameters.getCurve();
+        EllipticCurve curve = curveParameters.getGroup();
         int elementLength = ArrayConverter.bigIntegerToByteArray(curve.getModulus()).length;
         if (pointBytes.length < elementLength * 2) {
             LOGGER.warn(
@@ -136,7 +136,7 @@ public class PointFormatter {
     public static Point formatFromByteArray(
             NamedEllipticCurveParameters curveParameters, byte[] compressedPoint) {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(compressedPoint);
-        EllipticCurve curve = curveParameters.getCurve();
+        EllipticCurve curve = curveParameters.getGroup();
         int elementLength = ArrayConverter.bigIntegerToByteArray(curve.getModulus()).length;
         if (compressedPoint.length == 0) {
             LOGGER.warn("Could not parse point. Point is empty. Returning base point");

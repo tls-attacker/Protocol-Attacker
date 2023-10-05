@@ -28,7 +28,7 @@ public class EcdhPublicKey implements PublicKeyContainer {
             BigInteger publicPointX,
             BigInteger publicPointY,
             NamedEllipticCurveParameters parameters) {
-        this.publicPoint = parameters.getCurve().getPoint(publicPointX, publicPointY);
+        this.publicPoint = parameters.getGroup().getPoint(publicPointX, publicPointY);
         this.parameters = parameters;
     }
 

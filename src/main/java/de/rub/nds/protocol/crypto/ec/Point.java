@@ -30,7 +30,7 @@ import java.util.Objects;
 public class Point implements Serializable {
     public static Point createPoint(
             BigInteger x, BigInteger y, NamedEllipticCurveParameters curveParameters) {
-        EllipticCurve curve = curveParameters.getCurve();
+        EllipticCurve curve = curveParameters.getGroup();
         return curve.getPoint(x, y);
     }
 

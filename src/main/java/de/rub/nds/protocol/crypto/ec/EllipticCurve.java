@@ -8,10 +8,11 @@
  */
 package de.rub.nds.protocol.crypto.ec;
 
+import de.rub.nds.protocol.crypto.CyclicGroup;
 import java.math.BigInteger;
 
 /** An abstract class that provides functionality for elliptic curve over galois fields. */
-public abstract class EllipticCurve {
+public abstract class EllipticCurve implements CyclicGroup<Point> {
 
     private Point basePoint;
     private BigInteger basePointOrder;
@@ -175,4 +176,24 @@ public abstract class EllipticCurve {
     public abstract Point createAPointOnCurve(BigInteger x);
 
     public abstract FieldElement createFieldElement(BigInteger value);
+
+    @Override
+    public Point groupOperation(Point a, Point b) {
+        return add(a, b);
+    }
+
+    @Override
+    public Point nTimesGroupOperation(Point a, BigInteger scalar) {
+        return mult(scalar, a);
+    }
+
+    @Override
+    public Point getGenerator() {
+        return getBasePoint();
+    }
+
+    @Override
+    public Point nTimesGroupOperationOnGenerator(BigInteger scalar) {
+        return nTimesGroupOperation(basePoint, scalar);
+    }
 }

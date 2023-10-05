@@ -8,7 +8,9 @@
  */
 package de.rub.nds.protocol.constants;
 
-public interface GroupParameters {
+import de.rub.nds.protocol.crypto.CyclicGroup;
+
+public interface GroupParameters<GroupElementT> {
 
     /**
      * Returns the size of and element in the group in bits.
@@ -24,4 +26,11 @@ public interface GroupParameters {
      * @return The size of an element in the group in bytes.
      */
     public abstract int getElementSizeBytes();
+
+    /**
+     * Returns an instance of the mathematical group that is described by these parameters.
+     *
+     * @return An instasnce of the unterlying group
+     */
+    public CyclicGroup<GroupElementT> getGroup();
 }
