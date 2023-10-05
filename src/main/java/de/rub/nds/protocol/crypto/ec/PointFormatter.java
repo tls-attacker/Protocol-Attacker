@@ -10,8 +10,10 @@ package de.rub.nds.protocol.crypto.ec;
 
 import de.rub.nds.modifiablevariable.util.ArrayConverter;
 import de.rub.nds.protocol.constants.EcCurveEquationType;
+import de.rub.nds.protocol.constants.GroupParameters;
 import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
 import de.rub.nds.protocol.constants.PointFormat;
+import de.rub.nds.protocol.crypto.CyclicGroup;
 import de.rub.nds.protocol.exception.PreparationException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -25,14 +27,16 @@ public class PointFormatter {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static byte[] formatToByteArray(
-            NamedEllipticCurveParameters curveParameters, Point point, PointFormat format) {
+            GroupParameters<?> groupParameters, Point point, PointFormat format) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         if (point.isAtInfinity()) {
             return new byte[1];
         }
         int elementLength =
                 ArrayConverter.bigIntegerToByteArray(point.getFieldX().getModulus()).length;
-        if (curveParameters.getEquationType() == EcCurveEquationType.SHORT_WEIERSTRASS) {
+        if (groupParameters instanceof NamedEllipticCurveParameters
+                && ((NamedEllipticCurveParameters) groupParameters).getEquationType()
+                        == EcCurveEquationType.SHORT_WEIERSTRASS) {
             switch (format) {
                 case UNCOMPRESSED:
                     stream.write(0x04);
@@ -48,7 +52,12 @@ public class PointFormatter {
                     }
                     return stream.toByteArray();
                 case COMPRESSED:
-                    EllipticCurve curve = curveParameters.getGroup();
+                    CyclicGroup<?> group = groupParameters.getGroup();
+                    if (!(group instanceof EllipticCurve)) {
+                        throw new IllegalArgumentException(
+                                "Cannot convert Point for non-elliptic curve");
+                    }
+                    EllipticCurve curve = (EllipticCurve) group;
                     if (curve.createAPointOnCurve(point.getFieldX().getData())
                             .getFieldY()
                             .getData()
@@ -105,20 +114,23 @@ public class PointFormatter {
      * Tries to read the first N byte[] as a point of the curve of the form x|y. If the byte[] has
      * enough bytes the base point of the named group is returned
      *
-     * @param curveParameters
+     * @param groupParameters
      * @param pointBytes
      * @return
      */
-    public static Point fromRawFormat(
-            NamedEllipticCurveParameters curveParameters, byte[] pointBytes) {
-        EllipticCurve curve = curveParameters.getGroup();
-        int elementLength = ArrayConverter.bigIntegerToByteArray(curve.getModulus()).length;
+    public static Point fromRawFormat(GroupParameters<?> groupParameters, byte[] pointBytes) {
+        CyclicGroup<?> group = groupParameters.getGroup();
+        if (!(group instanceof EllipticCurve)) {
+            LOGGER.warn(
+                    "Trying to convert bytes for a non elliptic curve to a Point. Returning null");
+            return null;
+        }
+        Point basePoint = ((EllipticCurve) group).getBasePoint();
+        int elementLength = groupParameters.getElementSizeBytes();
         if (pointBytes.length < elementLength * 2) {
             LOGGER.warn(
-                    "Cannot decode byte[] to point of "
-                            + curveParameters
-                            + ". Returning base point");
-            return curve.getBasePoint();
+                    "Cannot decode byte[] to point of {}. Returning base point", groupParameters);
+            return basePoint;
         }
         ByteArrayInputStream inputStream = new ByteArrayInputStream(pointBytes);
         byte[] coordX = new byte[elementLength];
@@ -128,21 +140,31 @@ public class PointFormatter {
             inputStream.read(coordY);
         } catch (IOException ex) {
             LOGGER.warn("Could not read from byteArrayStream. Returning base point", ex);
-            return curve.getBasePoint();
+            return basePoint;
         }
-        return curve.getPoint(new BigInteger(1, coordX), new BigInteger(1, coordY));
+        return ((EllipticCurve) group)
+                .getPoint(new BigInteger(1, coordX), new BigInteger(1, coordY));
     }
 
     public static Point formatFromByteArray(
-            NamedEllipticCurveParameters curveParameters, byte[] compressedPoint) {
+            GroupParameters<?> groupParameters, byte[] compressedPoint) {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(compressedPoint);
-        EllipticCurve curve = curveParameters.getGroup();
-        int elementLength = ArrayConverter.bigIntegerToByteArray(curve.getModulus()).length;
+        CyclicGroup<?> group = groupParameters.getGroup();
+        if (!(group instanceof EllipticCurve)) {
+            LOGGER.warn(
+                    "Trying to convert bytes for a non elliptic curve to a Point. Returning null");
+
+            return null;
+        }
+        EllipticCurve curve = (EllipticCurve) group;
+        int elementLength = groupParameters.getElementSizeBytes();
         if (compressedPoint.length == 0) {
             LOGGER.warn("Could not parse point. Point is empty. Returning base point");
             return curve.getBasePoint();
         }
-        if (curveParameters.getEquationType() == EcCurveEquationType.SHORT_WEIERSTRASS) {
+        if (groupParameters instanceof NamedEllipticCurveParameters
+                && ((NamedEllipticCurveParameters) groupParameters).getEquationType()
+                        == EcCurveEquationType.SHORT_WEIERSTRASS) {
             int pointFormat = inputStream.read();
             byte[] coordX = new byte[elementLength];
             switch (pointFormat) {
@@ -214,9 +236,9 @@ public class PointFormatter {
                 LOGGER.warn("Could not read from byteArrayStream. Returning base point", ex);
                 return curve.getBasePoint();
             }
-            RFC7748Curve computation = (RFC7748Curve) curve;
+            RFC7748Curve rfc7748Curve = (RFC7748Curve) group;
             return curve.createAPointOnCurve(
-                    computation.decodeCoordinate(new BigInteger(1, coordX)));
+                    rfc7748Curve.decodeCoordinate(new BigInteger(1, coordX)));
         }
     }
 
