@@ -39,4 +39,12 @@ public class FfdhGroup implements CyclicGroup<BigInteger> {
     public BigInteger nTimesGroupOperationOnGenerator(BigInteger scalar) {
         return nTimesGroupOperation(parameters.getGenerator(), scalar);
     }
+
+    public BigInteger getModulus() {
+        return parameters.getModulus();
+    }
+
+    public FfdhGroupParameters getParameters() {
+        return parameters;
+    }
 }
