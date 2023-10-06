@@ -8,7 +8,8 @@
  */
 package de.rub.nds.protocol.crypto.ec;
 
-import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
+import de.rub.nds.protocol.constants.GroupParameters;
+import de.rub.nds.protocol.crypto.CyclicGroup;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -17,6 +18,8 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Can be used to store a point of an elliptic curve.
@@ -28,9 +31,19 @@ import java.util.Objects;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Point implements Serializable {
+
+    private static final Logger LOGGER = LogManager.getLogger();
+
     public static Point createPoint(
-            BigInteger x, BigInteger y, NamedEllipticCurveParameters curveParameters) {
-        EllipticCurve curve = curveParameters.getGroup();
+            BigInteger x, BigInteger y, GroupParameters<?> curveParameters) {
+        CyclicGroup<?> group = curveParameters.getGroup();
+        EllipticCurve curve;
+        if (group instanceof EllipticCurve) {
+            curve = (EllipticCurve) group;
+        } else {
+            LOGGER.warn("Cannot create point for non-elliptic curve");
+            return null;
+        }
         return curve.getPoint(x, y);
     }
 
