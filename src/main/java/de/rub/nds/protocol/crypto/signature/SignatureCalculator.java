@@ -144,7 +144,9 @@ public class SignatureCalculator {
         derEncoded = computations.getDerEncodedDigest().getValue();
         byte[] padding =
                 computePkcs1Padding(
-                        derEncoded.length, computations.getModulus().getValue().bitLength() / 8);
+                        derEncoded.length,
+                        ArrayConverter.bigIntegerToByteArray(computations.getModulus().getValue())
+                                .length);
         computations.setPadding(padding);
         padding = computations.getPadding().getValue();
         byte[] plainData = ArrayConverter.concatenate(padding, derEncoded);
