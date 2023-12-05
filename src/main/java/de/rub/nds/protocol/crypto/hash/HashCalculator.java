@@ -29,8 +29,13 @@ public class HashCalculator {
                 return computeSha384(toHash);
             case SHA512:
                 return computeSha512(toHash);
+            case SHA512_224:
+                return computeHash(toHash, "SHA-512/224");
+            case SHA3_256:
+                return computeHash(toHash, "SHA3-256");
             default:
-                throw new UnsupportedOperationException("Hash function not implemented");
+                throw new UnsupportedOperationException(
+                        "Hash function not implemented: " + algorithm.name());
         }
     }
 
