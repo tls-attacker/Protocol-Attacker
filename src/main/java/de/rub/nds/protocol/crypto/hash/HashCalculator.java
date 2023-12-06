@@ -19,6 +19,8 @@ public class HashCalculator {
 
     public static byte[] compute(byte[] toHash, HashAlgorithm algorithm) {
         switch (algorithm) {
+            case NONE:
+                return toHash;
             case MD5:
                 return computeMd5(toHash);
             case SHA1:
