@@ -23,6 +23,8 @@ public class HashCalculator {
                 return computeMd5(toHash);
             case SHA1:
                 return computeSha1(toHash);
+            case SHA224:
+                return computeHash(toHash, "SHA-224");
             case SHA256:
                 return computeSha256(toHash);
             case SHA384:
@@ -31,6 +33,8 @@ public class HashCalculator {
                 return computeSha512(toHash);
             case SHA512_224:
                 return computeHash(toHash, "SHA-512/224");
+            case SHA512_256:
+                return computeHash(toHash, "SHA-512/256");
             case SHA3_256:
                 return computeHash(toHash, "SHA3-256");
             default:
