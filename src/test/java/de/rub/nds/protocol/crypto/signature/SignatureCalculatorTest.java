@@ -20,7 +20,15 @@ import de.rub.nds.protocol.crypto.key.DsaPrivateKey;
 import de.rub.nds.protocol.crypto.key.EcdsaPrivateKey;
 import de.rub.nds.protocol.crypto.key.RsaPrivateKey;
 import java.math.BigInteger;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.security.Security;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.spec.DSAPublicKeySpec;
+import java.security.spec.KeySpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -83,9 +91,15 @@ public class SignatureCalculatorTest {
         assertTrue(computations.getSignatureValid());
     }
 
-    /** Test of computeDsaSignature method, of class SignatureCalculator. */
+    /**
+     * Test of computeDsaSignature method, of class SignatureCalculator.
+     *
+     * @throws SignatureException
+     * @throws InvalidKeyException
+     * @throws NoSuchAlgorithmException
+     */
     @Test
-    public void testComputeDsaSignature() {
+    public void testComputeDsaSignature() throws Exception {
         DsaSignatureComputations computations = new DsaSignatureComputations();
         BigInteger privateKey =
                 new BigInteger(
@@ -120,7 +134,19 @@ public class SignatureCalculatorTest {
                 new DsaPrivateKey(q, privateKey, nonce, g, p),
                 toBeSignedBytes,
                 hashAlgorithm);
-        computations.getDigestBytes();
+        // Generate public key
+        KeySpec pubKeySpec = new DSAPublicKeySpec(g.modPow(privateKey, p), p, q, g);
+        KeyFactory keyFactory = KeyFactory.getInstance("DSA");
+        PublicKey pubKey = keyFactory.generatePublic(pubKeySpec);
+
+        // Initialize signature object
+        Signature sig = Signature.getInstance("SHA1withDSA");
+        sig.initVerify(pubKey);
+
+        // Update and verify the signature
+        sig.update(computations.getToBeSignedBytes().getValue());
+        boolean verified = sig.verify(computations.getSignatureBytes().getValue());
+        assertTrue(verified);
         assertEquals(
                 new BigInteger(
                         1,
@@ -172,7 +198,7 @@ public class SignatureCalculatorTest {
         assertTrue(computations.getSignatureValid());
         assertArrayEquals(
                 ArrayConverter.hexStringToByteArray(
-                        "302D0214636155AC9A4633B4665D179F9E4117DF68601F34021500D557A1B4E7346C4A55427A28D47191381C269BDE"),
+                        "302C0214636155AC9A4633B4665D179F9E4117DF68601F3402146C540B02D9D4852F89DF8CFC99963204F4347704"),
                 computations.getSignatureBytes().getValue());
         assertArrayEquals(
                 ArrayConverter.hexStringToByteArray("616263"),

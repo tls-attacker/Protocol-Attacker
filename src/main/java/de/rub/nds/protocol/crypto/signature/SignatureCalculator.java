@@ -210,7 +210,7 @@ public class SignatureCalculator {
         computations.setPrivateKey(privateKey.getX());
 
         LOGGER.trace("Computing DSA signature");
-        int groupSize = privateKey.getQ().bitLength() / 8;
+        int groupSize = ArrayConverter.bigIntegerToByteArray(privateKey.getQ()).length;
         // not persisted in computation as they can be set before the calculation
         LOGGER.debug("g: " + computations.getG().getValue());
         LOGGER.debug("p: " + computations.getP().getValue());
@@ -221,8 +221,15 @@ public class SignatureCalculator {
                 HashCalculator.compute(computations.getToBeSignedBytes().getValue(), hashAlgorithm);
         computations.setDigestBytes(digest);
         digest = computations.getDigestBytes().getValue();
+        LOGGER.debug(
+                "toBeSignedBytes: "
+                        + ArrayConverter.bytesToHexString(
+                                computations.getToBeSignedBytes().getValue()));
 
-        LOGGER.debug("Digest: " + ArrayConverter.bytesToHexString(digest));
+        LOGGER.debug(
+                "Digest: "
+                        + ArrayConverter.bytesToHexString(
+                                computations.getDigestBytes().getValue()));
 
         // z = e[0:l], with l bit length of group order
         byte[] truncatedHashBytes =
@@ -270,7 +277,7 @@ public class SignatureCalculator {
         LOGGER.debug("r: " + ArrayConverter.bytesToHexString(r.toByteArray()));
 
         ASN1Integer asn1IntegerR = new ASN1Integer(r);
-        ASN1Integer asn1IntegerS = new ASN1Integer(inverseNonce);
+        ASN1Integer asn1IntegerS = new ASN1Integer(s);
         ASN1Encodable[] encodables = new ASN1Encodable[] {asn1IntegerR, asn1IntegerS};
         DERSequence derSequence = new DERSequence(encodables);
 
