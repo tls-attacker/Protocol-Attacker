@@ -136,12 +136,19 @@ public class SignatureCalculator {
         computations.setModulus(privateKey.getModulus());
         computations.setToBeSignedBytes(toBeSignedBytes);
         computations.setHashAlgorithm(hashAlgorithm);
-        byte[] digest = HashCalculator.compute(toBeSignedBytes, hashAlgorithm);
-        computations.setDigestBytes(digest);
-        digest = computations.getDigestBytes().getValue();
-        byte[] derEncoded = derEncodePkcs1(hashAlgorithm, digest);
-        computations.setDerEncodedDigest(derEncoded);
-        derEncoded = computations.getDerEncodedDigest().getValue();
+        byte[] derEncoded;
+        if (hashAlgorithm != HashAlgorithm.NONE) {
+            byte[] digest = HashCalculator.compute(toBeSignedBytes, hashAlgorithm);
+            computations.setDigestBytes(digest);
+            digest = computations.getDigestBytes().getValue();
+            derEncoded = derEncodePkcs1(hashAlgorithm, digest);
+            computations.setDerEncodedDigest(derEncoded);
+            derEncoded = computations.getDerEncodedDigest().getValue();
+        } else {
+            computations.setDigestBytes(computations.getToBeSignedBytes().getValue());
+            computations.setDerEncodedDigest(computations.getDigestBytes().getValue());
+            derEncoded = computations.getDerEncodedDigest().getValue();
+        }
         byte[] padding =
                 computePkcs1Padding(
                         derEncoded.length,
