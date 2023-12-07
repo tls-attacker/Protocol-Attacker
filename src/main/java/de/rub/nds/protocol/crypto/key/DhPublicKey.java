@@ -20,7 +20,7 @@ public class DhPublicKey implements PublicKeyContainer {
     private BigInteger publicKey;
 
     public DhPublicKey(BigInteger publicKey, BigInteger generator, BigInteger modulus) {
-        this.parameters = new ExplicitFfdhGroupParameters(modulus, generator);
+        this.parameters = new ExplicitFfdhGroupParameters(generator, modulus);
         this.publicKey = publicKey;
     }
 
