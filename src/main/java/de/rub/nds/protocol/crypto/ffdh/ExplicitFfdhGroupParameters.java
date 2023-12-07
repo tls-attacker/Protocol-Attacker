@@ -13,39 +13,16 @@ import java.math.BigInteger;
 
 public class ExplicitFfdhGroupParameters extends FfdhGroupParameters {
 
-    private BigInteger generator;
-    private BigInteger modulus;
-
     public ExplicitFfdhGroupParameters(BigInteger generator, BigInteger modulus) {
         super(generator, modulus);
-    }
-
-    @Override
-    public BigInteger getModulus() {
-        return modulus;
-    }
-
-    @Override
-    public BigInteger getGenerator() {
-        return generator;
-    }
-
-    @Override
-    public int getElementSizeBits() {
-        return modulus.bitLength();
-    }
-
-    @Override
-    public int getElementSizeBytes() {
-        return (int) Math.ceil(((double) getElementSizeBits()) / 8);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((modulus == null) ? 0 : modulus.hashCode());
-        result = prime * result + ((generator == null) ? 0 : generator.hashCode());
+        result = prime * result + ((getModulus() == null) ? 0 : getModulus().hashCode());
+        result = prime * result + ((getGenerator() == null) ? 0 : getGenerator().hashCode());
         return result;
     }
 
@@ -55,12 +32,12 @@ public class ExplicitFfdhGroupParameters extends FfdhGroupParameters {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         ExplicitFfdhGroupParameters other = (ExplicitFfdhGroupParameters) obj;
-        if (modulus == null) {
-            if (other.modulus != null) return false;
-        } else if (!modulus.equals(other.modulus)) return false;
-        if (generator == null) {
-            if (other.generator != null) return false;
-        } else if (!generator.equals(other.generator)) return false;
+        if (getModulus() == null) {
+            if (other.getModulus() != null) return false;
+        } else if (!getModulus().equals(other.getModulus())) return false;
+        if (getGenerator() == null) {
+            if (other.getGenerator() != null) return false;
+        } else if (!getGenerator().equals(other.getGenerator())) return false;
         return true;
     }
 }
