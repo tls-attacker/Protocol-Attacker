@@ -10,7 +10,7 @@ package de.rub.nds.protocol.constants;
 
 /** Metadata for hash algorithms. */
 public enum HashAlgorithm {
-    NONE(null, 0, 0),
+    NONE("1.2.840.113549.2.1", 0, 0),
     MD2("1.2.840.113549.2.2", 128, 64),
     MD4("1.2.840.113549.2.4", 128, 64),
     MD5("1.2.840.113549.2.5", 128, 64),
