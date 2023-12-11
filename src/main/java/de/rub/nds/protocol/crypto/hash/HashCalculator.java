@@ -18,51 +18,11 @@ public class HashCalculator {
     private HashCalculator() {}
 
     public static byte[] compute(byte[] toHash, HashAlgorithm algorithm) {
-        switch (algorithm) {
-            case NONE:
-                return toHash;
-            case MD5:
-                return computeMd5(toHash);
-            case SHA1:
-                return computeSha1(toHash);
-            case SHA224:
-                return computeHash(toHash, "SHA-224");
-            case SHA256:
-                return computeSha256(toHash);
-            case SHA384:
-                return computeSha384(toHash);
-            case SHA512:
-                return computeSha512(toHash);
-            case SHA512_224:
-                return computeHash(toHash, "SHA-512/224");
-            case SHA512_256:
-                return computeHash(toHash, "SHA-512/256");
-            case SHA3_256:
-                return computeHash(toHash, "SHA3-256");
-            default:
-                throw new UnsupportedOperationException(
-                        "Hash function not implemented: " + algorithm.name());
+        if (algorithm == HashAlgorithm.NONE) {
+            return toHash;
+        } else {
+            return computeHash(toHash, algorithm.getJavaName());
         }
-    }
-
-    public static byte[] computeMd5(byte[] toHash) {
-        return computeHash(toHash, "MD5");
-    }
-
-    public static byte[] computeSha1(byte[] toHash) {
-        return computeHash(toHash, "SHA1");
-    }
-
-    public static byte[] computeSha256(byte[] toHash) {
-        return computeHash(toHash, "SHA256");
-    }
-
-    public static byte[] computeSha384(byte[] toHash) {
-        return computeHash(toHash, "SHA384");
-    }
-
-    public static byte[] computeSha512(byte[] toHash) {
-        return computeHash(toHash, "SHA512");
     }
 
     private static byte[] computeHash(byte[] toHash, String algorithmName) {
