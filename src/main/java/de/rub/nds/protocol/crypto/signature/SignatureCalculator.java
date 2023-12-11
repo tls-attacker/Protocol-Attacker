@@ -23,6 +23,7 @@ import de.rub.nds.protocol.exception.CryptoException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,14 +47,14 @@ public class SignatureCalculator {
             byte[] toBeSignedBytes,
             SignatureAlgorithm signatureAlgorithm,
             HashAlgorithm hashAlgorithm) {
-        if (computations instanceof RsaPssSignatureComputations) {
+        if (computations instanceof RsaSsaPssSignatureComputations) {
             // Check That parameters are compatible
             if (!(privateKey instanceof RsaPrivateKey)) {
                 throw new IllegalArgumentException(
                         "RSA SignatureComputations must be used with a RSA PrivateKey");
             }
             computeRsaPssSignature(
-                    (RsaPssSignatureComputations) computations,
+                    (RsaSsaPssSignatureComputations) computations,
                     (RsaPrivateKey) privateKey,
                     toBeSignedBytes,
                     hashAlgorithm);
@@ -123,7 +124,61 @@ public class SignatureCalculator {
             RsaPrivateKey privateKey,
             byte[] toBeSignedBytes,
             HashAlgorithm hashAlgorithm) {
-        throw new UnsupportedOperationException("Unsupported operation");
+        LOGGER.trace("Computing RSA-PSS signature");
+
+        computations.setPrivateKey(privateKey.getPrivateExponent());
+        computations.setModulus(privateKey.getModulus());
+        computations.setToBeSignedBytes(toBeSignedBytes);
+        computations.setHashAlgorithm(hashAlgorithm);
+
+        // Hash the message
+        byte[] digest = HashCalculator.compute(toBeSignedBytes, hashAlgorithm);
+        computations.setDigestBytes(digest);
+        digest = computations.getDigestBytes().getValue();
+
+        // M' = (0x)00 00 00 00 00 00 00 00 || mHash || salt
+        byte[] mPrime = ArrayConverter.concatenate(new byte[8], digest, salt);
+
+        // Hash M' to get H
+        byte[] h = HashCalculator.compute(mPrime, hashAlgorithm);
+        computations.sethHash(h);
+
+        // Generate padding string PS, which is a string of zero bytes
+        int emLength =
+                ArrayConverter.bigIntegerToByteArray(computations.getModulus().getValue()).length;
+        byte[] ps = new byte[emLength - saltLength - h.length - 2];
+        computations.setPs(ps);
+
+        // Generate the DB = PS || 0x01 || salt
+        byte[] db = ArrayConverter.concatenate(ps, new byte[] {0x01}, salt);
+
+        // Generate a random octet string seed of the same length as the hash
+        byte[] seed = new byte[h.length];
+        new SecureRandom().nextBytes(seed);
+        computations.setSeed(seed);
+
+        // Mask generation function (MGF1)
+        byte[] dbMask = MGF1(seed, db.length, hashAlgorithm);
+        computations.setDbMask(dbMask);
+
+        // Mask the DB
+        byte[] maskedDB = mask(db, dbMask);
+        computations.setMaskedDB(maskedDB);
+
+        // Construct the encoded message EM = maskedDB || H || 0xBC
+        byte[] em = ArrayConverter.concatenate(maskedDB, h, new byte[] {(byte) 0xBC});
+        computations.setEncodedMessage(em);
+
+        // Convert EM to an integer
+        BigInteger emInteger = new BigInteger(1, em);
+
+        // Signature calculation: s = (emInteger^d) mod n
+        BigInteger signature =
+                emInteger.modPow(
+                        computations.getPrivateKey().getValue(),
+                        computations.getModulus().getValue());
+        computations.setSignatureBytes(ArrayConverter.bigIntegerToByteArray(signature));
+        computations.setSignatureValid(true);
     }
 
     public void computeRsaPkcs1Signature(
@@ -495,8 +550,8 @@ public class SignatureCalculator {
                 return new GostSignatureComputations();
             case RSA_PKCS1:
                 return new RsaPkcs1SignatureComputations();
-            case RSA_PSS:
-                return new RsaPssSignatureComputations();
+            case RSA_SSA_PSS:
+                return new RsaSsaPssSignatureComputations();
             default:
                 throw new UnsupportedOperationException(
                         "Unsupported signature algorithm: " + signatureAlgorithm);

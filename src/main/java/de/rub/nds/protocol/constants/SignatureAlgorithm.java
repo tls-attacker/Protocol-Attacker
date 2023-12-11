@@ -12,7 +12,7 @@ public enum SignatureAlgorithm {
     RSA_PKCS1("RSA PKCS#1.5"),
     DSA("DSA (DSS)"),
     ECDSA("ECDSA"),
-    RSA_PSS("RSA PSS"),
+    RSA_SSA_PSS("RSASSA PSS"),
     ED25519("Ed25519"),
     ED448("Ed448"),
     GOSTR34102001("GOSTR34102001"),
