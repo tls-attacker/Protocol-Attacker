@@ -29,11 +29,18 @@ import java.security.Signature;
 import java.security.SignatureException;
 import java.security.spec.DSAPublicKeySpec;
 import java.security.spec.KeySpec;
+import java.security.spec.MGF1ParameterSpec;
+import java.security.spec.PSSParameterSpec;
+import java.security.spec.RSAPublicKeySpec;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class SignatureCalculatorTest {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     @BeforeAll
     public static void setup() {
@@ -288,5 +295,53 @@ public class SignatureCalculatorTest {
                                 "8bf77819ca05a6b2786c76262bf7371cef97b218e96f175a3ccdda2acc058903")),
                 computations.getS().getValue());
         assertTrue(computations.getSignatureValid());
+    }
+
+    @Test
+    public void testRsaSsaPssSignatureComputation() throws Exception {
+        byte[] originalData = "test".getBytes();
+        SignatureCalculator signatureCalculator = new SignatureCalculator();
+        RsaSsaPssSignatureComputations computations = new RsaSsaPssSignatureComputations();
+        BigInteger modulus =
+                new BigInteger(
+                        1,
+                        ArrayConverter.hexStringToByteArray(
+                                "00cbfb45e6b09f1af40df60ddc865b6f98a1fd724678b583bfb5ae8539627bffdcd930d7c3f996f75e15172a017f143101ecd28fc629b800e24f0a83665d77c0a3"));
+        BigInteger privateKey =
+                new BigInteger(
+                        1,
+                        ArrayConverter.hexStringToByteArray(
+                                "61a4eb153f3f2a9be18303a7a8f964366074fe9b15756e97fad48c19a8374b870589dde72e4377f3837ab59fa76b55563642f2df635da71a3aa50ab835201b61"));
+        BigInteger publicExponent = new BigInteger("65537");
+        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(privateKey, modulus);
+        computations.setSalt(new byte[] {01, 02});
+        signatureCalculator.computeRsaPssSignature(
+                computations,
+                rsaPrivateKey,
+                originalData,
+                HashAlgorithm.SHA256,
+                computations.getSalt().getValue(),
+                HashAlgorithm.SHA256);
+        // Generate the public key
+
+        LOGGER.debug(
+                "Signature: {}",
+                ArrayConverter.bytesToHexString(computations.getSignatureBytes().getValue())
+                        .toUpperCase());
+
+        Signature signature = Signature.getInstance("SHA256withRSA/PSS");
+        MGF1ParameterSpec mgf1ParameterSpec = new MGF1ParameterSpec("SHA-256");
+        PSSParameterSpec pssParameterSpec =
+                new PSSParameterSpec("SHA-256", "MGF1", mgf1ParameterSpec, 2, 1);
+        signature.setParameter(pssParameterSpec);
+        RSAPublicKeySpec spec2 = new RSAPublicKeySpec(modulus, publicExponent);
+        KeyFactory factory = KeyFactory.getInstance("RSA");
+        PublicKey pubKey = factory.generatePublic(spec2);
+        signature.initVerify(pubKey);
+
+        // Update the data to be verified and verify the signature
+        signature.update(originalData);
+        boolean isSignatureValid = signature.verify(computations.getSignatureBytes().getValue());
+        assertTrue(isSignatureValid);
     }
 }

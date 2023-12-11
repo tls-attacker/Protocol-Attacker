@@ -23,7 +23,6 @@ import de.rub.nds.protocol.exception.CryptoException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.Arrays;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -53,11 +52,17 @@ public class SignatureCalculator {
                 throw new IllegalArgumentException(
                         "RSA SignatureComputations must be used with a RSA PrivateKey");
             }
+            if (((RsaSsaPssSignatureComputations) computations).getSalt() == null) {
+                throw new IllegalArgumentException(
+                        "PSS must be used with a salt already prepared in the computations class");
+            }
             computeRsaPssSignature(
                     (RsaSsaPssSignatureComputations) computations,
                     (RsaPrivateKey) privateKey,
                     toBeSignedBytes,
-                    hashAlgorithm);
+                    hashAlgorithm,
+                    ((RsaSsaPssSignatureComputations) computations).getSalt().getValue(),
+                    HashAlgorithm.SHA1);
         } else if (computations instanceof RsaPkcs1SignatureComputations) {
             // Check That parameters are compatible
             if (!(privateKey instanceof RsaPrivateKey)) {
@@ -120,10 +125,12 @@ public class SignatureCalculator {
     }
 
     public void computeRsaPssSignature(
-            RsaPssSignatureComputations computations,
+            RsaSsaPssSignatureComputations computations,
             RsaPrivateKey privateKey,
             byte[] toBeSignedBytes,
-            HashAlgorithm hashAlgorithm) {
+            HashAlgorithm hashAlgorithm,
+            byte[] salt,
+            HashAlgorithm mgf1Algorithm) {
         LOGGER.trace("Computing RSA-PSS signature");
 
         computations.setPrivateKey(privateKey.getPrivateExponent());
@@ -132,43 +139,59 @@ public class SignatureCalculator {
         computations.setHashAlgorithm(hashAlgorithm);
 
         // Hash the message
-        byte[] digest = HashCalculator.compute(toBeSignedBytes, hashAlgorithm);
+        byte[] digest =
+                HashCalculator.compute(computations.getToBeSignedBytes().getValue(), hashAlgorithm);
         computations.setDigestBytes(digest);
         digest = computations.getDigestBytes().getValue();
+        LOGGER.debug("Digest: {}", digest);
 
         // M' = (0x)00 00 00 00 00 00 00 00 || mHash || salt
-        byte[] mPrime = ArrayConverter.concatenate(new byte[8], digest, salt);
+        byte[] paddedSaltedDigest =
+                ArrayConverter.concatenate(new byte[8], digest, computations.getSalt().getValue());
+        computations.setPaddedSaltedDigest(paddedSaltedDigest);
+        paddedSaltedDigest = computations.getPaddedSaltedDigest().getValue();
+        LOGGER.debug("Padded salted digest: {}", paddedSaltedDigest);
 
         // Hash M' to get H
-        byte[] h = HashCalculator.compute(mPrime, hashAlgorithm);
-        computations.sethHash(h);
+        byte[] hValue = HashCalculator.compute(paddedSaltedDigest, hashAlgorithm);
+        computations.setHValue(hValue);
+        hValue = computations.getHValue().getValue();
+        LOGGER.debug("H: {}", hValue);
 
         // Generate padding string PS, which is a string of zero bytes
-        int emLength =
-                ArrayConverter.bigIntegerToByteArray(computations.getModulus().getValue()).length;
-        byte[] ps = new byte[emLength - saltLength - h.length - 2];
-        computations.setPs(ps);
+        int emBits = computations.getModulus().getValue().bitLength() - 1;
+        int emLength = (emBits + 7) / 8;
 
+        byte[] psValue =
+                new byte[emLength - computations.getSalt().getValue().length - hValue.length - 2];
+        computations.setPsValue(psValue);
+        psValue = computations.getPsValue().getValue();
+        LOGGER.debug("Ps value: {}", psValue);
         // Generate the DB = PS || 0x01 || salt
-        byte[] db = ArrayConverter.concatenate(ps, new byte[] {0x01}, salt);
-
-        // Generate a random octet string seed of the same length as the hash
-        byte[] seed = new byte[h.length];
-        new SecureRandom().nextBytes(seed);
-        computations.setSeed(seed);
-
+        byte[] db =
+                ArrayConverter.concatenate(
+                        psValue, new byte[] {0x01}, computations.getSalt().getValue());
+        computations.setDbValue(db);
+        db = computations.getDbValue().getValue();
+        LOGGER.debug("DB: {}", db);
         // Mask generation function (MGF1)
-        byte[] dbMask = MGF1(seed, db.length, hashAlgorithm);
-        computations.setDbMask(dbMask);
-
-        // Mask the DB
+        byte[] dbMask = maskGeneratorFunction1(hValue, mgf1Algorithm, emLength - hValue.length - 1);
+        LOGGER.debug("DB mask: {}", dbMask);
+        assert (db.length == dbMask.length);
         byte[] maskedDB = mask(db, dbMask);
-        computations.setMaskedDB(maskedDB);
+        computations.setMaskedDb(maskedDB);
+        maskedDB = computations.getMaskedDb().getValue();
+        LOGGER.debug("Masked DB: {}", maskedDB);
+        computations.setTfValue(new byte[] {(byte) 0xBC});
 
+        int firstByteMask = 0xff >>> ((emLength * 8) - emBits);
+        maskedDB[0] &= firstByteMask;
         // Construct the encoded message EM = maskedDB || H || 0xBC
-        byte[] em = ArrayConverter.concatenate(maskedDB, h, new byte[] {(byte) 0xBC});
-        computations.setEncodedMessage(em);
-
+        byte[] em =
+                ArrayConverter.concatenate(maskedDB, hValue, computations.getTfValue().getValue());
+        computations.setEmValue(em);
+        em = computations.getEmValue().getValue();
+        LOGGER.debug("EM: {}", em);
         // Convert EM to an integer
         BigInteger emInteger = new BigInteger(1, em);
 
@@ -179,6 +202,46 @@ public class SignatureCalculator {
                         computations.getModulus().getValue());
         computations.setSignatureBytes(ArrayConverter.bigIntegerToByteArray(signature));
         computations.setSignatureValid(true);
+    }
+
+    private byte[] mask(byte[] value, byte[] mask) {
+        byte[] maskedValue = new byte[value.length];
+        for (int i = 0; i < value.length; i++) {
+            maskedValue[i] = (byte) (value[i] ^ mask[i]);
+        }
+        return maskedValue;
+    }
+
+    private byte[] maskGeneratorFunction1(byte[] input, HashAlgorithm mgfAlgorithm, int length) {
+        int mgfhLen = mgfAlgorithm.getBitLength() / 8;
+        byte[] mask = new byte[length];
+        byte[] hashBuf = new byte[mgfhLen];
+        byte[] counterBytes = new byte[4];
+        int counter = 0;
+
+        while (counter < (length / mgfhLen)) {
+            counterBytes = ArrayConverter.intToBytes(counter, 4);
+
+            hashBuf =
+                    HashCalculator.compute(
+                            ArrayConverter.concatenate(input, counterBytes), mgfAlgorithm);
+            System.arraycopy(hashBuf, 0, mask, counter * mgfhLen, mgfhLen);
+
+            counter++;
+        }
+
+        if ((counter * mgfhLen) < length) {
+            counterBytes = ArrayConverter.intToBytes(counter, 4);
+
+            hashBuf =
+                    HashCalculator.compute(
+                            ArrayConverter.concatenate(input, counterBytes), mgfAlgorithm);
+
+            System.arraycopy(
+                    hashBuf, 0, mask, counter * mgfhLen, mask.length - (counter * mgfhLen));
+        }
+
+        return mask;
     }
 
     public void computeRsaPkcs1Signature(

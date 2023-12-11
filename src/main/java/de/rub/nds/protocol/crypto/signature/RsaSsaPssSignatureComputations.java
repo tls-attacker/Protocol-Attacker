@@ -14,7 +14,7 @@ import de.rub.nds.modifiablevariable.bytearray.ModifiableByteArray;
 import de.rub.nds.protocol.constants.HashAlgorithm;
 import java.math.BigInteger;
 
-public class RsaPssSignatureComputations extends SignatureComputations {
+public class RsaSsaPssSignatureComputations extends SignatureComputations {
 
     private ModifiableBigInteger privateKey;
 
@@ -30,11 +30,14 @@ public class RsaPssSignatureComputations extends SignatureComputations {
     /** H = Hash(paddedSaltedDigest) */
     private ModifiableByteArray hValue;
 
+    /** PS = emLen - sLen - hLen - 2 zero octets */
+    private ModifiableByteArray psValue;
+
     /** DB = PS | 01 | salt */
     private ModifiableByteArray dbValue;
 
-    /** MGF(hValue) */
-    private ModifiableByteArray maskedValue;
+    /** MGF(hValue) XOR DB */
+    private ModifiableByteArray maskedDb;
 
     /** EM=(maskedValue | H | TF) */
     private ModifiableByteArray emValue;
@@ -44,7 +47,7 @@ public class RsaPssSignatureComputations extends SignatureComputations {
 
     private HashAlgorithm hashAlgorithm;
 
-    public RsaPssSignatureComputations() {}
+    public RsaSsaPssSignatureComputations() {}
 
     public ModifiableBigInteger getPrivateKey() {
         return privateKey;
@@ -103,5 +106,89 @@ public class RsaPssSignatureComputations extends SignatureComputations {
 
     public void setHashAlgorithm(HashAlgorithm hashAlgorithm) {
         this.hashAlgorithm = hashAlgorithm;
+    }
+
+    public ModifiableByteArray getSalt() {
+        return salt;
+    }
+
+    public void setSalt(ModifiableByteArray salt) {
+        this.salt = salt;
+    }
+
+    public void setSalt(byte[] salt) {
+        this.salt = ModifiableVariableFactory.safelySetValue(this.salt, salt);
+    }
+
+    public ModifiableByteArray getHValue() {
+        return hValue;
+    }
+
+    public void setHValue(ModifiableByteArray hValue) {
+        this.hValue = hValue;
+    }
+
+    public void setHValue(byte[] hValue) {
+        this.hValue = ModifiableVariableFactory.safelySetValue(this.hValue, hValue);
+    }
+
+    public ModifiableByteArray getDbValue() {
+        return dbValue;
+    }
+
+    public void setDbValue(ModifiableByteArray dbValue) {
+        this.dbValue = dbValue;
+    }
+
+    public void setDbValue(byte[] dbValue) {
+        this.dbValue = ModifiableVariableFactory.safelySetValue(this.dbValue, dbValue);
+    }
+
+    public ModifiableByteArray getMaskedDb() {
+        return maskedDb;
+    }
+
+    public void setMaskedDb(ModifiableByteArray maskedValue) {
+        this.maskedDb = maskedValue;
+    }
+
+    public void setMaskedDb(byte[] maskedValue) {
+        this.maskedDb = ModifiableVariableFactory.safelySetValue(this.maskedDb, maskedValue);
+    }
+
+    public ModifiableByteArray getEmValue() {
+        return emValue;
+    }
+
+    public void setEmValue(ModifiableByteArray emValue) {
+        this.emValue = emValue;
+    }
+
+    public void setEmValue(byte[] emValue) {
+        this.emValue = ModifiableVariableFactory.safelySetValue(this.emValue, emValue);
+    }
+
+    public ModifiableByteArray getTfValue() {
+        return tfValue;
+    }
+
+    public void setTfValue(ModifiableByteArray tfValue) {
+        this.tfValue = tfValue;
+    }
+
+    public void setTfValue(byte[] tfValue) {
+        this.tfValue = ModifiableVariableFactory.safelySetValue(this.tfValue, tfValue);
+    }
+
+    public ModifiableByteArray getPsValue() {
+        return psValue;
+    }
+
+    public void setPsValue(ModifiableByteArray psValue) {
+        this.psValue = psValue;
+    }
+
+    public void setPsValue(byte[] psValue) {
+        this.psValue = ModifiableVariableFactory.safelySetValue(this.psValue, psValue);
     }
 }
