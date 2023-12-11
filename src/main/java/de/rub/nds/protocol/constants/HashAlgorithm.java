@@ -29,13 +29,13 @@ public enum HashAlgorithm {
     /** The length of a hash */
     private int bitLength;
 
-    private int secruityStrength;
+    private int securityStrength;
 
     private HashAlgorithm(
             String hashAlgorithmIdentifierOid, int bitStrength, int securityStrength) {
         this.hashAlgorithmIdentifierOid = hashAlgorithmIdentifierOid;
         this.bitLength = bitStrength;
-        this.secruityStrength = securityStrength;
+        this.securityStrength = securityStrength;
     }
 
     public String getHashAlgorithmIdentifierOid() {
@@ -47,6 +47,6 @@ public enum HashAlgorithm {
     }
 
     public int getSecurityStrength() {
-        return secruityStrength;
+        return securityStrength;
     }
 }
