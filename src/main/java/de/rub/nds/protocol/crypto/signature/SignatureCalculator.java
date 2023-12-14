@@ -137,6 +137,7 @@ public class SignatureCalculator {
         computations.setModulus(privateKey.getModulus());
         computations.setToBeSignedBytes(toBeSignedBytes);
         computations.setHashAlgorithm(hashAlgorithm);
+        computations.setSalt(salt);
 
         // Hash the message
         byte[] digest =
