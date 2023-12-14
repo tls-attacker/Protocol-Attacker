@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>protocol-attacker</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.1</version>
 
     <name>Protocol-Attacker</name>
     <description>Protocol-Attacker is a framework for the creation of protocol analysis tools</description>
@@ -39,7 +39,7 @@
     <scm>
         <connection>scm:git:https://github.com/tls-attacker/Protocol-Attacker.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/tls-attacker/Protocol-Attacker-Development.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v1.1.1</tag>
         <url>https://github.com/tls-attacker/Protocol-Attacker</url>
     </scm>
 
