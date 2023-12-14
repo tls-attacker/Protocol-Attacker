@@ -162,9 +162,12 @@ public class SignatureCalculator {
         // Generate padding string PS, which is a string of zero bytes
         int emBits = computations.getModulus().getValue().bitLength() - 1;
         int emLength = (emBits + 7) / 8;
-
-        byte[] psValue =
-                new byte[emLength - computations.getSalt().getValue().length - hValue.length - 2];
+        int psLenght = emLength - computations.getSalt().getValue().length - hValue.length - 2;
+        if (psLenght < 0) {
+            LOGGER.warn("PS length is negative. Overwritting with 0");
+            psLenght = 0;
+        }
+        byte[] psValue = new byte[psLenght];
         computations.setPsValue(psValue);
         psValue = computations.getPsValue().getValue();
         LOGGER.debug("Ps value: {}", psValue);
@@ -178,7 +181,6 @@ public class SignatureCalculator {
         // Mask generation function (MGF1)
         byte[] dbMask = maskGeneratorFunction1(hValue, mgf1Algorithm, emLength - hValue.length - 1);
         LOGGER.debug("DB mask: {}", dbMask);
-        assert (db.length == dbMask.length);
         byte[] maskedDB = mask(db, dbMask);
         computations.setMaskedDb(maskedDB);
         maskedDB = computations.getMaskedDb().getValue();
@@ -186,7 +188,9 @@ public class SignatureCalculator {
         computations.setTfValue(new byte[] {(byte) 0xBC});
 
         int firstByteMask = 0xff >>> ((emLength * 8) - emBits);
-        maskedDB[0] &= firstByteMask;
+        if (maskedDB.length > 0) {
+            maskedDB[0] &= firstByteMask;
+        }
         // Construct the encoded message EM = maskedDB || H || 0xBC
         byte[] em =
                 ArrayConverter.concatenate(maskedDB, hValue, computations.getTfValue().getValue());
@@ -206,8 +210,12 @@ public class SignatureCalculator {
     }
 
     private byte[] mask(byte[] value, byte[] mask) {
+        // Usually value and mask will be of equal length, but invalid values may cause this to not
+        // hold
+        // that is why we take the minimum of both lengths here.
+        int length = Math.min(value.length, mask.length);
         byte[] maskedValue = new byte[value.length];
-        for (int i = 0; i < value.length; i++) {
+        for (int i = 0; i < length; i++) {
             maskedValue[i] = (byte) (value[i] ^ mask[i]);
         }
         return maskedValue;
