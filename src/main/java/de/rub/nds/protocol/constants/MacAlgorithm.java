@@ -1,7 +1,7 @@
 /*
  * Protocol-Attacker - A Framework to create Protocol Analysis Tools
  *
- * Copyright 2023-2023 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
+ * Copyright 2023-2024 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
  *
  * Licensed under Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -17,8 +17,8 @@ public enum MacAlgorithm {
     HMAC_SHA384(384, 192, "HmacSHA384"),
     HMAC_SHA512(512, 256, "HmacSHA512"),
     HMAC_SHA512_224(224, 112, "HmacSHA512/224"),
-    HMAC_SHA512_256(256, 128, "HmacSHA512/256");    
-    
+    HMAC_SHA512_256(256, 128, "HmacSHA512/256");
+
     /** The length of a hash */
     private int bitLength;
 
@@ -26,10 +26,7 @@ public enum MacAlgorithm {
 
     private String javaName;
 
-    private MacAlgorithm(
-            int bitStrength,
-            int securityStrength,
-            String javaName) {
+    private MacAlgorithm(int bitStrength, int securityStrength, String javaName) {
         this.bitLength = bitStrength;
         this.securityStrength = securityStrength;
         this.javaName = javaName;
