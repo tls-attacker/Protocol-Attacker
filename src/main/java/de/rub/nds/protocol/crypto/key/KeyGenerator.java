@@ -107,7 +107,6 @@ public class KeyGenerator {
         while (phi.gcd(publicExponent).intValue() > 1) {
             publicExponent = BigInteger.probablePrime(bitLength / 2, random);
         }
-        //    return new RsaPublicKey(modulus, publicExponent);
         BigInteger privateExponent = publicExponent.modInverse(phi);
         return Pair.of(new RsaPublicKey(modulus, publicExponent), new RsaPrivateKey(modulus, privateExponent));
     }
