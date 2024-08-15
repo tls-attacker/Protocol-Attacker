@@ -44,11 +44,6 @@ public class KeyGenerator {
         return new EddsaPublicKey(parameters.getGroup().nTimesGroupOperationOnGenerator(privateKey), parameters);
     }
 
-    public static DsaPublicKey generateDsaPublicKey(BigInteger Q, BigInteger Y, BigInteger generator,
-            BigInteger modulus) {
-        return new DsaPublicKey(Q, Y, generator, modulus);
-    }
-
     /**
      * 
      * @param privateKey A private key that should be used
@@ -88,6 +83,11 @@ public class KeyGenerator {
             }
         } while (g == BigInteger.ONE);
         // At this point parameter generation is finished and the public key can be calculated
+
+        return generateDsaPublicKey(privateKey, g, p, q);
+    }
+
+    public static DsaPublicKey generateDsaPublicKey(BigInteger privateKey, BigInteger g, BigInteger p, BigInteger q) {
 
         BigInteger y = g.modPow(privateKey, p);
 
