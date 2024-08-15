@@ -125,7 +125,7 @@ public class KeyGenerator {
             publicExponent = BigInteger.probablePrime(bitLength / 2, random);
         }
         BigInteger privateExponent = publicExponent.modInverse(phi);
-        return Pair.of(new RsaPublicKey(modulus, publicExponent), new RsaPrivateKey(modulus, privateExponent));
+        return Pair.of(new RsaPublicKey(publicExponent, modulus), new RsaPrivateKey(privateExponent, modulus));
     }
 
 }
