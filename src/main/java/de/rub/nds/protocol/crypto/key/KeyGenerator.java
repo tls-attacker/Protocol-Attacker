@@ -99,15 +99,33 @@ public class KeyGenerator {
     }
 
     public static Pair<RsaPublicKey, RsaPrivateKey> generateRsaKeys(int bitLength, Random random) {
-        BigInteger p = BigInteger.probablePrime(bitLength / 2, random);
-        BigInteger q = BigInteger.probablePrime(bitLength / 2, random);
-        BigInteger modulus = p.multiply(q);
+        return generateRsaKeys(new BigInteger("65537"), bitLength, random);
+    }
+
+    public static Pair<RsaPublicKey, RsaPrivateKey> generateRsaKeys(BigInteger publicExponent, int bitLength,
+            Random random) {
+        if (bitLength <= 5) {
+            throw new IllegalArgumentException("Bit length must be greater than 5");
+        }
+        BigInteger modulus;
+        BigInteger p;
+        BigInteger q;
+        do {
+
+            p = BigInteger.probablePrime(bitLength / 2, random);
+            if (bitLength % 2 == 0) {
+                q = BigInteger.probablePrime(bitLength / 2, random);
+            } else {
+                q = BigInteger.probablePrime(bitLength / 2 + 1, random);
+            }
+            modulus = p.multiply(q);
+        } while (modulus.bitLength() != bitLength);
         BigInteger phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
-        BigInteger publicExponent = BigInteger.probablePrime(bitLength / 2, random);
         while (phi.gcd(publicExponent).intValue() > 1) {
             publicExponent = BigInteger.probablePrime(bitLength / 2, random);
         }
         BigInteger privateExponent = publicExponent.modInverse(phi);
         return Pair.of(new RsaPublicKey(modulus, publicExponent), new RsaPrivateKey(modulus, privateExponent));
     }
+
 }
