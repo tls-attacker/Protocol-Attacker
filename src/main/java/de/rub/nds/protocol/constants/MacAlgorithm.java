@@ -11,14 +11,10 @@ package de.rub.nds.protocol.constants;
 /** Metadata for hash algorithms. */
 public enum MacAlgorithm {
     NONE(0, 0, null),
-    /**
-     * The MAC algorithm used in SLL3 and before. Its slightly different to HMAC
-     */
-    SSLMAC_MD5(16, 16, "SslMacMD5"), //TODO Move to TLS-Attacker
-    /**
-     * The MAC algorithm used in SLL3 and before. Its slightly different to HMAC
-     */
-    SSLMAC_SHA1(20, 20, "SslMacSHA1"), //TODO Move to TLS-Attacker
+    /** The MAC algorithm used in SLL3 and before. Its slightly different to HMAC */
+    SSLMAC_MD5(16, 16, "SslMacMD5"), // TODO Move to TLS-Attacker
+    /** The MAC algorithm used in SLL3 and before. Its slightly different to HMAC */
+    SSLMAC_SHA1(20, 20, "SslMacSHA1"), // TODO Move to TLS-Attacker
     HMAC_MD5(16, 16, "HmacMD5"),
     HMAC_SHA1(20, 20, "HmacSHA1"),
     HMAC_SHA256(32, 32, "HmacSHA256"),

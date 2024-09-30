@@ -18,8 +18,7 @@ public class KeyGenerator {
 
     private static final int MAX_NUMBER_OF_DSA_ITERATIONS = 100;
 
-    private KeyGenerator() {
-    }
+    private KeyGenerator() {}
 
     public static DhPublicKey generateDhPublicKey(
             BigInteger privateKey, FfdhGroupParameters parameters) {

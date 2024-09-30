@@ -1,7 +1,7 @@
 /*
  * Protocol-Attacker - A Framework to create Protocol Analysis Tools
  *
- * Copyright 2023-2023 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
+ * Copyright 2023-2024 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
  *
  * Licensed under Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -23,8 +23,8 @@ public enum HashAlgorithm {
     SHA512_256("2.16.840.1.101.3.4.2.6", 256, 128, "SHA-512/256"),
     SM3("1.0.10118.3.0.65", 256, 128, "SM3"),
     SHA3_256("2.16.840.1.101.3.4.2.8", 256, 128, "SHA3-256"),
-    GOST_R3411_12("1.2.643.7.1.1.2.2", 256, 128, "GOST341112"), //TODO not tested 
-    GOST_R3411_94("1.2.643.2.2.30.0", 256, 128, "GOST341194"); //TODO not tested
+    GOST_R3411_12("1.2.643.7.1.1.2.2", 256, 128, "GOST341112"), // TODO not tested
+    GOST_R3411_94("1.2.643.2.2.30.0", 256, 128, "GOST341194"); // TODO not tested
 
     /** OID of the hash algorithm. */
     private String hashAlgorithmIdentifierOid;
