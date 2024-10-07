@@ -30,7 +30,7 @@ public enum MacAlgorithm {
     /** The length of a MAC in byte */
     private int macLength;
 
-    /** The lenght of a MAC in byte */
+    /** The lenght of the key in byte */
     private int keySize;
 
     private String javaName;
