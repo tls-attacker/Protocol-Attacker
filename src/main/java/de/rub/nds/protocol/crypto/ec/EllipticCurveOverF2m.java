@@ -1,7 +1,7 @@
 /*
  * Protocol-Attacker - A Framework to create Protocol Analysis Tools
  *
- * Copyright 2023-2023 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
+ * Copyright 2023-2024 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
  *
  * Licensed under Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -179,7 +179,7 @@ public class EllipticCurveOverF2m extends EllipticCurve {
      * @param x The x coordinate of the point
      */
     @Override
-    public Point createAPointOnCurve(BigInteger x) {
+    public Point createAPointOnCurve(BigInteger x, boolean returnBasepointUponError) {
         FieldElementF2m fieldX = new FieldElementF2m(x, this.getModulus());
         if (x.equals(BigInteger.ZERO)) {
             FieldElementF2m y = curveB.squarePow(this.getModulus().bitLength() - 2);
@@ -192,8 +192,12 @@ public class EllipticCurveOverF2m extends EllipticCurve {
             FieldElementF2m beta = (FieldElementF2m) fieldX.add(curveA).add(product);
             FieldElementF2m z = (FieldElementF2m) solveQuadraticEquation(beta);
             if (z == null) {
-                LOGGER.warn("Was unable to create point on curve - using basepoint instead");
-                return this.getBasePoint();
+                if (returnBasepointUponError) {
+                    LOGGER.warn("Was unable to create point on curve - using basepoint instead");
+                    return this.getBasePoint();
+                } else {
+                    return null;
+                }
             } else {
                 FieldElementF2m y = (FieldElementF2m) fieldX.mult(z);
                 Point created = getPoint(x, y.getData());

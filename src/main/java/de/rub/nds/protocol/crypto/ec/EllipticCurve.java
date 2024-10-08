@@ -1,7 +1,7 @@
 /*
  * Protocol-Attacker - A Framework to create Protocol Analysis Tools
  *
- * Copyright 2023-2023 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
+ * Copyright 2023-2024 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
  *
  * Licensed under Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -173,7 +173,11 @@ public abstract class EllipticCurve implements CyclicGroup<Point> {
         return this.modulus;
     }
 
-    public abstract Point createAPointOnCurve(BigInteger x);
+    public Point createAPointOnCurve(BigInteger x) {
+        return createAPointOnCurve(x, true);
+    }
+
+    public abstract Point createAPointOnCurve(BigInteger x, boolean returnBasepointUponError);
 
     public abstract FieldElement createFieldElement(BigInteger value);
 
