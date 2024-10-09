@@ -13,4 +13,15 @@ import de.rub.nds.modifiablevariable.biginteger.ModifiableBigInteger;
 public class EddsaSignatureComputations extends SignatureComputations {
 
     private ModifiableBigInteger privateKey;
+
+    public EddsaSignatureComputations() {
+    }
+
+    public ModifiableBigInteger getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(ModifiableBigInteger privateKey) {
+        this.privateKey = privateKey;
+    }
 }
