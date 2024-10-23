@@ -1,7 +1,7 @@
 /*
  * Protocol-Attacker - A Framework to create Protocol Analysis Tools
  *
- * Copyright 2023-2023 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
+ * Copyright 2023-2024 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
  *
  * Licensed under Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -12,6 +12,7 @@ public enum SignatureAlgorithm {
     RSA_PKCS1("RSA PKCS#1.5"),
     DSA("DSA (DSS)"),
     ECDSA("ECDSA"),
+    RSA_PSS_RSAE("RSA PSS RSAE"),
     RSA_SSA_PSS("RSASSA PSS"),
     ED25519("Ed25519"),
     ED448("Ed448"),
