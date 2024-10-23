@@ -1,7 +1,7 @@
 /*
  * Protocol-Attacker - A Framework to create Protocol Analysis Tools
  *
- * Copyright 2023-2023 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
+ * Copyright 2023-2024 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
  *
  * Licensed under Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -23,6 +23,7 @@ import de.rub.nds.protocol.exception.CryptoException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -71,6 +72,17 @@ public class SignatureCalculator {
             }
             computeRsaPkcs1Signature(
                     (RsaPkcs1SignatureComputations) computations,
+                    (RsaPrivateKey) privateKey,
+                    toBeSignedBytes,
+                    hashAlgorithm);
+        } else if (computations instanceof RsaPssRsaeSignatureComputations) {
+            // Check That parameters are compatible
+            if (!(privateKey instanceof RsaPrivateKey)) {
+                throw new IllegalArgumentException(
+                        "RSA RSAE SignatureComputations must be used with a RSA PrivateKey");
+            }
+            computeRsaPssRsaeSignature(
+                    (RsaPssRsaeSignatureComputations) computations,
                     (RsaPrivateKey) privateKey,
                     toBeSignedBytes,
                     hashAlgorithm);
@@ -197,6 +209,102 @@ public class SignatureCalculator {
         computations.setEmValue(em);
         em = computations.getEmValue().getValue();
         LOGGER.debug("EM: {}", em);
+        // Convert EM to an integer
+        BigInteger emInteger = new BigInteger(1, em);
+
+        // Signature calculation: s = (emInteger^d) mod n
+        BigInteger signature =
+                emInteger.modPow(
+                        computations.getPrivateKey().getValue(),
+                        computations.getModulus().getValue());
+        computations.setSignatureBytes(ArrayConverter.bigIntegerToByteArray(signature));
+        computations.setSignatureValid(true);
+    }
+
+    public void computeRsaPssRsaeSignature(
+            RsaPssRsaeSignatureComputations computations,
+            RsaPrivateKey privateKey,
+            byte[] toBeSignedBytes,
+            HashAlgorithm hashAlgorithm) {
+        LOGGER.trace("Computing RSA-PSS-RSAE signature");
+
+        computations.setPrivateKey(privateKey.getPrivateExponent());
+        computations.setModulus(privateKey.getModulus());
+        computations.setToBeSignedBytes(toBeSignedBytes);
+        computations.setHashAlgorithm(hashAlgorithm);
+
+        // Hash the message
+        byte[] digest =
+                HashCalculator.compute(computations.getToBeSignedBytes().getValue(), hashAlgorithm);
+        computations.setDigestBytes(digest);
+        digest = computations.getDigestBytes().getValue();
+        LOGGER.debug("Digest: {}", digest);
+
+        // Generate a random salt of length equal to the hash output length
+        int hashOutputLength = hashAlgorithm.getBitLength() / 8;
+        byte[] salt = new byte[hashOutputLength];
+        SecureRandom random = new SecureRandom();
+        random.nextBytes(salt);
+        computations.setSalt(salt);
+        LOGGER.debug("Salt: {}", salt);
+
+        // M' = (0x)00 00 00 00 00 00 00 00 || mHash || salt
+        byte[] paddedSaltedDigest =
+                ArrayConverter.concatenate(new byte[8], digest, computations.getSalt().getValue());
+        computations.setPaddedSaltedDigest(paddedSaltedDigest);
+        paddedSaltedDigest = computations.getPaddedSaltedDigest().getValue();
+        LOGGER.debug("Padded salted digest: {}", paddedSaltedDigest);
+
+        // Hash M' to get H
+        byte[] hValue = HashCalculator.compute(paddedSaltedDigest, hashAlgorithm);
+        computations.setHValue(hValue);
+        hValue = computations.getHValue().getValue();
+        LOGGER.debug("H: {}", hValue);
+
+        // Generate padding string PS, which is a string of zero bytes
+        int emBits = computations.getModulus().getValue().bitLength() - 1;
+        int emLength = (emBits + 7) / 8;
+        int psLength = emLength - computations.getSalt().getValue().length - hValue.length - 2;
+        if (psLength < 0) {
+            LOGGER.warn("PS length is negative. Overwriting with 0");
+            psLength = 0;
+        }
+        byte[] psValue = new byte[psLength];
+        computations.setPsValue(psValue);
+        psValue = computations.getPsValue().getValue();
+        LOGGER.debug("PS value: {}", psValue);
+
+        // Generate the DB = PS || 0x01 || salt
+        byte[] db =
+                ArrayConverter.concatenate(
+                        psValue, new byte[] {0x01}, computations.getSalt().getValue());
+        computations.setDbValue(db);
+        db = computations.getDbValue().getValue();
+        LOGGER.debug("DB: {}", db);
+
+        // Mask generation function (MGF1) using the same hash algorithm
+        byte[] dbMask = maskGeneratorFunction1(hValue, hashAlgorithm, emLength - hValue.length - 1);
+        LOGGER.debug("DB mask: {}", dbMask);
+
+        byte[] maskedDB = mask(db, dbMask);
+        computations.setMaskedDb(maskedDB);
+        maskedDB = computations.getMaskedDb().getValue();
+        LOGGER.debug("Masked DB: {}", maskedDB);
+
+        computations.setTfValue(new byte[] {(byte) 0xBC});
+
+        int firstByteMask = 0xff >>> ((emLength * 8) - emBits);
+        if (maskedDB.length > 0) {
+            maskedDB[0] &= firstByteMask;
+        }
+
+        // Construct the encoded message EM = maskedDB || H || 0xBC
+        byte[] em =
+                ArrayConverter.concatenate(maskedDB, hValue, computations.getTfValue().getValue());
+        computations.setEmValue(em);
+        em = computations.getEmValue().getValue();
+        LOGGER.debug("EM: {}", em);
+
         // Convert EM to an integer
         BigInteger emInteger = new BigInteger(1, em);
 
@@ -622,6 +730,8 @@ public class SignatureCalculator {
                 return new GostSignatureComputations();
             case RSA_PKCS1:
                 return new RsaPkcs1SignatureComputations();
+            case RSA_PSS_RSAE:
+                return new RsaPssRsaeSignatureComputations();
             case RSA_SSA_PSS:
                 return new RsaSsaPssSignatureComputations();
             default:
