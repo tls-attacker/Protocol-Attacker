@@ -620,7 +620,6 @@ public class SignatureCalculator {
                 return new GostSignatureComputations();
             case RSA_PKCS1:
                 return new RsaPkcs1SignatureComputations();
-            case RSA_PSS_RSAE:
             case RSA_SSA_PSS:
                 return new RsaSsaPssSignatureComputations();
             default:
