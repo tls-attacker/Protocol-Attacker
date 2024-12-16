@@ -1,7 +1,7 @@
 /*
  * Protocol-Attacker - A Framework to create Protocol Analysis Tools
  *
- * Copyright 2023-2023 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
+ * Copyright 2023-2024 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
  *
  * Licensed under Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -61,8 +61,7 @@ public class SignatureCalculator {
                     (RsaPrivateKey) privateKey,
                     toBeSignedBytes,
                     hashAlgorithm,
-                    ((RsaSsaPssSignatureComputations) computations).getSalt().getValue(),
-                    HashAlgorithm.SHA1);
+                    ((RsaSsaPssSignatureComputations) computations).getSalt().getValue());
         } else if (computations instanceof RsaPkcs1SignatureComputations) {
             // Check That parameters are compatible
             if (!(privateKey instanceof RsaPrivateKey)) {
@@ -129,8 +128,7 @@ public class SignatureCalculator {
             RsaPrivateKey privateKey,
             byte[] toBeSignedBytes,
             HashAlgorithm hashAlgorithm,
-            byte[] salt,
-            HashAlgorithm mgf1Algorithm) {
+            byte[] salt) {
         LOGGER.trace("Computing RSA-PSS signature");
 
         computations.setPrivateKey(privateKey.getPrivateExponent());
@@ -179,7 +177,7 @@ public class SignatureCalculator {
         db = computations.getDbValue().getValue();
         LOGGER.debug("DB: {}", db);
         // Mask generation function (MGF1)
-        byte[] dbMask = maskGeneratorFunction1(hValue, mgf1Algorithm, emLength - hValue.length - 1);
+        byte[] dbMask = maskGeneratorFunction1(hValue, hashAlgorithm, emLength - hValue.length - 1);
         LOGGER.debug("DB mask: {}", dbMask);
         byte[] maskedDB = mask(db, dbMask);
         computations.setMaskedDb(maskedDB);
