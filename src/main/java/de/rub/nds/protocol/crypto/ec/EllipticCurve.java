@@ -16,6 +16,7 @@ public abstract class EllipticCurve implements CyclicGroup<Point> {
 
     private Point basePoint;
     private BigInteger basePointOrder;
+
     /** The modulus of the field over which the curve is defined. */
     private final BigInteger modulus;
 

@@ -491,16 +491,22 @@ public enum NamedEllipticCurveParameters implements GroupParameters<Point> {
 
     /** The name referred by us internally, always present */
     private final String name;
+
     /** The name referred by ANSI X9.62, may be null if not defined */
     private final String x962name;
+
     /** The name referred by NIST, may be null if not defined */
     private final String nistName;
+
     /** The name referred by SEC 2, may be null if not defined */
     private final String secName;
+
     /** The type of the equation that is used to define the curve */
     private final EcCurveEquationType equationType;
+
     /** The length in bit of an individual element of the curve */
     private final int bitLength;
+
     /** The concrete curve that is behind these parameters */
     private final EllipticCurve curve;
 
