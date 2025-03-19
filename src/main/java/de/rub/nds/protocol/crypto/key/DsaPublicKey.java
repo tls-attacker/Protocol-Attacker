@@ -10,28 +10,35 @@ package de.rub.nds.protocol.crypto.key;
 
 import de.rub.nds.protocol.constants.AsymmetricAlgorithmType;
 import de.rub.nds.protocol.constants.DsaParameters;
+import de.rub.nds.protocol.crypto.dsa.ExplicitDsaParameters;
 import java.math.BigInteger;
 
 public class DsaPublicKey implements PublicKeyContainer {
 
-    private BigInteger modulus;
-    private BigInteger generator;
-    private BigInteger Q;
     private BigInteger Y;
     private DsaParameters dsaParameters;
 
+    /**
+     * Create a DSA public key with explicit parameters
+     *
+     * @param Q DSA subgroup order
+     * @param Y Public key value
+     * @param generator Generator g
+     * @param modulus Modulus p
+     */
     public DsaPublicKey(BigInteger Q, BigInteger Y, BigInteger generator, BigInteger modulus) {
-        this.Q = Q;
+        this.dsaParameters = new ExplicitDsaParameters(modulus, Q, generator);
         this.Y = Y;
-        this.generator = generator;
-        this.modulus = modulus;
     }
 
+    /**
+     * Create a DSA public key using parameter set
+     *
+     * @param Y Public key value
+     * @param dsaParameters DSA parameter set
+     */
     public DsaPublicKey(BigInteger Y, DsaParameters dsaParameters) {
         this.dsaParameters = dsaParameters;
-        this.modulus = dsaParameters.getP();
-        this.generator = dsaParameters.getG();
-        this.Q = dsaParameters.getQ();
         this.Y = Y;
     }
 
@@ -41,55 +48,38 @@ public class DsaPublicKey implements PublicKeyContainer {
 
     public void setDsaParameters(DsaParameters dsaParameters) {
         this.dsaParameters = dsaParameters;
-        this.modulus = dsaParameters.getP();
-        this.generator = dsaParameters.getG();
-        this.Q = dsaParameters.getQ();
     }
 
     public BigInteger getModulus() {
-        return modulus;
-    }
-
-    public void setModulus(BigInteger modulus) {
-        this.modulus = modulus;
+        return dsaParameters.getP();
     }
 
     public BigInteger getGenerator() {
-        return generator;
-    }
-
-    public void setGenerator(BigInteger generator) {
-        this.generator = generator;
+        return dsaParameters.getG();
     }
 
     public BigInteger getQ() {
-        return Q;
-    }
-
-    public void setQ(BigInteger Q) {
-        this.Q = Q;
+        return dsaParameters.getQ();
     }
 
     public BigInteger getY() {
         return Y;
     }
 
-    public void setY(BigInteger X) {
-        this.Y = X;
+    public void setY(BigInteger y) {
+        this.Y = y;
     }
 
     @Override
     public int length() {
-        return modulus.bitLength();
+        return getModulus().bitLength();
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((modulus == null) ? 0 : modulus.hashCode());
-        result = prime * result + ((generator == null) ? 0 : generator.hashCode());
-        result = prime * result + ((Q == null) ? 0 : Q.hashCode());
+        result = prime * result + ((dsaParameters == null) ? 0 : dsaParameters.hashCode());
         result = prime * result + ((Y == null) ? 0 : Y.hashCode());
         return result;
     }
@@ -100,15 +90,9 @@ public class DsaPublicKey implements PublicKeyContainer {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         DsaPublicKey other = (DsaPublicKey) obj;
-        if (modulus == null) {
-            if (other.modulus != null) return false;
-        } else if (!modulus.equals(other.modulus)) return false;
-        if (generator == null) {
-            if (other.generator != null) return false;
-        } else if (!generator.equals(other.generator)) return false;
-        if (Q == null) {
-            if (other.Q != null) return false;
-        } else if (!Q.equals(other.Q)) return false;
+        if (dsaParameters == null) {
+            if (other.dsaParameters != null) return false;
+        } else if (!dsaParameters.equals(other.dsaParameters)) return false;
         if (Y == null) {
             if (other.Y != null) return false;
         } else if (!Y.equals(other.Y)) return false;

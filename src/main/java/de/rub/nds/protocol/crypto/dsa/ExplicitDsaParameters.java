@@ -11,37 +11,17 @@ package de.rub.nds.protocol.crypto.dsa;
 import de.rub.nds.protocol.constants.DsaParameters;
 import java.math.BigInteger;
 
+/** DSA Parameters with explicitly defined values rather than a named parameter set */
 public class ExplicitDsaParameters extends DsaParameters {
 
+    /**
+     * Create DSA parameters with explicit values
+     *
+     * @param p Modulus p
+     * @param q Subgroup order q
+     * @param g Generator g
+     */
     public ExplicitDsaParameters(BigInteger p, BigInteger q, BigInteger g) {
         super(p, q, g);
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getP() == null) ? 0 : getP().hashCode());
-        result = prime * result + ((getQ() == null) ? 0 : getQ().hashCode());
-        result = prime * result + ((getG() == null) ? 0 : getG().hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        ExplicitDsaParameters other = (ExplicitDsaParameters) obj;
-        if (getP() == null) {
-            if (other.getP() != null) return false;
-        } else if (!getP().equals(other.getP())) return false;
-        if (getQ() == null) {
-            if (other.getQ() != null) return false;
-        } else if (!getQ().equals(other.getQ())) return false;
-        if (getG() == null) {
-            if (other.getG() != null) return false;
-        } else if (!getG().equals(other.getG())) return false;
-        return true;
     }
 }

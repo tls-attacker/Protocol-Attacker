@@ -50,4 +50,32 @@ public abstract class DsaParameters implements GroupParameters<BigInteger> {
     public CyclicGroup<BigInteger> getGroup() {
         return new DsaGroup(this);
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((p == null) ? 0 : p.hashCode());
+        result = prime * result + ((q == null) ? 0 : q.hashCode());
+        result = prime * result + ((g == null) ? 0 : g.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        DsaParameters other = (DsaParameters) obj;
+        if (p == null) {
+            if (other.p != null) return false;
+        } else if (!p.equals(other.p)) return false;
+        if (q == null) {
+            if (other.q != null) return false;
+        } else if (!q.equals(other.q)) return false;
+        if (g == null) {
+            if (other.g != null) return false;
+        } else if (!g.equals(other.g)) return false;
+        return true;
+    }
 }
