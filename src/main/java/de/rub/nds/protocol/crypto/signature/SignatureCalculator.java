@@ -274,9 +274,11 @@ public class SignatureCalculator {
             computations.setDerEncodedDigest(computations.getDigestBytes().getValue());
             derEncoded = computations.getDerEncodedDigest().getValue();
         }
-        int modLength =
-                ArrayConverter.bigIntegerToByteArray(computations.getModulus().getValue()).length;
-        byte[] padding = computePkcs1Padding(derEncoded.length, modLength);
+        byte[] padding =
+                computePkcs1Padding(
+                        derEncoded.length,
+                        ArrayConverter.bigIntegerToByteArray(computations.getModulus().getValue())
+                                .length);
         computations.setPadding(padding);
         padding = computations.getPadding().getValue();
         byte[] plainData = ArrayConverter.concatenate(padding, derEncoded);
@@ -287,8 +289,7 @@ public class SignatureCalculator {
                 plainInteger.modPow(
                         computations.getPrivateKey().getValue(),
                         computations.getModulus().getValue());
-        computations.setSignatureBytes(
-                ArrayConverter.bigIntegerToByteArray(signature, modLength, true));
+        computations.setSignatureBytes(ArrayConverter.bigIntegerToByteArray(signature));
         computations.setSignatureValid(true);
     }
 
