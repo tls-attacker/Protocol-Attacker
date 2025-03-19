@@ -10,10 +10,18 @@ package de.rub.nds.protocol.crypto.dsa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import de.rub.nds.protocol.constants.HashAlgorithm;
 import de.rub.nds.protocol.crypto.key.DsaPrivateKey;
 import de.rub.nds.protocol.crypto.key.DsaPublicKey;
+import de.rub.nds.protocol.crypto.signature.DsaSignatureComputations;
+import de.rub.nds.protocol.crypto.signature.SignatureCalculator;
 import java.math.BigInteger;
+import java.security.Security;
+import java.security.Signature;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,6 +31,11 @@ public class DsaKeyTest {
     private FipsDsaGroup2048_256 dsaParams2048;
     private DsaPrivateKey privateKey;
     private DsaPublicKey publicKey;
+
+    @BeforeAll
+    public static void setup() {
+        Security.addProvider(new BouncyCastleProvider());
+    }
 
     @BeforeEach
     public void setUp() {
@@ -69,5 +82,122 @@ public class DsaKeyTest {
         assertEquals(dsaParams2048.getP(), publicKey.getModulus());
         assertEquals(dsaParams2048.getG(), publicKey.getGenerator());
         assertEquals(dsaParams2048.getQ(), publicKey.getQ());
+    }
+
+    @Test
+    public void testDsaParametersCompatibility() throws Exception {
+        // This test verifies that we can use DSA parameters from JSSE in our implementation
+
+        // Generate a DSA key pair using Java security with default parameters
+        java.security.KeyPairGenerator keyGen = java.security.KeyPairGenerator.getInstance("DSA");
+        keyGen.initialize(1024); // Use JSSE's default 1024-bit DSA parameters
+        java.security.KeyPair keyPair = keyGen.generateKeyPair();
+
+        // Get the JSSE private and public keys
+        java.security.interfaces.DSAPrivateKey jssePrivateKey =
+                (java.security.interfaces.DSAPrivateKey) keyPair.getPrivate();
+        java.security.interfaces.DSAPublicKey jssePublicKey =
+                (java.security.interfaces.DSAPublicKey) keyPair.getPublic();
+
+        // Get the parameters from JSSE keys
+        BigInteger jssePValue = jssePrivateKey.getParams().getP();
+        BigInteger jsseQValue = jssePrivateKey.getParams().getQ();
+        BigInteger jsseGValue = jssePrivateKey.getParams().getG();
+
+        // Create a custom DSA parameter set based on JSSE parameters
+        ExplicitDsaParameters customDsaParams =
+                new ExplicitDsaParameters(jssePValue, jsseQValue, jsseGValue);
+
+        // Create our equivalent keys using the custom parameters
+        BigInteger x = jssePrivateKey.getX();
+        BigInteger k = new BigInteger("987654321"); // Nonce for our implementation
+        BigInteger y = jssePublicKey.getY();
+
+        DsaPrivateKey ourPrivateKey = new DsaPrivateKey(x, k, customDsaParams);
+        DsaPublicKey ourPublicKey = new DsaPublicKey(y, customDsaParams);
+
+        // Verify the parameters match
+        assertEquals(jssePValue, ourPrivateKey.getModulus());
+        assertEquals(jsseGValue, ourPrivateKey.getGenerator());
+        assertEquals(jsseQValue, ourPrivateKey.getQ());
+
+        assertEquals(jssePValue, ourPublicKey.getModulus());
+        assertEquals(jsseGValue, ourPublicKey.getGenerator());
+        assertEquals(jsseQValue, ourPublicKey.getQ());
+
+        // Test that our implementation works correctly with JSSE parameters
+        assertEquals(jssePrivateKey.getX(), ourPrivateKey.getX());
+        assertEquals(jssePublicKey.getY(), ourPublicKey.getY());
+    }
+
+    @Test
+    public void testSignatureInteroperability() throws Exception {
+        // This test verifies that:
+        // 1. JSSE can verify signatures created by our implementation
+        // 2. Our implementation can compute valid signatures
+
+        // Generate a DSA key pair using Java security with default parameters
+        java.security.KeyPairGenerator keyGen = java.security.KeyPairGenerator.getInstance("DSA");
+        keyGen.initialize(1024);
+        java.security.KeyPair keyPair = keyGen.generateKeyPair();
+
+        // Get the JSSE private and public keys
+        java.security.interfaces.DSAPrivateKey jssePrivateKey =
+                (java.security.interfaces.DSAPrivateKey) keyPair.getPrivate();
+        java.security.interfaces.DSAPublicKey jssePublicKey =
+                (java.security.interfaces.DSAPublicKey) keyPair.getPublic();
+
+        // Create equivalent keys using our DSA parameter implementation
+        BigInteger x = jssePrivateKey.getX();
+        BigInteger k = new BigInteger("987654321"); // Nonce for our implementation
+        BigInteger y = jssePublicKey.getY();
+
+        ExplicitDsaParameters customDsaParams =
+                new ExplicitDsaParameters(
+                        jssePrivateKey.getParams().getP(),
+                        jssePrivateKey.getParams().getQ(),
+                        jssePrivateKey.getParams().getG());
+
+        DsaPrivateKey ourPrivateKey = new DsaPrivateKey(x, k, customDsaParams);
+        DsaPublicKey ourPublicKey = new DsaPublicKey(y, customDsaParams);
+
+        // Data to sign
+        byte[] dataToSign = "DSA interoperability test data".getBytes();
+
+        // PART 1: Sign with JSSE to confirm key validity
+
+        // Sign with JSSE
+        Signature jsseSig = Signature.getInstance("SHA1withDSA");
+        jsseSig.initSign(jssePrivateKey);
+        jsseSig.update(dataToSign);
+        byte[] jsseSignature = jsseSig.sign();
+
+        // Verify the JSSE signature with JSSE (sanity check)
+        jsseSig.initVerify(jssePublicKey);
+        jsseSig.update(dataToSign);
+        boolean jsseVerifiedJsseSignature = jsseSig.verify(jsseSignature);
+        assertTrue(jsseVerifiedJsseSignature, "JSSE should verify its own signature");
+
+        // PART 2: Sign with our implementation, verify with JSSE
+
+        // Sign with our implementation
+        DsaSignatureComputations computations = new DsaSignatureComputations();
+        SignatureCalculator calculator = new SignatureCalculator();
+
+        // Compute signature using our implementation
+        calculator.computeDsaSignature(computations, ourPrivateKey, dataToSign, HashAlgorithm.SHA1);
+
+        byte[] ourSignature = computations.getSignatureBytes().getValue();
+
+        // Verify that our signature is valid according to our implementation
+        assertTrue(
+                computations.getSignatureValid(),
+                "Our signature should be valid in our computations");
+
+        // Verify our signature with JSSE
+        jsseSig.initVerify(jssePublicKey);
+        jsseSig.update(dataToSign);
+        boolean jsseVerifiedOurSignature = jsseSig.verify(ourSignature);
+        assertTrue(jsseVerifiedOurSignature, "JSSE should verify our signature");
     }
 }
