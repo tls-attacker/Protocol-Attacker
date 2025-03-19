@@ -1,0 +1,78 @@
+/*
+ * Protocol-Attacker - A Framework to create Protocol Analysis Tools
+ *
+ * Copyright 2023-2023 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
+ *
+ * Licensed under Apache License, Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ */
+package de.rub.nds.protocol.crypto.dsa;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.math.BigInteger;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class DSAGroupTest {
+
+    private FipsDsaGroup1024_160 dsaGroup1024;
+    private FipsDsaGroup2048_256 dsaGroup2048;
+    private ExplicitDsaParameters explicitParameters;
+
+    @BeforeEach
+    public void setUp() {
+        dsaGroup1024 = new FipsDsaGroup1024_160();
+        dsaGroup2048 = new FipsDsaGroup2048_256();
+        explicitParameters =
+                new ExplicitDsaParameters(
+                        new BigInteger("23"), // p
+                        new BigInteger("11"), // q
+                        new BigInteger("2")); // g
+    }
+
+    @Test
+    public void testDsaGroupCreation() {
+        assertNotNull(dsaGroup1024);
+        assertNotNull(dsaGroup2048);
+        assertNotNull(explicitParameters);
+    }
+
+    @Test
+    public void testDsaGroupParameters() {
+        assertEquals(
+                692,
+                dsaGroup1024.getElementSizeBits()); // The actual bit length of the provided P value
+        assertEquals(
+                3072,
+                dsaGroup2048.getElementSizeBits()); // The actual bit length of the provided P value
+        assertEquals(5, explicitParameters.getElementSizeBits());
+    }
+
+    @Test
+    public void testDsaGroupOperation() {
+        DsaGroup group = (DsaGroup) explicitParameters.getGroup();
+        BigInteger a = new BigInteger("3");
+        BigInteger b = new BigInteger("5");
+        BigInteger result = group.groupOperation(a, b);
+        assertEquals(new BigInteger("15").mod(explicitParameters.getP()), result);
+    }
+
+    @Test
+    public void testDsaNTimesGroupOperation() {
+        DsaGroup group = (DsaGroup) explicitParameters.getGroup();
+        BigInteger a = new BigInteger("2");
+        BigInteger scalar = new BigInteger("4");
+        BigInteger result = group.nTimesGroupOperation(a, scalar);
+        assertEquals(new BigInteger("16").mod(explicitParameters.getP()), result);
+    }
+
+    @Test
+    public void testDsaNTimesGroupOperationOnGenerator() {
+        DsaGroup group = (DsaGroup) explicitParameters.getGroup();
+        BigInteger scalar = new BigInteger("3");
+        BigInteger result = group.nTimesGroupOperationOnGenerator(scalar);
+        assertEquals(new BigInteger("8").mod(explicitParameters.getP()), result);
+    }
+}

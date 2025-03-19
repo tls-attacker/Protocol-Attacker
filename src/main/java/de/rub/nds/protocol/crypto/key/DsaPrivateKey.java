@@ -8,17 +8,16 @@
  */
 package de.rub.nds.protocol.crypto.key;
 
+import de.rub.nds.protocol.constants.DsaParameters;
 import java.math.BigInteger;
 
 public class DsaPrivateKey implements PrivateKeyContainer {
     private BigInteger modulus;
     private BigInteger generator;
-
     private BigInteger Q;
-
     private BigInteger X;
-
     private BigInteger K;
+    private DsaParameters dsaParameters;
 
     public DsaPrivateKey(
             BigInteger Q, BigInteger X, BigInteger K, BigInteger generator, BigInteger modulus) {
@@ -27,6 +26,26 @@ public class DsaPrivateKey implements PrivateKeyContainer {
         this.Q = Q;
         this.X = X;
         this.K = K;
+    }
+
+    public DsaPrivateKey(BigInteger X, BigInteger K, DsaParameters dsaParameters) {
+        this.dsaParameters = dsaParameters;
+        this.modulus = dsaParameters.getP();
+        this.generator = dsaParameters.getG();
+        this.Q = dsaParameters.getQ();
+        this.X = X;
+        this.K = K;
+    }
+
+    public DsaParameters getDsaParameters() {
+        return dsaParameters;
+    }
+
+    public void setDsaParameters(DsaParameters dsaParameters) {
+        this.dsaParameters = dsaParameters;
+        this.modulus = dsaParameters.getP();
+        this.generator = dsaParameters.getG();
+        this.Q = dsaParameters.getQ();
     }
 
     public BigInteger getModulus() {
@@ -41,8 +60,8 @@ public class DsaPrivateKey implements PrivateKeyContainer {
         return generator;
     }
 
-    public void setGenerator(BigInteger generaotr) {
-        this.generator = generaotr;
+    public void setGenerator(BigInteger generator) {
+        this.generator = generator;
     }
 
     public BigInteger getQ() {

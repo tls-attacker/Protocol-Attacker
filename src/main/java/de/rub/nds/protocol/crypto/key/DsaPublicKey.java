@@ -9,6 +9,7 @@
 package de.rub.nds.protocol.crypto.key;
 
 import de.rub.nds.protocol.constants.AsymmetricAlgorithmType;
+import de.rub.nds.protocol.constants.DsaParameters;
 import java.math.BigInteger;
 
 public class DsaPublicKey implements PublicKeyContainer {
@@ -17,12 +18,32 @@ public class DsaPublicKey implements PublicKeyContainer {
     private BigInteger generator;
     private BigInteger Q;
     private BigInteger Y;
+    private DsaParameters dsaParameters;
 
     public DsaPublicKey(BigInteger Q, BigInteger Y, BigInteger generator, BigInteger modulus) {
         this.Q = Q;
         this.Y = Y;
         this.generator = generator;
         this.modulus = modulus;
+    }
+
+    public DsaPublicKey(BigInteger Y, DsaParameters dsaParameters) {
+        this.dsaParameters = dsaParameters;
+        this.modulus = dsaParameters.getP();
+        this.generator = dsaParameters.getG();
+        this.Q = dsaParameters.getQ();
+        this.Y = Y;
+    }
+
+    public DsaParameters getDsaParameters() {
+        return dsaParameters;
+    }
+
+    public void setDsaParameters(DsaParameters dsaParameters) {
+        this.dsaParameters = dsaParameters;
+        this.modulus = dsaParameters.getP();
+        this.generator = dsaParameters.getG();
+        this.Q = dsaParameters.getQ();
     }
 
     public BigInteger getModulus() {
