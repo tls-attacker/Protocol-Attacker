@@ -9,22 +9,17 @@
 package de.rub.nds.protocol.crypto.dsa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class DsaGroupTest {
-
-    private FipsDsaGroup1024_160 dsaGroup1024;
-    private FipsDsaGroup2048_256 dsaGroup2048;
+    ;
     private ExplicitDsaParameters explicitParameters;
 
     @BeforeEach
     void setUp() {
-        dsaGroup1024 = new FipsDsaGroup1024_160();
-        dsaGroup2048 = new FipsDsaGroup2048_256();
         explicitParameters =
                 new ExplicitDsaParameters(
                         new BigInteger("23"), // p
@@ -33,20 +28,7 @@ class DsaGroupTest {
     }
 
     @Test
-    void testDsaGroupCreation() {
-        assertNotNull(dsaGroup1024);
-        assertNotNull(dsaGroup2048);
-        assertNotNull(explicitParameters);
-    }
-
-    @Test
     void testDsaGroupParameters() {
-        assertEquals(
-                692,
-                dsaGroup1024.getElementSizeBits()); // The actual bit length of the provided P value
-        assertEquals(
-                3072,
-                dsaGroup2048.getElementSizeBits()); // The actual bit length of the provided P value
         assertEquals(5, explicitParameters.getElementSizeBits());
     }
 

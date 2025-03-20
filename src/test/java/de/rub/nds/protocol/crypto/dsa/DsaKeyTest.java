@@ -26,8 +26,7 @@ import org.junit.jupiter.api.Test;
 
 class DsaKeyTest {
 
-    private FipsDsaGroup1024_160 dsaParams1024;
-    private FipsDsaGroup2048_256 dsaParams2048;
+    private ExplicitDsaParameters dsaParams;
     private DsaPrivateKey privateKey;
     private DsaPublicKey publicKey;
 
@@ -38,43 +37,56 @@ class DsaKeyTest {
 
     @BeforeEach
     void setUp() {
-        dsaParams1024 = new FipsDsaGroup1024_160();
-        dsaParams2048 = new FipsDsaGroup2048_256();
+        dsaParams =
+                new ExplicitDsaParameters(
+                        new BigInteger(
+                                "86F4A2491234567890ABCDEFFEDCBA09876543211234567890ABCDEF87654321",
+                                16),
+                        new BigInteger(
+                                "F7E1A085D69B3DDE54321FEDCBA9876543210FEDCBA9876543210FEDCBA98765",
+                                16),
+                        new BigInteger(
+                                "6789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456",
+                                16));
 
         // Create a private key with DSA parameters
         BigInteger x = new BigInteger("123456789");
         BigInteger k = new BigInteger("987654321");
-        privateKey = new DsaPrivateKey(x, k, dsaParams1024);
+        privateKey = new DsaPrivateKey(x, k, dsaParams);
 
         // Create a public key with Y = g^x mod p
-        BigInteger y = dsaParams1024.getG().modPow(x, dsaParams1024.getP());
-        publicKey = new DsaPublicKey(y, dsaParams1024);
+        BigInteger y = dsaParams.getG().modPow(x, dsaParams.getP());
+        publicKey = new DsaPublicKey(y, dsaParams);
     }
 
     @Test
     void testDsaKeyParameters() {
-        assertEquals(dsaParams1024.getP(), privateKey.getModulus());
-        assertEquals(dsaParams1024.getG(), privateKey.getGenerator());
-        assertEquals(dsaParams1024.getQ(), privateKey.getQ());
+        assertEquals(dsaParams.getP(), privateKey.getModulus());
+        assertEquals(dsaParams.getG(), privateKey.getGenerator());
+        assertEquals(dsaParams.getQ(), privateKey.getQ());
 
-        assertEquals(dsaParams1024.getP(), publicKey.getModulus());
-        assertEquals(dsaParams1024.getG(), publicKey.getGenerator());
-        assertEquals(dsaParams1024.getQ(), publicKey.getQ());
+        assertEquals(dsaParams.getP(), publicKey.getModulus());
+        assertEquals(dsaParams.getG(), publicKey.getGenerator());
+        assertEquals(dsaParams.getQ(), publicKey.getQ());
     }
 
     @Test
     void testParameterChange() {
         // Change parameters
-        privateKey.setDsaParameters(dsaParams2048);
-        publicKey.setDsaParameters(dsaParams2048);
+        dsaParams =
+                new ExplicitDsaParameters(
+                        new BigInteger("123"), new BigInteger("456"), new BigInteger("789"));
 
-        assertEquals(dsaParams2048.getP(), privateKey.getModulus());
-        assertEquals(dsaParams2048.getG(), privateKey.getGenerator());
-        assertEquals(dsaParams2048.getQ(), privateKey.getQ());
+        privateKey.setDsaParameters(dsaParams);
+        publicKey.setDsaParameters(dsaParams);
 
-        assertEquals(dsaParams2048.getP(), publicKey.getModulus());
-        assertEquals(dsaParams2048.getG(), publicKey.getGenerator());
-        assertEquals(dsaParams2048.getQ(), publicKey.getQ());
+        assertEquals(dsaParams.getP(), privateKey.getModulus());
+        assertEquals(dsaParams.getG(), privateKey.getGenerator());
+        assertEquals(dsaParams.getQ(), privateKey.getQ());
+
+        assertEquals(dsaParams.getP(), publicKey.getModulus());
+        assertEquals(dsaParams.getG(), publicKey.getGenerator());
+        assertEquals(dsaParams.getQ(), publicKey.getQ());
     }
 
     @Test
