@@ -1,6 +1,7 @@
 # Protocol-Attacker Development Guide
 
 ## Build Commands
+
 - Build project: `mvn clean install`
 - Run all tests: `mvn test`
 - Run single test: `mvn test -Dtest=FullyQualifiedTestName` (e.g., `mvn test -Dtest=de.rub.nds.protocol.crypto.key.KeyGeneratorTest`)
@@ -10,6 +11,7 @@
 - Generate Javadoc: `mvn javadoc:javadoc`
 
 ## Code Style
+
 - Java version: JDK 21
 - Formatting: Google Java Style (AOSP variant)
 - Indentation: 4 spaces
@@ -19,3 +21,4 @@
 - Testing: JUnit 5 with optional IntegrationTest/SlowTest annotations
 - Logging: Log4j2
 - Error handling: Custom exceptions in exception package
+
