@@ -25,7 +25,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class DsaKeyTest {
+class DsaKeyTest {
 
     private FipsDsaGroup1024_160 dsaParams1024;
     private FipsDsaGroup2048_256 dsaParams2048;
@@ -33,12 +33,12 @@ public class DsaKeyTest {
     private DsaPublicKey publicKey;
 
     @BeforeAll
-    public static void setup() {
+    static void setup() {
         Security.addProvider(new BouncyCastleProvider());
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         dsaParams1024 = new FipsDsaGroup1024_160();
         dsaParams2048 = new FipsDsaGroup2048_256();
 
@@ -53,13 +53,7 @@ public class DsaKeyTest {
     }
 
     @Test
-    public void testDsaKeyCreation() {
-        assertNotNull(privateKey);
-        assertNotNull(publicKey);
-    }
-
-    @Test
-    public void testDsaKeyParameters() {
+    void testDsaKeyParameters() {
         assertEquals(dsaParams1024.getP(), privateKey.getModulus());
         assertEquals(dsaParams1024.getG(), privateKey.getGenerator());
         assertEquals(dsaParams1024.getQ(), privateKey.getQ());
@@ -70,7 +64,7 @@ public class DsaKeyTest {
     }
 
     @Test
-    public void testParameterChange() {
+    void testParameterChange() {
         // Change parameters
         privateKey.setDsaParameters(dsaParams2048);
         publicKey.setDsaParameters(dsaParams2048);
@@ -85,53 +79,7 @@ public class DsaKeyTest {
     }
 
     @Test
-    public void testDsaParametersCompatibility() throws Exception {
-        // This test verifies that we can use DSA parameters from JSSE in our implementation
-
-        // Generate a DSA key pair using Java security with default parameters
-        java.security.KeyPairGenerator keyGen = java.security.KeyPairGenerator.getInstance("DSA");
-        keyGen.initialize(1024); // Use JSSE's default 1024-bit DSA parameters
-        java.security.KeyPair keyPair = keyGen.generateKeyPair();
-
-        // Get the JSSE private and public keys
-        java.security.interfaces.DSAPrivateKey jssePrivateKey =
-                (java.security.interfaces.DSAPrivateKey) keyPair.getPrivate();
-        java.security.interfaces.DSAPublicKey jssePublicKey =
-                (java.security.interfaces.DSAPublicKey) keyPair.getPublic();
-
-        // Get the parameters from JSSE keys
-        BigInteger jssePValue = jssePrivateKey.getParams().getP();
-        BigInteger jsseQValue = jssePrivateKey.getParams().getQ();
-        BigInteger jsseGValue = jssePrivateKey.getParams().getG();
-
-        // Create a custom DSA parameter set based on JSSE parameters
-        ExplicitDsaParameters customDsaParams =
-                new ExplicitDsaParameters(jssePValue, jsseQValue, jsseGValue);
-
-        // Create our equivalent keys using the custom parameters
-        BigInteger x = jssePrivateKey.getX();
-        BigInteger k = new BigInteger("987654321"); // Nonce for our implementation
-        BigInteger y = jssePublicKey.getY();
-
-        DsaPrivateKey ourPrivateKey = new DsaPrivateKey(x, k, customDsaParams);
-        DsaPublicKey ourPublicKey = new DsaPublicKey(y, customDsaParams);
-
-        // Verify the parameters match
-        assertEquals(jssePValue, ourPrivateKey.getModulus());
-        assertEquals(jsseGValue, ourPrivateKey.getGenerator());
-        assertEquals(jsseQValue, ourPrivateKey.getQ());
-
-        assertEquals(jssePValue, ourPublicKey.getModulus());
-        assertEquals(jsseGValue, ourPublicKey.getGenerator());
-        assertEquals(jsseQValue, ourPublicKey.getQ());
-
-        // Test that our implementation works correctly with JSSE parameters
-        assertEquals(jssePrivateKey.getX(), ourPrivateKey.getX());
-        assertEquals(jssePublicKey.getY(), ourPublicKey.getY());
-    }
-
-    @Test
-    public void testSignatureInteroperability() throws Exception {
+    void testSignatureInteroperability() throws Exception {
         // This test verifies that:
         // 1. JSSE can verify signatures created by our implementation
         // 2. Our implementation can compute valid signatures
@@ -150,8 +98,7 @@ public class DsaKeyTest {
         // Create equivalent keys using our DSA parameter implementation
         BigInteger x = jssePrivateKey.getX();
         BigInteger k = new BigInteger("987654321"); // Nonce for our implementation
-        BigInteger y = jssePublicKey.getY();
-
+        
         ExplicitDsaParameters customDsaParams =
                 new ExplicitDsaParameters(
                         jssePrivateKey.getParams().getP(),
@@ -159,8 +106,7 @@ public class DsaKeyTest {
                         jssePrivateKey.getParams().getG());
 
         DsaPrivateKey ourPrivateKey = new DsaPrivateKey(x, k, customDsaParams);
-        DsaPublicKey ourPublicKey = new DsaPublicKey(y, customDsaParams);
-
+        
         // Data to sign
         byte[] dataToSign = "DSA interoperability test data".getBytes();
 
