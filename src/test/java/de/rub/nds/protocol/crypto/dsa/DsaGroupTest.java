@@ -15,14 +15,14 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class DSAGroupTest {
+class DsaGroupTest {
 
     private FipsDsaGroup1024_160 dsaGroup1024;
     private FipsDsaGroup2048_256 dsaGroup2048;
     private ExplicitDsaParameters explicitParameters;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         dsaGroup1024 = new FipsDsaGroup1024_160();
         dsaGroup2048 = new FipsDsaGroup2048_256();
         explicitParameters =
@@ -33,14 +33,14 @@ public class DSAGroupTest {
     }
 
     @Test
-    public void testDsaGroupCreation() {
+    void testDsaGroupCreation() {
         assertNotNull(dsaGroup1024);
         assertNotNull(dsaGroup2048);
         assertNotNull(explicitParameters);
     }
 
     @Test
-    public void testDsaGroupParameters() {
+    void testDsaGroupParameters() {
         assertEquals(
                 692,
                 dsaGroup1024.getElementSizeBits()); // The actual bit length of the provided P value
@@ -51,7 +51,7 @@ public class DSAGroupTest {
     }
 
     @Test
-    public void testDsaGroupOperation() {
+    void testDsaGroupOperation() {
         DsaGroup group = (DsaGroup) explicitParameters.getGroup();
         BigInteger a = new BigInteger("3");
         BigInteger b = new BigInteger("5");
@@ -60,7 +60,7 @@ public class DSAGroupTest {
     }
 
     @Test
-    public void testDsaNTimesGroupOperation() {
+    void testDsaNTimesGroupOperation() {
         DsaGroup group = (DsaGroup) explicitParameters.getGroup();
         BigInteger a = new BigInteger("2");
         BigInteger scalar = new BigInteger("4");
@@ -69,7 +69,7 @@ public class DSAGroupTest {
     }
 
     @Test
-    public void testDsaNTimesGroupOperationOnGenerator() {
+    void testDsaNTimesGroupOperationOnGenerator() {
         DsaGroup group = (DsaGroup) explicitParameters.getGroup();
         BigInteger scalar = new BigInteger("3");
         BigInteger result = group.nTimesGroupOperationOnGenerator(scalar);

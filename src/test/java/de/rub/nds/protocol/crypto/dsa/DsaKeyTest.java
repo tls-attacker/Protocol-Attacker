@@ -9,7 +9,6 @@
 package de.rub.nds.protocol.crypto.dsa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.rub.nds.protocol.constants.HashAlgorithm;
@@ -98,7 +97,7 @@ class DsaKeyTest {
         // Create equivalent keys using our DSA parameter implementation
         BigInteger x = jssePrivateKey.getX();
         BigInteger k = new BigInteger("987654321"); // Nonce for our implementation
-        
+
         ExplicitDsaParameters customDsaParams =
                 new ExplicitDsaParameters(
                         jssePrivateKey.getParams().getP(),
@@ -106,7 +105,7 @@ class DsaKeyTest {
                         jssePrivateKey.getParams().getG());
 
         DsaPrivateKey ourPrivateKey = new DsaPrivateKey(x, k, customDsaParams);
-        
+
         // Data to sign
         byte[] dataToSign = "DSA interoperability test data".getBytes();
 
