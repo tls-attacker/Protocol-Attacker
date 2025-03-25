@@ -8,49 +8,62 @@
  */
 package de.rub.nds.protocol.crypto.key;
 
+import de.rub.nds.protocol.constants.DsaParameters;
+import de.rub.nds.protocol.crypto.dsa.ExplicitDsaParameters;
 import java.math.BigInteger;
 
 public class DsaPrivateKey implements PrivateKeyContainer {
-    private BigInteger modulus;
-    private BigInteger generator;
-
-    private BigInteger Q;
-
     private BigInteger X;
-
     private BigInteger K;
+    private DsaParameters dsaParameters;
 
+    /**
+     * Create a DSA private key with explicit parameters
+     *
+     * @param Q DSA subgroup order
+     * @param X Private key value
+     * @param K Nonce
+     * @param generator Generator g
+     * @param modulus Modulus p
+     */
     public DsaPrivateKey(
             BigInteger Q, BigInteger X, BigInteger K, BigInteger generator, BigInteger modulus) {
-        this.modulus = modulus;
-        this.generator = generator;
-        this.Q = Q;
+        this.dsaParameters = new ExplicitDsaParameters(modulus, Q, generator);
         this.X = X;
         this.K = K;
     }
 
-    public BigInteger getModulus() {
-        return modulus;
+    /**
+     * Create a DSA private key using parameter set
+     *
+     * @param X Private key value
+     * @param K Nonce
+     * @param dsaParameters DSA parameter set
+     */
+    public DsaPrivateKey(BigInteger X, BigInteger K, DsaParameters dsaParameters) {
+        this.dsaParameters = dsaParameters;
+        this.X = X;
+        this.K = K;
     }
 
-    public void setModulus(BigInteger modulus) {
-        this.modulus = modulus;
+    public DsaParameters getDsaParameters() {
+        return dsaParameters;
+    }
+
+    public void setDsaParameters(DsaParameters dsaParameters) {
+        this.dsaParameters = dsaParameters;
+    }
+
+    public BigInteger getModulus() {
+        return dsaParameters.getP();
     }
 
     public BigInteger getGenerator() {
-        return generator;
-    }
-
-    public void setGenerator(BigInteger generaotr) {
-        this.generator = generaotr;
+        return dsaParameters.getG();
     }
 
     public BigInteger getQ() {
-        return Q;
-    }
-
-    public void setQ(BigInteger q) {
-        Q = q;
+        return dsaParameters.getQ();
     }
 
     public BigInteger getX() {
