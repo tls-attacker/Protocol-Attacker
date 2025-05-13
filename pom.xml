@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.rub.nds</groupId>
         <artifactId>protocol-toolkit-bom</artifactId>
-        <version>5.3.0</version>
+        <version>6.0.0</version>
     </parent>
 
     <artifactId>protocol-attacker</artifactId>
@@ -59,6 +59,7 @@
         <dependency>
             <groupId>de.rub.nds</groupId>
             <artifactId>modifiable-variable</artifactId>
+            <version>5.1.2</version>
         </dependency>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
