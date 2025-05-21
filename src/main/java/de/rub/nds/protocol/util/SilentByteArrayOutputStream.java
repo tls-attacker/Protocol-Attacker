@@ -94,7 +94,7 @@ public class SilentByteArrayOutputStream extends OutputStream {
      * Writes the complete contents of the specified byte array to this {@code
      * SilentByteArrayOutputStream}.
      *
-     * @apiNote This method is equivalent to {@link #write(byte[],int,int) write(b, 0, b.length)}.
+     * This method is equivalent to {@link #write(byte[],int,int) write(b, 0, b.length)}.
      * @param b the data.
      * @throws NullPointerException if {@code b} is {@code null}.
      * @since 11
