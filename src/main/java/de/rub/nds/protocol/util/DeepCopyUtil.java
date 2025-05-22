@@ -9,7 +9,6 @@
 package de.rub.nds.protocol.util;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -19,7 +18,7 @@ public class DeepCopyUtil {
 
     public static <T> T deepCopy(T object) {
         try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            SilentByteArrayOutputStream outputStream = new SilentByteArrayOutputStream();
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(object);
             objectOutputStream.flush();

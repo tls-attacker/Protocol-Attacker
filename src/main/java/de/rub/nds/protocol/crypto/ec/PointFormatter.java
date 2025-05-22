@@ -14,9 +14,8 @@ import de.rub.nds.protocol.constants.GroupParameters;
 import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
 import de.rub.nds.protocol.constants.PointFormat;
 import de.rub.nds.protocol.crypto.CyclicGroup;
-import de.rub.nds.protocol.exception.PreparationException;
+import de.rub.nds.protocol.util.SilentByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +27,7 @@ public class PointFormatter {
 
     public static byte[] formatToByteArray(
             GroupParameters<?> groupParameters, Point point, PointFormat format) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        SilentByteArrayOutputStream stream = new SilentByteArrayOutputStream();
         if (point.isAtInfinity()) {
             return new byte[1];
         }
@@ -40,16 +39,12 @@ public class PointFormatter {
             switch (format) {
                 case UNCOMPRESSED:
                     stream.write(0x04);
-                    try {
-                        stream.write(
-                                ArrayConverter.bigIntegerToNullPaddedByteArray(
-                                        point.getFieldX().getData(), elementLength));
-                        stream.write(
-                                ArrayConverter.bigIntegerToNullPaddedByteArray(
-                                        point.getFieldY().getData(), elementLength));
-                    } catch (IOException ex) {
-                        throw new PreparationException("Could not serialize ec point", ex);
-                    }
+                    stream.write(
+                            ArrayConverter.bigIntegerToNullPaddedByteArray(
+                                    point.getFieldX().getData(), elementLength));
+                    stream.write(
+                            ArrayConverter.bigIntegerToNullPaddedByteArray(
+                                    point.getFieldY().getData(), elementLength));
                     return stream.toByteArray();
                 case COMPRESSED:
                     CyclicGroup<?> group = groupParameters.getGroup();
@@ -66,47 +61,35 @@ public class PointFormatter {
                     } else {
                         stream.write(0x02);
                     }
-                    try {
-                        stream.write(
-                                ArrayConverter.bigIntegerToNullPaddedByteArray(
-                                        point.getFieldX().getData(), elementLength));
-                    } catch (IOException ex) {
-                        throw new PreparationException("Could not serialize ec point", ex);
-                    }
+                    stream.write(
+                            ArrayConverter.bigIntegerToNullPaddedByteArray(
+                                    point.getFieldX().getData(), elementLength));
                     return stream.toByteArray();
                 default:
                     throw new UnsupportedOperationException("Unsupported PointFormat: " + format);
             }
         } else {
-            try {
-                byte[] coordinate =
-                        ArrayConverter.bigIntegerToNullPaddedByteArray(
-                                point.getFieldX().getData(), elementLength);
-                stream.write(coordinate);
-            } catch (IOException ex) {
-                throw new PreparationException("Could not serialize ec point", ex);
-            }
+            byte[] coordinate =
+                    ArrayConverter.bigIntegerToNullPaddedByteArray(
+                            point.getFieldX().getData(), elementLength);
+            stream.write(coordinate);
             return stream.toByteArray();
         }
     }
 
     public static byte[] toRawFormat(Point point) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        SilentByteArrayOutputStream stream = new SilentByteArrayOutputStream();
         if (point.isAtInfinity()) {
             return new byte[1];
         }
         int elementLength =
                 ArrayConverter.bigIntegerToByteArray(point.getFieldX().getModulus()).length;
-        try {
-            stream.write(
-                    ArrayConverter.bigIntegerToNullPaddedByteArray(
-                            point.getFieldX().getData(), elementLength));
-            stream.write(
-                    ArrayConverter.bigIntegerToNullPaddedByteArray(
-                            point.getFieldY().getData(), elementLength));
-        } catch (IOException ex) {
-            throw new PreparationException("Could not serialize ec point", ex);
-        }
+        stream.write(
+                ArrayConverter.bigIntegerToNullPaddedByteArray(
+                        point.getFieldX().getData(), elementLength));
+        stream.write(
+                ArrayConverter.bigIntegerToNullPaddedByteArray(
+                        point.getFieldY().getData(), elementLength));
         return stream.toByteArray();
     }
 
