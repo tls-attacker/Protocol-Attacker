@@ -1,7 +1,7 @@
 /*
  * Protocol-Attacker - A Framework to create Protocol Analysis Tools
  *
- * Copyright 2023-2024 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
+ * Copyright 2023-2025 Ruhr University Bochum, Paderborn University, Technology Innovation Institute, and Hackmanit GmbH
  *
  * Licensed under Apache License, Version 2.0
  * http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -118,8 +118,8 @@ public class SilentByteArrayOutputStream extends OutputStream {
         try {
             this.outputStream.writeTo(out);
         } catch (IOException ex) {
-            LOGGER.warn("Encountered exception while writing to OutputStream.");
-            LOGGER.debug(ex);
+            LOGGER.error("Encountered exception while writing to OutputStream.", ex);
+            throw new RuntimeException(ex);
         }
     }
 
