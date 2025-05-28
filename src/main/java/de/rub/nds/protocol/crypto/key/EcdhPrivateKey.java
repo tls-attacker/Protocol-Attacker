@@ -17,6 +17,14 @@ public class EcdhPrivateKey implements PrivateKeyContainer {
 
     private NamedEllipticCurveParameters parameters;
 
+    @SuppressWarnings("unused")
+    // Default constructor for deserialization
+    private EcdhPrivateKey() {
+        // Default constructor for deserialization
+        this.privateKey = null;
+        this.parameters = null;
+    }
+
     public EcdhPrivateKey(BigInteger privateKey, NamedEllipticCurveParameters parameters) {
         this.privateKey = privateKey;
         this.parameters = parameters;

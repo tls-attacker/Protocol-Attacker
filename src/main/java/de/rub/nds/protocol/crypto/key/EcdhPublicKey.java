@@ -19,6 +19,14 @@ public class EcdhPublicKey implements PublicKeyContainer {
 
     private NamedEllipticCurveParameters parameters;
 
+    @SuppressWarnings("unused")
+    // Default constructor for deserialization
+    private EcdhPublicKey() {
+        // Default constructor for deserialization
+        this.publicPoint = null;
+        this.parameters = null;
+    }
+
     public EcdhPublicKey(Point publicPoint, NamedEllipticCurveParameters parameters) {
         this.publicPoint = publicPoint;
         this.parameters = parameters;

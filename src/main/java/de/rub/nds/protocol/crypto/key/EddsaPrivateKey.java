@@ -17,6 +17,14 @@ public class EddsaPrivateKey implements PrivateKeyContainer {
 
     private NamedEllipticCurveParameters parameters;
 
+    @SuppressWarnings("unused")
+    // Default constructor for deserialization
+    private EddsaPrivateKey() {
+        // Default constructor for deserialization
+        this.privateKey = null;
+        this.parameters = null;
+    }
+
     public EddsaPrivateKey(BigInteger privateKey, NamedEllipticCurveParameters parameters) {
         this.privateKey = privateKey;
         this.parameters = parameters;

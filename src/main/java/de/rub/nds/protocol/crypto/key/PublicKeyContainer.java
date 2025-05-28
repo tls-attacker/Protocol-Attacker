@@ -8,8 +8,10 @@
  */
 package de.rub.nds.protocol.crypto.key;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.rub.nds.protocol.constants.AsymmetricAlgorithmType;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public interface PublicKeyContainer {
     public int length();
 

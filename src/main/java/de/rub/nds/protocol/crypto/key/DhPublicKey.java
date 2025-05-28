@@ -19,6 +19,14 @@ public class DhPublicKey implements PublicKeyContainer {
 
     private BigInteger publicKey;
 
+    @SuppressWarnings("unused")
+    // Default constructor for deserialization
+    private DhPublicKey() {
+        // Default constructor for deserialization
+        this.parameters = null;
+        this.publicKey = null;
+    }
+
     public DhPublicKey(BigInteger publicKey, BigInteger generator, BigInteger modulus) {
         this.parameters = new ExplicitFfdhGroupParameters(generator, modulus);
         this.publicKey = publicKey;
