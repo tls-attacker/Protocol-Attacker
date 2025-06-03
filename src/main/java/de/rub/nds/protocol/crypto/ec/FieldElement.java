@@ -8,6 +8,7 @@
  */
 package de.rub.nds.protocol.crypto.ec;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import java.io.Serializable;
@@ -22,6 +23,7 @@ import java.util.Objects;
  * All arithmetic operations are performed within the laws of the specified field.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public abstract class FieldElement implements Serializable {
 
     /*
@@ -31,7 +33,13 @@ public abstract class FieldElement implements Serializable {
     private final BigInteger data;
     private final BigInteger modulus;
 
-    public FieldElement(BigInteger data, BigInteger modulus) {
+    /** Default constructor for JAXB. */
+    protected FieldElement() {
+        this.data = null;
+        this.modulus = null;
+    }
+
+    protected FieldElement(BigInteger data, BigInteger modulus) {
         this.data = data;
         this.modulus = modulus;
     }

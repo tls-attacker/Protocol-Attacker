@@ -35,6 +35,7 @@ public class FieldElementF2m extends FieldElement {
         super(data, modulus);
     }
 
+    @SuppressWarnings("unused")
     private FieldElementF2m() {
         super(null, null);
     }

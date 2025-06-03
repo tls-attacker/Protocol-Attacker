@@ -18,6 +18,7 @@ public class FieldElementFp extends FieldElement {
         super(data.mod(modulus), modulus);
     }
 
+    @SuppressWarnings("unused")
     private FieldElementFp() {
         super(null, null);
     }
