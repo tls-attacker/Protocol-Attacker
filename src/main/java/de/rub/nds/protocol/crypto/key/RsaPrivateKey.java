@@ -16,10 +16,9 @@ public class RsaPrivateKey implements PrivateKeyContainer {
 
     private BigInteger modulus;
 
+    /** Default constructor for deserialization. */
     @SuppressWarnings("unused")
-    // Default constructor for deserialization
     private RsaPrivateKey() {
-        // Default constructor for deserialization
         this.privateExponent = null;
         this.modulus = null;
     }

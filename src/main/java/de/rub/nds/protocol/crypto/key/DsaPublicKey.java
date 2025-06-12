@@ -18,10 +18,9 @@ public class DsaPublicKey implements PublicKeyContainer {
     private BigInteger Y;
     private DsaParameters dsaParameters;
 
+    /** Default constructor for deserialization. */
     @SuppressWarnings("unused")
-    // Default constructor for deserialization
     private DsaPublicKey() {
-        // Default constructor for deserialization
         this.Y = null;
         this.dsaParameters = null;
     }

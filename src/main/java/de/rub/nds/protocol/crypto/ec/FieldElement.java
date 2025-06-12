@@ -33,7 +33,7 @@ public abstract class FieldElement implements Serializable {
     private final BigInteger data;
     private final BigInteger modulus;
 
-    /** Default constructor for JAXB. */
+    /** Default constructor for deserialization. */
     protected FieldElement() {
         this.data = null;
         this.modulus = null;

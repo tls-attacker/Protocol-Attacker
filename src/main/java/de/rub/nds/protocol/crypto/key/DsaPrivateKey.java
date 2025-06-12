@@ -17,10 +17,9 @@ public class DsaPrivateKey implements PrivateKeyContainer {
     private BigInteger K;
     private DsaParameters dsaParameters;
 
+    /** Default constructor for deserialization. */
     @SuppressWarnings("unused")
-    // Default constructor for deserialization
     private DsaPrivateKey() {
-        // Default constructor for deserialization
         this.X = null;
         this.K = null;
         this.dsaParameters = null;

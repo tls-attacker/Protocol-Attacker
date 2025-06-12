@@ -18,10 +18,9 @@ public class EcdsaPublicKey implements PublicKeyContainer {
 
     private NamedEllipticCurveParameters parameters;
 
+    /** Default constructor for deserialization. */
     @SuppressWarnings("unused")
-    // Default constructor for deserialization
     private EcdsaPublicKey() {
-        // Default constructor for deserialization
         this.publicPoint = null;
         this.parameters = null;
     }

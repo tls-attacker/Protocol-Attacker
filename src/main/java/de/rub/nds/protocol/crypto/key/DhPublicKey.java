@@ -19,10 +19,9 @@ public class DhPublicKey implements PublicKeyContainer {
 
     private BigInteger publicKey;
 
+    /** Default constructor for deserialization. */
     @SuppressWarnings("unused")
-    // Default constructor for deserialization
     private DhPublicKey() {
-        // Default constructor for deserialization
         this.parameters = null;
         this.publicKey = null;
     }
