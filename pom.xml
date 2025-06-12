@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>protocol-attacker</artifactId>
-    <version>2.0.6-json</version>
+    <version>2.0.6-SNAPSHOT</version>
 
     <name>Protocol-Attacker</name>
     <description>Protocol-Attacker is a framework for the creation of protocol analysis tools</description>
@@ -122,8 +122,7 @@
     <build>
         <finalName>ProtocolAttacker</finalName>
         <plugins>
-            <!--#################
-            default lifecycle plugins #################-->
+            <!--################# default lifecycle plugins #################-->
             <!-- Formatting -->
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
@@ -199,11 +198,9 @@
                     <includes>
                         <include>**/*.java</include>
                     </includes>
-                    <!-- Allow parallel execution of unit tests (execution in series within test
-                    classes) -->
+                    <!-- Allow parallel execution of unit tests (execution in series within test classes) -->
                     <parallel>classes</parallel>
-                    <!-- Can be adjusted depending on the local system, 3 should be a fair default
-                    value -->
+                    <!-- Can be adjusted depending on the local system, 3 should be a fair default value -->
                     <forkCount>3</forkCount>
                     <reuseForks>true</reuseForks>
                     <!-- By default we include all but integration tests during surefire execution -->
@@ -260,8 +257,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
-                    <!-- By default, the Failsafe plugin excludes various files. We have to override
-                    that. -->
+                    <!-- By default, the Failsafe plugin excludes various files. We have to override that. -->
                     <includes>
                         <include>**/*.java</include>
                     </includes>
@@ -286,8 +282,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--############
-            plugins without lifecycle bindings #############-->
+            <!--############ plugins without lifecycle bindings #############-->
             <!-- Static code analysis -->
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
@@ -309,8 +304,7 @@
             <build>
                 <pluginManagement>
                     <plugins>
-                        <!-- Configure Surefire to run SlowTests during integration-test phase to
-                        speed up the build process -->
+                        <!-- Configure Surefire to run SlowTests during integration-test phase to speed up the build process -->
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-surefire-plugin</artifactId>
