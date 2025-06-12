@@ -17,6 +17,13 @@ public class DhPrivateKey implements PrivateKeyContainer {
 
     private FfdhGroupParameters parameters;
 
+    /** Default constructor for deserialization. */
+    @SuppressWarnings("unused")
+    private DhPrivateKey() {
+        this.privateKey = null;
+        this.parameters = null;
+    }
+
     public DhPrivateKey(BigInteger privateKey, FfdhGroupParameters parameters) {
         this.privateKey = privateKey;
         this.parameters = parameters;

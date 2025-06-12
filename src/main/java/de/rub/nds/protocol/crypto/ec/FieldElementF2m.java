@@ -35,6 +35,8 @@ public class FieldElementF2m extends FieldElement {
         super(data, modulus);
     }
 
+    /** Default constructor for deserialization. */
+    @SuppressWarnings("unused")
     private FieldElementF2m() {
         super(null, null);
     }

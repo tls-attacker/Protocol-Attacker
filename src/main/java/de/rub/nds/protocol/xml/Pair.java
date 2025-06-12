@@ -20,6 +20,7 @@ public class Pair<L, R> {
     private L leftElement;
     private R rightElement;
 
+    /** Default constructor for deserialization. */
     @SuppressWarnings("unused")
     private Pair() {}
 

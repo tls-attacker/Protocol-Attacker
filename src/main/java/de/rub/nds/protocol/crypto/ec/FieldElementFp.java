@@ -18,6 +18,8 @@ public class FieldElementFp extends FieldElement {
         super(data.mod(modulus), modulus);
     }
 
+    /** Default constructor for deserialization. */
+    @SuppressWarnings("unused")
     private FieldElementFp() {
         super(null, null);
     }

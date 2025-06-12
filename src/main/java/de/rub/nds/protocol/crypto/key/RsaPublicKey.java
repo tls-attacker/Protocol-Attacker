@@ -17,6 +17,13 @@ public class RsaPublicKey implements PublicKeyContainer {
 
     private BigInteger modulus;
 
+    /** Default constructor for deserialization. */
+    @SuppressWarnings("unused")
+    private RsaPublicKey() {
+        this.publicExponent = null;
+        this.modulus = null;
+    }
+
     public RsaPublicKey(BigInteger publicExponent, BigInteger modulus) {
         this.publicExponent = publicExponent;
         this.modulus = modulus;

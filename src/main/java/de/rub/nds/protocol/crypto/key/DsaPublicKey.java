@@ -18,6 +18,13 @@ public class DsaPublicKey implements PublicKeyContainer {
     private BigInteger Y;
     private DsaParameters dsaParameters;
 
+    /** Default constructor for deserialization. */
+    @SuppressWarnings("unused")
+    private DsaPublicKey() {
+        this.Y = null;
+        this.dsaParameters = null;
+    }
+
     /**
      * Create a DSA public key with explicit parameters
      *
