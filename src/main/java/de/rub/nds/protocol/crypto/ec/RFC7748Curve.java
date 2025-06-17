@@ -49,10 +49,6 @@ public abstract class RFC7748Curve extends SimulatedMontgomeryCurve {
         BigInteger decodedKey = decodeScalar(privateKey);
 
         Point publicPoint = createAPointOnCurve(decodedCoord);
-        if (publicPoint == null) {
-            LOGGER.warn("Could not create a point on curve. Using non-point");
-            publicPoint = getPoint(BigInteger.ZERO, BigInteger.ZERO);
-        }
         Point sharedPoint = mult(decodedKey, publicPoint);
         if (sharedPoint.getFieldX() == null) {
             LOGGER.warn(

@@ -222,8 +222,8 @@ public class SignatureCalculator {
     private byte[] maskGeneratorFunction1(byte[] input, HashAlgorithm mgfAlgorithm, int length) {
         int mgfhLen = mgfAlgorithm.getBitLength() / 8;
         byte[] mask = new byte[length];
-        byte[] hashBuf = new byte[mgfhLen];
-        byte[] counterBytes = new byte[4];
+        byte[] hashBuf;
+        byte[] counterBytes;
         int counter = 0;
 
         while (counter < (length / mgfhLen)) {

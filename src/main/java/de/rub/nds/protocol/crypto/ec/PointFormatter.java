@@ -47,12 +47,7 @@ public class PointFormatter {
                                     point.getFieldY().getData(), elementLength));
                     return stream.toByteArray();
                 case COMPRESSED:
-                    CyclicGroup<?> group = groupParameters.getGroup();
-                    if (!(group instanceof EllipticCurve)) {
-                        throw new IllegalArgumentException(
-                                "Cannot convert Point for non-elliptic curve");
-                    }
-                    EllipticCurve curve = (EllipticCurve) group;
+                    EllipticCurve curve = (EllipticCurve) groupParameters.getGroup();
                     if (curve.createAPointOnCurve(point.getFieldX().getData())
                             .getFieldY()
                             .getData()

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -154,22 +155,20 @@ public class SilentByteArrayOutputStream extends OutputStream {
     }
 
     /**
-     * Converts the buffer's contents into a string decoding bytes using the default charset. The
-     * length of the new {@code String} is a function of the charset, and hence may not be equal to
-     * the size of the buffer.
+     * Converts the buffer's contents into a string decoding bytes using UTF-8 charset. The length
+     * of the new {@code String} is a function of the charset, and hence may not be equal to the
+     * size of the buffer.
      *
      * <p>This method always replaces malformed-input and unmappable-character sequences with the
-     * default replacement string for the default charset. The {@linkplain
-     * java.nio.charset.CharsetDecoder} class should be used when more control over the decoding
-     * process is required.
+     * charset's default replacement string. The {@linkplain java.nio.charset.CharsetDecoder} class
+     * should be used when more control over the decoding process is required.
      *
-     * @see Charset#defaultCharset()
-     * @return String decoded from the buffer's contents.
+     * @return String decoded from the buffer's contents using UTF-8.
      * @since 1.1
      */
     @Override
     public String toString() {
-        return this.outputStream.toString();
+        return this.outputStream.toString(StandardCharsets.UTF_8);
     }
 
     /**
