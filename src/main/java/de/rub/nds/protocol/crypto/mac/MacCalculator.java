@@ -14,8 +14,12 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MacCalculator {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private MacCalculator() {}
 
@@ -23,11 +27,19 @@ public class MacCalculator {
         if (algorithm == MacAlgorithm.NONE) {
             return toMac;
         } else {
+            if (key.length == 0) {
+                // TODO #71 Ideally we return a proper MAC, but the Java implementation does not
+                // allow
+                // this.
+                LOGGER.warn("Key length is zero, returning empty MAC");
+                return new byte[algorithm.getMacLength()];
+            }
             return computeMac(key, toMac, algorithm.getJavaName());
         }
     }
 
     private static byte[] computeMac(byte[] key, byte[] toMac, String javaName) {
+
         try {
             Mac mac = Mac.getInstance(javaName);
             mac.init(new SecretKeySpec(key, mac.getAlgorithm()));
