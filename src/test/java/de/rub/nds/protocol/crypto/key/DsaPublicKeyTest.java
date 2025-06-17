@@ -15,8 +15,6 @@ import org.junit.jupiter.api.Test;
 
 class DsaPublicKeyTest {
 
-    // DsaPublicKey doesn't have a default constructor
-
     @Test
     void testConstructorWithParameters() {
         // Create a key with parameters

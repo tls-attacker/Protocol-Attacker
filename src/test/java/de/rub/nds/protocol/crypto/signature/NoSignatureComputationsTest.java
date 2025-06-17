@@ -61,8 +61,6 @@ public class NoSignatureComputationsTest {
 
     @Test
     public void testModifiableVariableSupport() {
-        // Since NoSignatureComputations just extends SignatureComputations without
-        // any additional functionality, we'll just test basic assignment works
         NoSignatureComputations computations = new NoSignatureComputations();
         byte[] testData = "test data".getBytes();
 

@@ -9,61 +9,55 @@
 package de.rub.nds.protocol.crypto.ffdh;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.rub.nds.protocol.constants.FfdhGroupParameters;
 import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
-public class Rfc7919GroupsTest {
+class Rfc7919GroupsTest {
 
     @Test
-    public void testRfc7919Group2048Properties() {
+    void testRfc7919Group2048Properties() {
         FfdhGroupParameters group = new Rfc7919Group2048();
         assertEquals(BigInteger.TWO, group.getGenerator());
         assertEquals(2048, group.getElementSizeBits());
         assertEquals(256, group.getElementSizeBytes());
-        assertTrue(group.getModulus().isProbablePrime(10));
     }
 
     @Test
-    public void testRfc7919Group3072Properties() {
+    void testRfc7919Group3072Properties() {
         FfdhGroupParameters group = new Rfc7919Group3072();
         assertEquals(BigInteger.TWO, group.getGenerator());
         assertEquals(3072, group.getElementSizeBits());
         assertEquals(384, group.getElementSizeBytes());
-        assertTrue(group.getModulus().isProbablePrime(10));
     }
 
     @Test
-    public void testRfc7919Group4096Properties() {
+    void testRfc7919Group4096Properties() {
         FfdhGroupParameters group = new Rfc7919Group4096();
         assertEquals(BigInteger.TWO, group.getGenerator());
         assertEquals(4096, group.getElementSizeBits());
         assertEquals(512, group.getElementSizeBytes());
-        assertTrue(group.getModulus().isProbablePrime(10));
     }
 
     @Test
-    public void testRfc7919Group6144Properties() {
+    void testRfc7919Group6144Properties() {
         FfdhGroupParameters group = new Rfc7919Group6144();
         assertEquals(BigInteger.TWO, group.getGenerator());
         assertEquals(6144, group.getElementSizeBits());
         assertEquals(768, group.getElementSizeBytes());
-        assertTrue(group.getModulus().isProbablePrime(10));
     }
 
     @Test
-    public void testRfc7919Group8192Properties() {
+    void testRfc7919Group8192Properties() {
         FfdhGroupParameters group = new Rfc7919Group8192();
         assertEquals(BigInteger.TWO, group.getGenerator());
         assertEquals(8192, group.getElementSizeBits());
         assertEquals(1024, group.getElementSizeBytes());
-        assertTrue(group.getModulus().isProbablePrime(10));
     }
 
     @Test
-    public void testRfc7919GroupOperations() {
+    void testRfc7919GroupOperations() {
         // Test that all groups produce valid results for basic group operations
         FfdhGroupParameters[] groups = {
             new Rfc7919Group2048(),

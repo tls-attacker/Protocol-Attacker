@@ -15,8 +15,6 @@ import org.junit.jupiter.api.Test;
 
 class RsaPublicKeyTest {
 
-    // RsaPublicKey doesn't have a default constructor
-
     @Test
     void testConstructorWithParameters() {
         // Create a key with parameters

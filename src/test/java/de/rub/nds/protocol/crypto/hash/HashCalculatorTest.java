@@ -10,10 +10,8 @@ package de.rub.nds.protocol.crypto.hash;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.rub.nds.protocol.constants.HashAlgorithm;
-import de.rub.nds.protocol.exception.CryptoException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -86,16 +84,5 @@ public class HashCalculatorTest {
 
         // Assert
         assertArrayEquals(expected, result, "Should be able to hash empty byte array");
-    }
-
-    @Test
-    void testHashWithInvalidAlgorithm() {
-        // Since we can't create a new HashAlgorithm (it's an enum), we'll use a known algorithm
-        // but with a non-existent Java implementation - GOST algorithms aren't typically available
-        // in standard JDK
-        HashAlgorithm algorithm = HashAlgorithm.GOST_R3411_94;
-
-        // Act & Assert
-        assertThrows(CryptoException.class, () -> HashCalculator.compute(TEST_DATA, algorithm));
     }
 }

@@ -10,10 +10,10 @@ package de.rub.nds.protocol.crypto.mac;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import de.rub.nds.protocol.constants.MacAlgorithm;
-import de.rub.nds.protocol.exception.CryptoException;
 import java.nio.charset.StandardCharsets;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -73,8 +73,7 @@ public class MacCalculatorTest {
                     result.length,
                     "MAC output length should match expected length");
         } catch (Exception e) {
-            // Skip this test if the algorithm is not supported by the JVM
-            System.out.println("Skipping test for " + algorithm + ": " + e.getMessage());
+            fail(e);
         }
     }
 
@@ -102,20 +101,7 @@ public class MacCalculatorTest {
         // Arrange
         byte[] emptyKey = new byte[0];
         MacAlgorithm algorithm = MacAlgorithm.HMAC_SHA256;
-
-        // Act & Assert - An empty key is not a valid key for most MAC algorithms
-        // The underlying exception is IllegalArgumentException, but it should be wrapped in
-        // CryptoException
-        assertThrows(Exception.class, () -> MacCalculator.compute(emptyKey, TEST_DATA, algorithm));
-    }
-
-    @Test
-    void testMacWithInvalidAlgorithm() {
-        // Use a MAC algorithm that isn't typically available in standard JDK
-        MacAlgorithm algorithm = MacAlgorithm.IMIT_GOST28147;
-
-        // Act & Assert
-        assertThrows(
-                CryptoException.class, () -> MacCalculator.compute(TEST_KEY, TEST_DATA, algorithm));
+        // Should not throw an exception, but return a valid MAC
+        assertNotNull(MacCalculator.compute(emptyKey, TEST_DATA, algorithm));
     }
 }

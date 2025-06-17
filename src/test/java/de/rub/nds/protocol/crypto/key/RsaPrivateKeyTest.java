@@ -15,8 +15,6 @@ import org.junit.jupiter.api.Test;
 
 class RsaPrivateKeyTest {
 
-    // RsaPrivateKey doesn't have a default constructor
-
     @Test
     void testConstructorWithParameters() {
         // Create a key with parameters
@@ -29,6 +27,4 @@ class RsaPrivateKeyTest {
         assertEquals(privateExponent, key.getPrivateExponent());
         assertEquals(modulus, key.getModulus());
     }
-
-    // RsaPrivateKey doesn't have setters
 }

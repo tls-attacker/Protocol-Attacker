@@ -21,19 +21,19 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class RsaPkcs1SignatureComputationsTest {
+class RsaPkcs1SignatureComputationsTest {
 
     private RsaPkcs1SignatureComputations computations;
     private byte[] testData = "test data".getBytes();
     private BigInteger testBigInt = new BigInteger("12345678901234567890");
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         computations = new RsaPkcs1SignatureComputations();
     }
 
     @Test
-    public void testPrivateKeyGetterSetter() {
+    void testPrivateKeyGetterSetter() {
         // Initially null
         assertNull(computations.getPrivateKey());
 
@@ -43,14 +43,14 @@ public class RsaPkcs1SignatureComputationsTest {
         assertEquals(modifiableBigInt, computations.getPrivateKey());
 
         // Set and get with BigInteger
-        BigInteger newValue = testBigInt; // Use the same value to avoid test issues
+        BigInteger newValue = BigInteger.TWO;
         computations.setPrivateKey(newValue);
         assertNotNull(computations.getPrivateKey());
         assertEquals(newValue, computations.getPrivateKey().getValue());
     }
 
     @Test
-    public void testModulusGetterSetter() {
+    void testModulusGetterSetter() {
         // Initially null
         assertNull(computations.getModulus());
 
@@ -60,14 +60,14 @@ public class RsaPkcs1SignatureComputationsTest {
         assertEquals(modifiableBigInt, computations.getModulus());
 
         // Set and get with BigInteger
-        BigInteger newValue = testBigInt; // Use the same value to avoid test issues
+        BigInteger newValue = BigInteger.TWO;
         computations.setModulus(newValue);
         assertNotNull(computations.getModulus());
         assertEquals(newValue, computations.getModulus().getValue());
     }
 
     @Test
-    public void testPaddingGetterSetter() {
+    void testPaddingGetterSetter() {
         // Initially null
         assertNull(computations.getPadding());
 
@@ -77,14 +77,14 @@ public class RsaPkcs1SignatureComputationsTest {
         assertEquals(modifiableBytes, computations.getPadding());
 
         // Set and get with byte[]
-        byte[] newData = testData; // Use the same value to avoid test issues
+        byte[] newData = new byte[4];
         computations.setPadding(newData);
         assertNotNull(computations.getPadding());
         assertArrayEquals(newData, computations.getPadding().getValue());
     }
 
     @Test
-    public void testPlainToBeSignedGetterSetter() {
+    void testPlainToBeSignedGetterSetter() {
         // Initially null
         assertNull(computations.getPlainToBeSigned());
 
@@ -94,26 +94,26 @@ public class RsaPkcs1SignatureComputationsTest {
         assertEquals(modifiableBytes, computations.getPlainToBeSigned());
 
         // Set and get with byte[]
-        byte[] newData = testData; // Use the same value to avoid test issues
+        byte[] newData = new byte[5];
         computations.setPlainToBeSigned(newData);
         assertNotNull(computations.getPlainToBeSigned());
         assertArrayEquals(newData, computations.getPlainToBeSigned().getValue());
     }
 
     @Test
-    public void testDerEncodedDigestGetterSetter() {
+    void testDerEncodedDigestGetterSetter() {
         // Initially null
         assertNull(computations.getDerEncodedDigest());
 
         // Set and get with byte[]
-        byte[] derData = testData; // Use the same value to avoid test issues
+        byte[] derData = new byte[6];
         computations.setDerEncodedDigest(derData);
         assertNotNull(computations.getDerEncodedDigest());
         assertArrayEquals(derData, computations.getDerEncodedDigest().getValue());
     }
 
     @Test
-    public void testHashAlgorithmGetterSetter() {
+    void testHashAlgorithmGetterSetter() {
         // Initially null
         assertNull(computations.getHashAlgorithm());
 

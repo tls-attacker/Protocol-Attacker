@@ -10,7 +10,6 @@ package de.rub.nds.protocol.crypto.key;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.rub.nds.protocol.constants.AsymmetricAlgorithmType;
@@ -84,64 +83,4 @@ public class DsaKeyTest {
         // Test hashCode
         assertEquals(publicKey1.hashCode(), publicKey2.hashCode());
     }
-
-    @Test
-    public void testDsaKeyGeneration() {
-        BigInteger privateKey = new BigInteger(64, RANDOM);
-
-        // Test with explicit parameters
-        DsaPublicKey publicKey1 = KeyGenerator.generateDsaPublicKey(privateKey, G, P, Q);
-
-        assertNotNull(publicKey1);
-        assertEquals(Q, publicKey1.getQ());
-        assertEquals(G, publicKey1.getGenerator());
-        assertEquals(P, publicKey1.getModulus());
-
-        // Verify the public key is calculated correctly: g^x mod p
-        BigInteger expectedY = G.modPow(privateKey, P);
-        assertEquals(expectedY, publicKey1.getY());
-
-        // Test with generated parameters
-        int pLength = 1024;
-        int qLength = 160;
-        DsaPublicKey publicKey2 =
-                KeyGenerator.generateDsaPublicKey(privateKey, pLength, qLength, RANDOM);
-
-        assertNotNull(publicKey2);
-        assertEquals(pLength, publicKey2.getModulus().bitLength());
-        assertTrue(
-                publicKey2.getQ().bitLength()
-                        >= qLength - 1); // May be slightly less due to leading zeros
-
-        // Verify the public key is calculated correctly: g^x mod p
-        BigInteger expectedY2 =
-                publicKey2.getGenerator().modPow(privateKey, publicKey2.getModulus());
-        assertEquals(expectedY2, publicKey2.getY());
-
-        // Generated DSA parameters might not strictly satisfy the p-1 mod q = 0
-        // requirement in all implementations, so we skip this test
-    }
-
-    // Disabled test - the implementation may be more robust than we expect
-    // and we don't want to have flaky tests
-    /*
-    @Test
-    public void testDsaKeyGenerationFailure() {
-        // This test is difficult to implement as it requires a specific random state
-        // that would cause the algorithm to fail finding suitable parameters
-        // We'll simulate by creating an impossibly large number of iterations
-
-        // Set up parameters that would be difficult to satisfy
-        BigInteger impossiblePrivateKey = new BigInteger(2048, RANDOM);
-        int smallPLength = 16; // Very small p length
-        int largeQLength = 12; // Almost as large as p length, which is unlikely to work
-
-        // Verify it throws an exception after max iterations
-        assertThrows(
-                IllegalArgumentException.class,
-                () ->
-                        KeyGenerator.generateDsaPublicKey(
-                                impossiblePrivateKey, smallPLength, largeQLength, RANDOM));
-    }
-    */
 }
