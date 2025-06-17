@@ -22,7 +22,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.EnumSource.Mode;
 
-public class MacCalculatorTest {
+class MacCalculatorTest {
 
     private static final byte[] TEST_DATA =
             "Protocol-Attacker test data".getBytes(StandardCharsets.UTF_8);
