@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Exclude EI_EXPOSE_REP warnings -->
+    <!-- These warnings are intentionally ignored as ModifiableVariable objects 
+         are designed to be modified at runtime, which is the intended behavior
+         of the Protocol-Attacker framework -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    
+    <!-- Exclude EI_EXPOSE_REP2 warnings -->
+    <!-- These warnings are intentionally ignored for the same reason as EI_EXPOSE_REP -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+</FindBugsFilter>
