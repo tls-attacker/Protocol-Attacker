@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import de.rub.nds.modifiablevariable.biginteger.ModifiableBigInteger;
 import de.rub.nds.modifiablevariable.bytearray.ModifiableByteArray;
-import de.rub.nds.modifiablevariable.util.Modifiable;
 import de.rub.nds.protocol.constants.HashAlgorithm;
 import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
 import java.math.BigInteger;
@@ -39,7 +38,7 @@ public class EcdsaSignatureComputationsTest {
         assertNull(computations.getTruncatedHashBytes());
 
         // Set and get with ModifiableByteArray
-        ModifiableByteArray modifiableBytes = Modifiable.explicit(testData);
+        ModifiableByteArray modifiableBytes = new ModifiableByteArray(testData);
         computations.setTruncatedHashBytes(modifiableBytes);
         assertEquals(modifiableBytes, computations.getTruncatedHashBytes());
 
@@ -56,7 +55,7 @@ public class EcdsaSignatureComputationsTest {
         assertNull(computations.getTruncatedHash());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setTruncatedHash(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getTruncatedHash());
 
@@ -94,7 +93,7 @@ public class EcdsaSignatureComputationsTest {
         assertNull(computations.getPrivateKey());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setPrivateKey(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getPrivateKey());
 
@@ -111,7 +110,7 @@ public class EcdsaSignatureComputationsTest {
         assertNull(computations.getNonce());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setNonce(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getNonce());
 
@@ -128,7 +127,7 @@ public class EcdsaSignatureComputationsTest {
         assertNull(computations.getInverseNonce());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setInverseNonce(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getInverseNonce());
 
@@ -145,7 +144,7 @@ public class EcdsaSignatureComputationsTest {
         assertNull(computations.getS());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setS(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getS());
 
@@ -162,7 +161,7 @@ public class EcdsaSignatureComputationsTest {
         assertNull(computations.getR());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setR(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getR());
 

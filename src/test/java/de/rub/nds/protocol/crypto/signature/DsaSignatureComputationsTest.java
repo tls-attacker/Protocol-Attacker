@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import de.rub.nds.modifiablevariable.biginteger.ModifiableBigInteger;
 import de.rub.nds.modifiablevariable.bytearray.ModifiableByteArray;
-import de.rub.nds.modifiablevariable.util.Modifiable;
 import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +36,7 @@ public class DsaSignatureComputationsTest {
         assertNull(computations.getPrivateKey());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setPrivateKey(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getPrivateKey());
 
@@ -54,7 +53,7 @@ public class DsaSignatureComputationsTest {
         assertNull(computations.getQ());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setQ(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getQ());
 
@@ -71,7 +70,7 @@ public class DsaSignatureComputationsTest {
         assertNull(computations.getG());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setG(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getG());
 
@@ -88,7 +87,7 @@ public class DsaSignatureComputationsTest {
         assertNull(computations.getP());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setP(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getP());
 
@@ -105,7 +104,7 @@ public class DsaSignatureComputationsTest {
         assertNull(computations.getR());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setR(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getR());
 
@@ -122,7 +121,7 @@ public class DsaSignatureComputationsTest {
         assertNull(computations.getInverseNonce());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setInverseNonce(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getInverseNonce());
 
@@ -139,7 +138,7 @@ public class DsaSignatureComputationsTest {
         assertNull(computations.getS());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setS(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getS());
 
@@ -156,7 +155,7 @@ public class DsaSignatureComputationsTest {
         assertNull(computations.getXr());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setXr(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getXr());
 
@@ -173,7 +172,7 @@ public class DsaSignatureComputationsTest {
         assertNull(computations.getNonce());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setNonce(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getNonce());
 
@@ -190,7 +189,7 @@ public class DsaSignatureComputationsTest {
         assertNull(computations.getTruncatedHashBytes());
 
         // Set and get with ModifiableByteArray
-        ModifiableByteArray modifiableBytes = Modifiable.explicit(testData);
+        ModifiableByteArray modifiableBytes = new ModifiableByteArray(testData);
         computations.setTruncatedHashBytes(modifiableBytes);
         assertEquals(modifiableBytes, computations.getTruncatedHashBytes());
 

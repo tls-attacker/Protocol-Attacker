@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import de.rub.nds.modifiablevariable.biginteger.ModifiableBigInteger;
 import de.rub.nds.modifiablevariable.bytearray.ModifiableByteArray;
-import de.rub.nds.modifiablevariable.util.Modifiable;
 import de.rub.nds.protocol.constants.HashAlgorithm;
 import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +37,7 @@ class RsaPkcs1SignatureComputationsTest {
         assertNull(computations.getPrivateKey());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setPrivateKey(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getPrivateKey());
 
@@ -55,7 +54,7 @@ class RsaPkcs1SignatureComputationsTest {
         assertNull(computations.getModulus());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setModulus(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getModulus());
 
@@ -72,7 +71,7 @@ class RsaPkcs1SignatureComputationsTest {
         assertNull(computations.getPadding());
 
         // Set and get with ModifiableByteArray
-        ModifiableByteArray modifiableBytes = Modifiable.explicit(testData);
+        ModifiableByteArray modifiableBytes = new ModifiableByteArray(testData);
         computations.setPadding(modifiableBytes);
         assertEquals(modifiableBytes, computations.getPadding());
 
@@ -89,7 +88,7 @@ class RsaPkcs1SignatureComputationsTest {
         assertNull(computations.getPlainToBeSigned());
 
         // Set and get with ModifiableByteArray
-        ModifiableByteArray modifiableBytes = Modifiable.explicit(testData);
+        ModifiableByteArray modifiableBytes = new ModifiableByteArray(testData);
         computations.setPlainToBeSigned(modifiableBytes);
         assertEquals(modifiableBytes, computations.getPlainToBeSigned());
 

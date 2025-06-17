@@ -15,30 +15,29 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import de.rub.nds.modifiablevariable.biginteger.ModifiableBigInteger;
 import de.rub.nds.modifiablevariable.bytearray.ModifiableByteArray;
-import de.rub.nds.modifiablevariable.util.Modifiable;
 import de.rub.nds.protocol.constants.HashAlgorithm;
 import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class RsaSsaPssSignatureComputationsTest {
+class RsaSsaPssSignatureComputationsTest {
 
     private RsaSsaPssSignatureComputations computations;
     private byte[] testData = "test data".getBytes();
     private BigInteger testBigInt = new BigInteger("12345678901234567890");
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         computations = new RsaSsaPssSignatureComputations();
     }
 
     @Test
-    public void testPrivateKeyGetterSetter() {
+    void testPrivateKeyGetterSetter() {
         // Initially null
         assertNull(computations.getPrivateKey());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setPrivateKey(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getPrivateKey());
 
@@ -50,12 +49,12 @@ public class RsaSsaPssSignatureComputationsTest {
     }
 
     @Test
-    public void testModulusGetterSetter() {
+    void testModulusGetterSetter() {
         // Initially null
         assertNull(computations.getModulus());
 
         // Set and get with ModifiableBigInteger
-        ModifiableBigInteger modifiableBigInt = Modifiable.explicit(testBigInt);
+        ModifiableBigInteger modifiableBigInt = new ModifiableBigInteger(testBigInt);
         computations.setModulus(modifiableBigInt);
         assertEquals(modifiableBigInt, computations.getModulus());
 
@@ -67,12 +66,12 @@ public class RsaSsaPssSignatureComputationsTest {
     }
 
     @Test
-    public void testPlainToBeSignedGetterSetter() {
+    void testPlainToBeSignedGetterSetter() {
         // Initially null
         assertNull(computations.getPlainToBeSigned());
 
         // Set and get with ModifiableByteArray
-        ModifiableByteArray modifiableBytes = Modifiable.explicit(testData);
+        ModifiableByteArray modifiableBytes = new ModifiableByteArray(testData);
         computations.setPlainToBeSigned(modifiableBytes);
         assertEquals(modifiableBytes, computations.getPlainToBeSigned());
 
@@ -84,12 +83,12 @@ public class RsaSsaPssSignatureComputationsTest {
     }
 
     @Test
-    public void testSaltGetterSetter() {
+    void testSaltGetterSetter() {
         // Initially null
         assertNull(computations.getSalt());
 
         // Set and get with ModifiableByteArray
-        ModifiableByteArray modifiableBytes = Modifiable.explicit(testData);
+        ModifiableByteArray modifiableBytes = new ModifiableByteArray(testData);
         computations.setSalt(modifiableBytes);
         assertEquals(modifiableBytes, computations.getSalt());
 
@@ -101,12 +100,12 @@ public class RsaSsaPssSignatureComputationsTest {
     }
 
     @Test
-    public void testPaddedSaltedDigestGetterSetter() {
+    void testPaddedSaltedDigestGetterSetter() {
         // Initially null
         assertNull(computations.getPaddedSaltedDigest());
 
         // Set and get with ModifiableByteArray
-        ModifiableByteArray modifiableBytes = Modifiable.explicit(testData);
+        ModifiableByteArray modifiableBytes = new ModifiableByteArray(testData);
         computations.setPaddedSaltedDigest(modifiableBytes);
         assertEquals(modifiableBytes, computations.getPaddedSaltedDigest());
 
@@ -118,12 +117,12 @@ public class RsaSsaPssSignatureComputationsTest {
     }
 
     @Test
-    public void testHValueGetterSetter() {
+    void testHValueGetterSetter() {
         // Initially null
         assertNull(computations.getHValue());
 
         // Set and get with ModifiableByteArray
-        ModifiableByteArray modifiableBytes = Modifiable.explicit(testData);
+        ModifiableByteArray modifiableBytes = new ModifiableByteArray(testData);
         computations.setHValue(modifiableBytes);
         assertEquals(modifiableBytes, computations.getHValue());
 
@@ -135,12 +134,12 @@ public class RsaSsaPssSignatureComputationsTest {
     }
 
     @Test
-    public void testPsValueGetterSetter() {
+    void testPsValueGetterSetter() {
         // Initially null
         assertNull(computations.getPsValue());
 
         // Set and get with ModifiableByteArray
-        ModifiableByteArray modifiableBytes = Modifiable.explicit(testData);
+        ModifiableByteArray modifiableBytes = new ModifiableByteArray(testData);
         computations.setPsValue(modifiableBytes);
         assertEquals(modifiableBytes, computations.getPsValue());
 
@@ -152,12 +151,12 @@ public class RsaSsaPssSignatureComputationsTest {
     }
 
     @Test
-    public void testDbValueGetterSetter() {
+    void testDbValueGetterSetter() {
         // Initially null
         assertNull(computations.getDbValue());
 
         // Set and get with ModifiableByteArray
-        ModifiableByteArray modifiableBytes = Modifiable.explicit(testData);
+        ModifiableByteArray modifiableBytes = new ModifiableByteArray(testData);
         computations.setDbValue(modifiableBytes);
         assertEquals(modifiableBytes, computations.getDbValue());
 
@@ -169,12 +168,12 @@ public class RsaSsaPssSignatureComputationsTest {
     }
 
     @Test
-    public void testMaskedDbGetterSetter() {
+    void testMaskedDbGetterSetter() {
         // Initially null
         assertNull(computations.getMaskedDb());
 
         // Set and get with ModifiableByteArray
-        ModifiableByteArray modifiableBytes = Modifiable.explicit(testData);
+        ModifiableByteArray modifiableBytes = new ModifiableByteArray(testData);
         computations.setMaskedDb(modifiableBytes);
         assertEquals(modifiableBytes, computations.getMaskedDb());
 
@@ -186,12 +185,12 @@ public class RsaSsaPssSignatureComputationsTest {
     }
 
     @Test
-    public void testEmValueGetterSetter() {
+    void testEmValueGetterSetter() {
         // Initially null
         assertNull(computations.getEmValue());
 
         // Set and get with ModifiableByteArray
-        ModifiableByteArray modifiableBytes = Modifiable.explicit(testData);
+        ModifiableByteArray modifiableBytes = new ModifiableByteArray(testData);
         computations.setEmValue(modifiableBytes);
         assertEquals(modifiableBytes, computations.getEmValue());
 
@@ -203,12 +202,12 @@ public class RsaSsaPssSignatureComputationsTest {
     }
 
     @Test
-    public void testTfValueGetterSetter() {
+    void testTfValueGetterSetter() {
         // Initially null
         assertNull(computations.getTfValue());
 
         // Set and get with ModifiableByteArray
-        ModifiableByteArray modifiableBytes = Modifiable.explicit(testData);
+        ModifiableByteArray modifiableBytes = new ModifiableByteArray(testData);
         computations.setTfValue(modifiableBytes);
         assertEquals(modifiableBytes, computations.getTfValue());
 
@@ -220,7 +219,7 @@ public class RsaSsaPssSignatureComputationsTest {
     }
 
     @Test
-    public void testHashAlgorithmGetterSetter() {
+    void testHashAlgorithmGetterSetter() {
         // Initially null
         assertNull(computations.getHashAlgorithm());
 
