@@ -13,7 +13,8 @@ import java.math.BigInteger;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
- * Curve25519 - a Montgomery curve designed for ECDH, offering 128-bit security with fast scalar multiplication.
+ * Curve25519 - a Montgomery curve designed for ECDH, offering 128-bit security with fast scalar
+ * multiplication.
  */
 public class EllipticCurve25519 extends RFC7748Curve {
 

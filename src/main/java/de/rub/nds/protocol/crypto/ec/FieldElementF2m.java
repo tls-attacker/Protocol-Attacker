@@ -14,10 +14,10 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Represents an element of a binary field F2m (characteristic 2).
- * 
- * <p>Elements are represented as binary polynomials where each bit in the BigInteger
- * corresponds to a coefficient (0 or 1) of the polynomial. Field arithmetic is performed
- * modulo an irreducible reduction polynomial.
+ *
+ * <p>Elements are represented as binary polynomials where each bit in the BigInteger corresponds to
+ * a coefficient (0 or 1) of the polynomial. Field arithmetic is performed modulo an irreducible
+ * reduction polynomial.
  */
 public class FieldElementF2m extends FieldElement {
 
@@ -26,7 +26,7 @@ public class FieldElementF2m extends FieldElement {
 
     /**
      * Creates a binary field element.
-     * 
+     *
      * @param data binary polynomial representing the element
      * @param modulus irreducible reduction polynomial defining the field
      */

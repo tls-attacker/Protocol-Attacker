@@ -14,9 +14,9 @@ import java.math.BigInteger;
 /**
  * Abstract base class for elliptic curves over finite fields.
  *
- * <p>This class provides the fundamental operations for elliptic curve cryptography,
- * including point arithmetic, scalar multiplication, and field operations.
- * Supports both prime field (Fp) and binary field (F2m) curves through subclasses.
+ * <p>This class provides the fundamental operations for elliptic curve cryptography, including
+ * point arithmetic, scalar multiplication, and field operations. Supports both prime field (Fp) and
+ * binary field (F2m) curves through subclasses.
  *
  * <p>Implements the CyclicGroup interface to provide group operations on curve points.
  */

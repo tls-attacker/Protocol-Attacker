@@ -14,10 +14,9 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Elliptic curve implementation over prime fields Fp.
- * 
- * <p>Implements the Weierstrass equation y² = x³ + ax + b over Fp.
- * Provides efficient point arithmetic for prime field curves used in standards
- * like NIST P-256, secp256k1, etc.
+ *
+ * <p>Implements the Weierstrass equation y² = x³ + ax + b over Fp. Provides efficient point
+ * arithmetic for prime field curves used in standards like NIST P-256, secp256k1, etc.
  */
 public class EllipticCurveOverFp extends EllipticCurve {
 

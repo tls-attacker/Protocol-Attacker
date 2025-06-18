@@ -8,9 +8,7 @@
  */
 package de.rub.nds.protocol.exception;
 
-/**
- * Thrown when errors occur in protocol context management or state handling.
- */
+/** Thrown when errors occur in protocol context management or state handling. */
 public class ContextHandlingException extends RuntimeException {
 
     /** Constructs a new ContextHandlingException with no detail message. */

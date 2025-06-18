@@ -16,8 +16,8 @@ import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
 import java.math.BigInteger;
 
 /**
- * Computation container for ECDSA (Elliptic Curve Digital Signature Algorithm) signatures.
- * Stores elliptic curve parameters, private key d, nonce k, and signature components r and s.
+ * Computation container for ECDSA (Elliptic Curve Digital Signature Algorithm) signatures. Stores
+ * elliptic curve parameters, private key d, nonce k, and signature components r and s.
  */
 public class EcdsaSignatureComputations extends SignatureComputations {
 

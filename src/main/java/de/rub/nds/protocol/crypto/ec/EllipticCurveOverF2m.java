@@ -15,10 +15,10 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Elliptic curve implementation over binary fields F2m.
- * 
- * <p>Implements the equation y² + xy = x³ + ax² + b over F2m.
- * Uses polynomial basis representation where field elements are binary polynomials.
- * Supports binary curves used in standards like NIST B-curves.
+ *
+ * <p>Implements the equation y² + xy = x³ + ax² + b over F2m. Uses polynomial basis representation
+ * where field elements are binary polynomials. Supports binary curves used in standards like NIST
+ * B-curves.
  */
 public class EllipticCurveOverF2m extends EllipticCurve {
 

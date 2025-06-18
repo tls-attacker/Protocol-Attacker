@@ -8,9 +8,7 @@
  */
 package de.rub.nds.protocol.exception;
 
-/**
- * Thrown when parsing protocol messages or data structures fails.
- */
+/** Thrown when parsing protocol messages or data structures fails. */
 public class ParserException extends RuntimeException {
 
     /** Constructs a new ParserException with no detail message. */

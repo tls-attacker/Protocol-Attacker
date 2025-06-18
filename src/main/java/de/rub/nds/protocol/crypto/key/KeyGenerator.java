@@ -15,8 +15,8 @@ import java.util.Random;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**
- * Utility class for generating cryptographic key pairs.
- * Provides methods for generating RSA, DH, DSA, ECDH, ECDSA, and EdDSA keys.
+ * Utility class for generating cryptographic key pairs. Provides methods for generating RSA, DH,
+ * DSA, ECDH, ECDSA, and EdDSA keys.
  */
 public class KeyGenerator {
 

@@ -9,8 +9,8 @@
 package de.rub.nds.protocol.crypto.signature;
 
 /**
- * Computation container for scenarios where no signature is computed. Used as a placeholder
- * when signature algorithms are disabled or not applicable.
+ * Computation container for scenarios where no signature is computed. Used as a placeholder when
+ * signature algorithms are disabled or not applicable.
  */
 public class NoSignatureComputations extends SignatureComputations {
 

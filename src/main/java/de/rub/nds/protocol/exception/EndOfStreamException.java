@@ -8,9 +8,7 @@
  */
 package de.rub.nds.protocol.exception;
 
-/**
- * Thrown when attempting to read beyond the end of a data stream.
- */
+/** Thrown when attempting to read beyond the end of a data stream. */
 public class EndOfStreamException extends RuntimeException {
 
     /** Constructs a new EndOfStreamException with no detail message. */

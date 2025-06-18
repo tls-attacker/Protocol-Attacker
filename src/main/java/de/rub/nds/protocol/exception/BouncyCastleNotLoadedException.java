@@ -8,9 +8,7 @@
  */
 package de.rub.nds.protocol.exception;
 
-/**
- * Thrown when BouncyCastle cryptographic provider is not available or properly loaded.
- */
+/** Thrown when BouncyCastle cryptographic provider is not available or properly loaded. */
 public class BouncyCastleNotLoadedException extends RuntimeException {
     /** Constructs a new BouncyCastleNotLoadedException with no detail message. */
     public BouncyCastleNotLoadedException() {

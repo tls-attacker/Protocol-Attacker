@@ -8,9 +8,7 @@
  */
 package de.rub.nds.protocol.exception;
 
-/**
- * Thrown to signal that an action should be skipped in workflow execution.
- */
+/** Thrown to signal that an action should be skipped in workflow execution. */
 public class SkipActionException extends RuntimeException {
 
     /** Constructs a new SkipActionException with no detail message. */

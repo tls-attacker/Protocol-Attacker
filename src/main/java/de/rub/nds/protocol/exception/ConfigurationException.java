@@ -8,9 +8,7 @@
  */
 package de.rub.nds.protocol.exception;
 
-/**
- * Thrown when protocol configuration is invalid or cannot be loaded.
- */
+/** Thrown when protocol configuration is invalid or cannot be loaded. */
 public class ConfigurationException extends RuntimeException {
 
     /** Constructs a new ConfigurationException with no detail message. */

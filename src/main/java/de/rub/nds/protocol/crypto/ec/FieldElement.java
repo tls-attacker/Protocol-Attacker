@@ -18,9 +18,9 @@ import java.util.Objects;
 /**
  * Abstract base class for finite field elements.
  *
- * <p>Represents immutable elements of finite fields used in elliptic curve cryptography.
- * Subclasses implement specific field arithmetic for prime fields (Fp) and binary fields (F2m).
- * All operations return new instances, preserving immutability.
+ * <p>Represents immutable elements of finite fields used in elliptic curve cryptography. Subclasses
+ * implement specific field arithmetic for prime fields (Fp) and binary fields (F2m). All operations
+ * return new instances, preserving immutability.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
@@ -45,18 +45,18 @@ public abstract class FieldElement implements Serializable {
     }
 
     /**
-     * Returns this + f.
+     * Adds this element to another field element.
      *
-     * @param f An element of the field, which this is an element of.
-     * @return The sum of this element and f.
+     * @param f field element to add
+     * @return this + f
      */
     public abstract FieldElement add(FieldElement f);
 
     /**
-     * Returns this - f.
+     * Subtracts another field element from this element.
      *
-     * @param f An element of the field, which this is an element of.
-     * @return The difference of this element minus f.
+     * @param f field element to subtract
+     * @return this - f
      */
     public FieldElement subtract(FieldElement f) {
         f = f.addInv();
@@ -64,18 +64,18 @@ public abstract class FieldElement implements Serializable {
     }
 
     /**
-     * Returns this * f.
+     * Multiplies this element by another field element.
      *
-     * @param f An element of the field, which this is an element of.
-     * @return The product of this element and f.
+     * @param f field element to multiply by
+     * @return this * f
      */
     public abstract FieldElement mult(FieldElement f);
 
     /**
-     * Returns this * f^-1.
+     * Divides this element by another field element.
      *
-     * @param f An element of the field, which this is an element of.
-     * @return The quotient of this element divided by f.
+     * @param f field element to divide by (must be non-zero)
+     * @return this / f
      */
     public FieldElement divide(FieldElement f) {
         f = f.multInv();
@@ -83,16 +83,17 @@ public abstract class FieldElement implements Serializable {
     }
 
     /**
-     * Returns -this.
+     * Computes the additive inverse of this element.
      *
-     * @return The additive inverse of this element.
+     * @return -this such that this + (-this) = 0
      */
     public abstract FieldElement addInv();
 
     /**
-     * Returns this^-1.
+     * Computes the multiplicative inverse of this element.
      *
-     * @return The multiplicative inverse of this element.
+     * @return this^-1 such that this * this^-1 = 1
+     * @throws ArithmeticException if this is zero
      */
     public abstract FieldElement multInv();
 

@@ -13,8 +13,8 @@ import java.math.BigInteger;
 /**
  * Represents an element of a prime field Fp.
  *
- * <p>Implements field arithmetic modulo a prime p. All operations are performed
- * using modular arithmetic to ensure results stay within the field.
+ * <p>Implements field arithmetic modulo a prime p. All operations are performed using modular
+ * arithmetic to ensure results stay within the field.
  */
 public class FieldElementFp extends FieldElement {
 

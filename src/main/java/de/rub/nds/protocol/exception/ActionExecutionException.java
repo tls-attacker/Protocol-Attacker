@@ -8,9 +8,7 @@
  */
 package de.rub.nds.protocol.exception;
 
-/**
- * Thrown when an action fails to execute during workflow processing.
- */
+/** Thrown when an action fails to execute during workflow processing. */
 public class ActionExecutionException extends RuntimeException {
 
     /** Constructs a new ActionExecutionException with no detail message. */

@@ -15,8 +15,8 @@ import de.rub.nds.protocol.constants.HashAlgorithm;
 import java.math.BigInteger;
 
 /**
- * Computation container for RSA signatures using PKCS#1 v1.5 padding scheme. Stores RSA
- * parameters, padding, and DER-encoded digest.
+ * Computation container for RSA signatures using PKCS#1 v1.5 padding scheme. Stores RSA parameters,
+ * padding, and DER-encoded digest.
  */
 public class RsaPkcs1SignatureComputations extends SignatureComputations {
 
