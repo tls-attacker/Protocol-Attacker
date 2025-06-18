@@ -19,7 +19,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * A wrapper around {@link ByteArrayOutputStream} that suppresses IOExceptions in most operations
- * and logs them silently.
+ * and logs them silently. Provides safe byte array output operations for protocol implementations
+ * where IOException handling would complicate the code flow unnecessarily.
  */
 public class SilentByteArrayOutputStream extends OutputStream {
 

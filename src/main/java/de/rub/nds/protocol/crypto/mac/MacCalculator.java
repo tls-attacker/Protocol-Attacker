@@ -17,6 +17,9 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Utility class for computing Message Authentication Codes (MACs) using standard algorithms.
+ */
 public class MacCalculator {
 
     private static final Logger LOGGER = LogManager.getLogger();
