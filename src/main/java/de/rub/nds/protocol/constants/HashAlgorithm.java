@@ -9,8 +9,8 @@
 package de.rub.nds.protocol.constants;
 
 /**
- * Enumeration of cryptographic hash algorithms with their properties.
- * Provides OID, bit length, security strength, and Java provider name for each algorithm.
+ * Enumeration of cryptographic hash algorithms with their properties. Provides OID, bit length,
+ * security strength, and Java provider name for each algorithm.
  */
 public enum HashAlgorithm {
     NONE("1.2.840.113549.2.1", 0, 0, null),

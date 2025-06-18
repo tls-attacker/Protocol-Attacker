@@ -12,6 +12,7 @@ import de.rub.nds.protocol.constants.AsymmetricAlgorithmType;
 import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
 import de.rub.nds.protocol.crypto.ec.Point;
 
+/** Stores an EdDSA public key consisting of a point on an Edwards curve. */
 public class EddsaPublicKey implements PublicKeyContainer {
 
     private Point publicPoint;

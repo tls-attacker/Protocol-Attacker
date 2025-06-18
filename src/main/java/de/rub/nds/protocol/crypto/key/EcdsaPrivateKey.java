@@ -11,6 +11,7 @@ package de.rub.nds.protocol.crypto.key;
 import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
 import java.math.BigInteger;
 
+/** Stores an ECDSA private key, signing nonce, and curve parameters. */
 public class EcdsaPrivateKey implements PrivateKeyContainer {
 
     private BigInteger privateKey;

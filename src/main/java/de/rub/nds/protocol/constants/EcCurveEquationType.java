@@ -9,8 +9,7 @@
 package de.rub.nds.protocol.constants;
 
 /**
- * Enumeration of elliptic curve equation types.
- * Defines the mathematical form of elliptic curves.
+ * Enumeration of elliptic curve equation types. Defines the mathematical form of elliptic curves.
  */
 public enum EcCurveEquationType {
     /** Curves in the form y² = x³ + ax + b. */

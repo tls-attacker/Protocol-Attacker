@@ -9,8 +9,8 @@
 package de.rub.nds.protocol.constants;
 
 /**
- * Enumeration of Message Authentication Code (MAC) algorithms.
- * Provides MAC length, key size, and Java provider name for each algorithm.
+ * Enumeration of Message Authentication Code (MAC) algorithms. Provides MAC length, key size, and
+ * Java provider name for each algorithm.
  */
 public enum MacAlgorithm {
     NONE(0, 0, null),

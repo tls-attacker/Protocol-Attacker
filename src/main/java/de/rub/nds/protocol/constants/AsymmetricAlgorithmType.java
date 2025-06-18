@@ -9,8 +9,8 @@
 package de.rub.nds.protocol.constants;
 
 /**
- * Enumeration of asymmetric cryptographic algorithm types.
- * Distinguishes between different public key cryptography families.
+ * Enumeration of asymmetric cryptographic algorithm types. Distinguishes between different public
+ * key cryptography families.
  */
 public enum AsymmetricAlgorithmType {
     /** Rivest-Shamir-Adleman algorithm. */

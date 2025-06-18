@@ -11,8 +11,8 @@ package de.rub.nds.protocol.constants;
 import de.rub.nds.protocol.crypto.CyclicGroup;
 
 /**
- * Interface for cryptographic group parameters.
- * Defines methods for accessing properties of mathematical groups used in cryptography.
+ * Interface for cryptographic group parameters. Defines methods for accessing properties of
+ * mathematical groups used in cryptography.
  *
  * @param <GroupElementT> the type of elements in the group
  */

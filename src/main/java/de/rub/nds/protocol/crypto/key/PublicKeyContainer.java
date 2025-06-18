@@ -11,6 +11,10 @@ package de.rub.nds.protocol.crypto.key;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.rub.nds.protocol.constants.AsymmetricAlgorithmType;
 
+/**
+ * Interface for containers holding public key data. Provides methods to retrieve key length and
+ * algorithm type.
+ */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public interface PublicKeyContainer {
     /**

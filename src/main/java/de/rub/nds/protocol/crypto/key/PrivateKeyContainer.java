@@ -10,5 +10,9 @@ package de.rub.nds.protocol.crypto.key;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * Marker interface for containers holding private key data. Implementations should securely store
+ * private key material.
+ */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public interface PrivateKeyContainer {}

@@ -18,9 +18,14 @@ import java.math.BigInteger;
  */
 public abstract class DsaParameters implements GroupParameters<BigInteger> {
 
-    private final BigInteger p; // modulus
-    private final BigInteger q; // subgroup order
-    private final BigInteger g; // generator
+    /** The prime modulus p. */
+    private final BigInteger p;
+
+    /** The prime subgroup order q. */
+    private final BigInteger q;
+
+    /** The generator g of the subgroup. */
+    private final BigInteger g;
 
     /**
      * Constructs a new DsaParameters instance with the specified DSA domain parameters.

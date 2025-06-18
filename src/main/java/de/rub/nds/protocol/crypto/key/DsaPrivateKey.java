@@ -12,6 +12,7 @@ import de.rub.nds.protocol.constants.DsaParameters;
 import de.rub.nds.protocol.crypto.dsa.ExplicitDsaParameters;
 import java.math.BigInteger;
 
+/** Stores DSA private key (X), nonce (K), and algorithm parameters. */
 public class DsaPrivateKey implements PrivateKeyContainer {
     private BigInteger X;
     private BigInteger K;
