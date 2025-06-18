@@ -297,13 +297,14 @@ public class SignatureCalculator {
             // Dont pad in this case
             return new byte[0];
         } else {
-            SilentByteArrayOutputStream stream = new SilentByteArrayOutputStream();
-            stream.write(new byte[] {0, 1});
-            while (stream.size() < modLengthInByte - toBePaddedLength - 1) {
-                stream.write((byte) 0xFF);
+            try (SilentByteArrayOutputStream stream = new SilentByteArrayOutputStream()) {
+                stream.write(new byte[] {0, 1});
+                while (stream.size() < modLengthInByte - toBePaddedLength - 1) {
+                    stream.write((byte) 0xFF);
+                }
+                stream.write(0);
+                return stream.toByteArray();
             }
-            stream.write(0);
-            return stream.toByteArray();
         }
     }
 
@@ -407,13 +408,13 @@ public class SignatureCalculator {
         ASN1Encodable[] encodables = new ASN1Encodable[] {asn1IntegerR, asn1IntegerS};
         DERSequence derSequence = new DERSequence(encodables);
 
-        SilentByteArrayOutputStream outputStream = new SilentByteArrayOutputStream();
-        try {
+        byte[] completeSignature;
+        try (SilentByteArrayOutputStream outputStream = new SilentByteArrayOutputStream()) {
             derSequence.encodeTo(outputStream);
+            completeSignature = outputStream.toByteArray();
         } catch (IOException ex) {
             throw new CryptoException("Could not write Signature to output stream");
         }
-        byte[] completeSignature = outputStream.toByteArray();
         computations.setSignatureBytes(completeSignature);
         computations.setSignatureValid(true);
     }
@@ -492,12 +493,12 @@ public class SignatureCalculator {
         LOGGER.debug("CurveBasePointOrder: {}", curve.getBasePointOrder().toByteArray());
         LOGGER.debug("Modulus: {}", curve.getModulus().toByteArray());
 
-        SilentByteArrayOutputStream outputStream = new SilentByteArrayOutputStream();
-
-        outputStream.write(ArrayConverter.bigIntegerToByteArray(r, 32, true));
-        outputStream.write(ArrayConverter.bigIntegerToByteArray(s, 32, true));
-
-        byte[] completeSignature = outputStream.toByteArray();
+        byte[] completeSignature;
+        try (SilentByteArrayOutputStream outputStream = new SilentByteArrayOutputStream()) {
+            outputStream.write(ArrayConverter.bigIntegerToByteArray(r, 32, true));
+            outputStream.write(ArrayConverter.bigIntegerToByteArray(s, 32, true));
+            completeSignature = outputStream.toByteArray();
+        }
         computations.setSignatureBytes(completeSignature);
         computations.setSignatureValid(true);
     }
@@ -582,13 +583,13 @@ public class SignatureCalculator {
         ASN1Encodable[] encodables = new ASN1Encodable[] {asn1IntegerR, asn1IntegerS};
         DERSequence derSequence = new DERSequence(encodables);
 
-        SilentByteArrayOutputStream outputStream = new SilentByteArrayOutputStream();
-        try {
+        byte[] completeSignature;
+        try (SilentByteArrayOutputStream outputStream = new SilentByteArrayOutputStream()) {
             derSequence.encodeTo(outputStream);
+            completeSignature = outputStream.toByteArray();
         } catch (IOException ex) {
             throw new CryptoException("Could not write Signature to output stream");
         }
-        byte[] completeSignature = outputStream.toByteArray();
         computations.setSignatureBytes(completeSignature);
         computations.setSignatureValid(true);
     }
