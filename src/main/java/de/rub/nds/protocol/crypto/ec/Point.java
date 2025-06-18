@@ -22,11 +22,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Can be used to store a point of an elliptic curve.
+ * Represents a point on an elliptic curve.
  *
- * <p>Affine points store their x and y coordinates. The projective z-coordinate (equal to 1) will
- * not be stored. The point at infinity [0:1:0] (the only point with z-coordinate 0) does not store
- * any of it's coordinates.
+ * <p>Points are stored in affine coordinates (x, y) or as the special point at infinity.
+ * The point at infinity serves as the identity element for the group operation.
+ * This class uses lazy initialization for field elements to optimize performance.
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -82,12 +82,10 @@ public class Point implements Serializable {
     }
 
     /**
-     * Instantiates an affine point with coordinates x and y. Calling EllipticCurve.getPoint()
-     * should always be preferred over using this constructor.
+     * Creates an affine point with the given field element coordinates.
      *
-     * @param x A FieldElement representing the x-coordinate of the point.
-     * @param y A FieldElement representing the y-coordinate of the point. x and y must be elements
-     *     of the same field.
+     * @param x x-coordinate as a field element
+     * @param y y-coordinate as a field element
      */
     public Point(FieldElement x, FieldElement y) {
         this.fieldX = x;

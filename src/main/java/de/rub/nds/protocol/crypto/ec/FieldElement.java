@@ -16,11 +16,11 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 /**
- * Can be used to store elements of a galois field.<br>
- * The attribute data should contain some BigInteger representing the element.<br>
- * The attribute modulus should contain some BigInteger that may be used to identify the field (and
- * for calculations).<br>
- * All arithmetic operations are performed within the laws of the specified field.
+ * Abstract base class for finite field elements.
+ *
+ * <p>Represents immutable elements of finite fields used in elliptic curve cryptography.
+ * Subclasses implement specific field arithmetic for prime fields (Fp) and binary fields (F2m).
+ * All operations return new instances, preserving immutability.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")

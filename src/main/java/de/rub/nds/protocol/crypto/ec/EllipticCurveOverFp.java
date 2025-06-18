@@ -12,7 +12,13 @@ import java.math.BigInteger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/** An elliptic curve over a galois field F_p, where p is a prime number. */
+/**
+ * Elliptic curve implementation over prime fields Fp.
+ * 
+ * <p>Implements the Weierstrass equation y² = x³ + ax + b over Fp.
+ * Provides efficient point arithmetic for prime field curves used in standards
+ * like NIST P-256, secp256k1, etc.
+ */
 public class EllipticCurveOverFp extends EllipticCurve {
 
     private static final Logger LOGGER = LogManager.getLogger();

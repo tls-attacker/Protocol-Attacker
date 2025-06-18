@@ -10,6 +10,9 @@ package de.rub.nds.protocol.crypto.ec;
 
 import java.math.BigInteger;
 
+/**
+ * NIST P-256 elliptic curve (secp256r1) - a 256-bit prime field Weierstrass curve widely used in TLS.
+ */
 @SuppressWarnings("SpellCheckingInspection")
 public class EllipticCurveSECP256R1 extends EllipticCurveOverFp {
     public EllipticCurveSECP256R1() {

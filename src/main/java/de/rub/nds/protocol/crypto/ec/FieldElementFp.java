@@ -10,7 +10,12 @@ package de.rub.nds.protocol.crypto.ec;
 
 import java.math.BigInteger;
 
-/** An element of the field F_p (with p being a prime number). */
+/**
+ * Represents an element of a prime field Fp.
+ *
+ * <p>Implements field arithmetic modulo a prime p. All operations are performed
+ * using modular arithmetic to ensure results stay within the field.
+ */
 public class FieldElementFp extends FieldElement {
 
     /**
