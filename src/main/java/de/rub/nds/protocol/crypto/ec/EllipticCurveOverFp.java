@@ -119,9 +119,9 @@ public class EllipticCurveOverFp extends EllipticCurve {
             FieldElementFp lambda;
             if (p.equals(q)) {
                 final FieldElementFp two =
-                        new FieldElementFp(new BigInteger("2"), this.getModulus());
+                        new FieldElementFp(BigInteger.valueOf(2), this.getModulus());
                 final FieldElementFp three =
-                        new FieldElementFp(new BigInteger("3"), this.getModulus());
+                        new FieldElementFp(BigInteger.valueOf(3), this.getModulus());
 
                 // lambda := (3*(x1^2) + a) / (2*y1)
                 lambda =
@@ -196,7 +196,7 @@ public class EllipticCurveOverFp extends EllipticCurve {
     }
 
     private int legendreSymbol(BigInteger a, BigInteger p) {
-        BigInteger ls = a.modPow(p.subtract(BigInteger.ONE).divide(new BigInteger("2")), p);
+        BigInteger ls = a.modPow(p.subtract(BigInteger.ONE).divide(BigInteger.valueOf(2)), p);
         if (ls.compareTo(p.subtract(BigInteger.ONE)) == 0) {
             return -1;
         } else {
@@ -207,25 +207,25 @@ public class EllipticCurveOverFp extends EllipticCurve {
     public BigInteger modSqrt(BigInteger a, BigInteger p) {
         if (legendreSymbol(a, p) != 1
                 || a.compareTo(BigInteger.ZERO) == 0
-                || a.compareTo(new BigInteger("2")) == 0) {
+                || a.compareTo(BigInteger.valueOf(2)) == 0) {
             // no solution exists
             return null;
         } else {
-            if (p.mod(new BigInteger("4")).compareTo(new BigInteger("3")) == 0) {
+            if (p.mod(BigInteger.valueOf(4)).compareTo(BigInteger.valueOf(3)) == 0) {
                 // faster method for this case
-                return a.modPow(p.add(BigInteger.ONE).divide(new BigInteger("4")), p);
+                return a.modPow(p.add(BigInteger.ONE).divide(BigInteger.valueOf(4)), p);
             } else {
                 // Tonelli Shanks
                 BigInteger r = p.subtract(BigInteger.ONE);
                 BigInteger e = BigInteger.ZERO;
 
-                while (r.mod(new BigInteger("2")).compareTo(BigInteger.ZERO) == 0) {
-                    r = r.divide(new BigInteger("2"));
+                while (r.mod(BigInteger.valueOf(2)).compareTo(BigInteger.ZERO) == 0) {
+                    r = r.divide(BigInteger.valueOf(2));
                     e = e.add(BigInteger.ONE);
                 }
 
                 // find n with (n|p) = -1
-                BigInteger n = new BigInteger("2");
+                BigInteger n = BigInteger.valueOf(2);
                 while (legendreSymbol(n, p) != -1) {
                     n = n.add(BigInteger.ONE);
                 }
@@ -233,20 +233,20 @@ public class EllipticCurveOverFp extends EllipticCurve {
                 BigInteger z = n.modPow(r, p);
                 BigInteger y = z;
                 BigInteger s = e;
-                BigInteger x = a.modPow(r.subtract(BigInteger.ONE).divide(new BigInteger("2")), p);
+                BigInteger x = a.modPow(r.subtract(BigInteger.ONE).divide(BigInteger.valueOf(2)), p);
 
                 BigInteger b = a.multiply(x.pow(2)).mod(p);
                 x = a.multiply(x).mod(p);
                 while (b.mod(p).compareTo(BigInteger.ONE) != 0) {
                     BigInteger m = BigInteger.ONE;
-                    while (b.modPow(new BigInteger("2").pow(m.intValue()), p)
+                    while (b.modPow(BigInteger.valueOf(2).pow(m.intValue()), p)
                                     .compareTo(BigInteger.ONE)
                             != 0) {
                         m = m.add(BigInteger.ONE);
                     }
 
                     BigInteger t =
-                            y.modPow(new BigInteger("2").pow(s.intValue() - m.intValue() - 1), p);
+                            y.modPow(BigInteger.valueOf(2).pow(s.intValue() - m.intValue() - 1), p);
                     y = t.pow(2).mod(p);
                     s = m;
 

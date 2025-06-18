@@ -84,40 +84,40 @@ public class SimulatedMontgomeryCurve extends EllipticCurveOverFp {
 
     private EllipticCurveOverFp computeWeierstrassEquivalent() {
         BigInteger weierstrassA =
-                new BigInteger("3")
+                BigInteger.valueOf(3)
                         .subtract(
                                 this.getFieldA()
                                         .getData()
-                                        .modPow(new BigInteger("2"), this.getModulus()));
+                                        .modPow(BigInteger.valueOf(2), this.getModulus()));
         weierstrassA =
                 weierstrassA
                         .multiply(
-                                new BigInteger("3")
+                                BigInteger.valueOf(3)
                                         .multiply(
                                                 this.getFieldB()
                                                         .getData()
                                                         .modPow(
-                                                                new BigInteger("2"),
+                                                                BigInteger.valueOf(2),
                                                                 this.getModulus()))
                                         .modInverse(this.getModulus()))
                         .mod(this.getModulus());
 
         BigInteger weierstrassB =
-                new BigInteger("2")
+                BigInteger.valueOf(2)
                         .multiply(
                                 this.getFieldA()
                                         .getData()
-                                        .modPow(new BigInteger("3"), this.getModulus()))
-                        .subtract(new BigInteger("9").multiply(this.getFieldA().getData()));
+                                        .modPow(BigInteger.valueOf(3), this.getModulus()))
+                        .subtract(BigInteger.valueOf(9).multiply(this.getFieldA().getData()));
         weierstrassB =
                 weierstrassB
                         .multiply(
-                                new BigInteger("27")
+                                BigInteger.valueOf(27)
                                         .multiply(
                                                 this.getFieldB()
                                                         .getData()
                                                         .modPow(
-                                                                new BigInteger("3"),
+                                                                BigInteger.valueOf(3),
                                                                 this.getModulus()))
                                         .modInverse(this.getModulus()))
                         .mod(this.getModulus());
@@ -145,7 +145,7 @@ public class SimulatedMontgomeryCurve extends EllipticCurveOverFp {
                                     this.getFieldA()
                                             .getData()
                                             .multiply(
-                                                    new BigInteger("3")
+                                                    BigInteger.valueOf(3)
                                                             .multiply(this.getFieldB().getData())
                                                             .modInverse(this.getModulus())))
                             .mod(this.getModulus());
@@ -172,7 +172,7 @@ public class SimulatedMontgomeryCurve extends EllipticCurveOverFp {
                                     this.getFieldA()
                                             .getData()
                                             .multiply(
-                                                    new BigInteger("3")
+                                                    BigInteger.valueOf(3)
                                                             .multiply(this.getFieldB().getData())
                                                             .modInverse(this.getModulus())))
                             .multiply(this.getFieldB().getData())
