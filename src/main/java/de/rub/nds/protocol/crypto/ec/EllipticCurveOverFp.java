@@ -233,7 +233,8 @@ public class EllipticCurveOverFp extends EllipticCurve {
                 BigInteger z = n.modPow(r, p);
                 BigInteger y = z;
                 BigInteger s = e;
-                BigInteger x = a.modPow(r.subtract(BigInteger.ONE).divide(BigInteger.valueOf(2)), p);
+                BigInteger x =
+                        a.modPow(r.subtract(BigInteger.ONE).divide(BigInteger.valueOf(2)), p);
 
                 BigInteger b = a.multiply(x.pow(2)).mod(p);
                 x = a.multiply(x).mod(p);
