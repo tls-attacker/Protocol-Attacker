@@ -8,6 +8,9 @@
  */
 package de.rub.nds.protocol.exception;
 
+/**
+ * Thrown when message or protocol state adjustments fail.
+ */
 public class AdjustmentException extends RuntimeException {
 
     /** Constructs a new AdjustmentException with no detail message. */

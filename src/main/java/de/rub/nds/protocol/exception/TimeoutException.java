@@ -8,6 +8,9 @@
  */
 package de.rub.nds.protocol.exception;
 
+/**
+ * Thrown when protocol operations exceed specified time limits.
+ */
 public class TimeoutException extends RuntimeException {
 
     /** Constructs a new TimeoutException with no detail message. */

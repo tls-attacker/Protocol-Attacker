@@ -8,6 +8,9 @@
  */
 package de.rub.nds.protocol.exception;
 
+/**
+ * Thrown when message preparation fails before sending.
+ */
 public class PreparationException extends RuntimeException {
 
     /** Constructs a new PreparationException with no detail message. */

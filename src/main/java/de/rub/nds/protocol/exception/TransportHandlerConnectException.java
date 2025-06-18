@@ -8,6 +8,9 @@
  */
 package de.rub.nds.protocol.exception;
 
+/**
+ * Thrown when transport layer connection establishment fails.
+ */
 public class TransportHandlerConnectException extends RuntimeException {
 
     /** Constructs a new TransportHandlerConnectException with no detail message. */

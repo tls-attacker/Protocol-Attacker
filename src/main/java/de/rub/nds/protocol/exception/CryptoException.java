@@ -8,7 +8,9 @@
  */
 package de.rub.nds.protocol.exception;
 
-/** Crypto exception */
+/**
+ * Thrown when cryptographic operations fail or produce unexpected results.
+ */
 public class CryptoException extends RuntimeException {
 
     /** Constructs a new CryptoException with no detail message. */
