@@ -8,6 +8,10 @@
  */
 package de.rub.nds.protocol.constants;
 
+/**
+ * Interface for hash algorithm implementations.
+ * Defines methods for retrieving algorithm properties and computing hashes.
+ */
 public interface IHashAlgorithm {
 
     /**

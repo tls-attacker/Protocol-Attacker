@@ -8,7 +8,10 @@
  */
 package de.rub.nds.protocol.constants;
 
-/** Metadata for hash algorithms. */
+/**
+ * Enumeration of Message Authentication Code (MAC) algorithms.
+ * Provides MAC length, key size, and Java provider name for each algorithm.
+ */
 public enum MacAlgorithm {
     NONE(0, 0, null),
     /** The MAC algorithm used in SLL3 and before. Its slightly different to HMAC */
@@ -27,12 +30,13 @@ public enum MacAlgorithm {
     HMAC_GOSTR3411_2012_256(32, 32, "HmacGOST3411-2012-256"),
     HMAC_SM3(32, 32, "HmacSM3");
 
-    /** The length of a MAC in byte */
+    /** The length of a MAC in bytes. */
     private int macLength;
 
-    /** The lenght of the key in byte */
+    /** The length of the key in bytes. */
     private int keySize;
 
+    /** Java Security Provider algorithm name. */
     private String javaName;
 
     MacAlgorithm(int macLength, int keySize, String javaName) {

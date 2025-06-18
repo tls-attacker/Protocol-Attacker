@@ -8,6 +8,10 @@
  */
 package de.rub.nds.protocol.constants;
 
+/**
+ * Enumeration of cryptographic signature algorithms.
+ * Provides human-readable names for various signature schemes.
+ */
 public enum SignatureAlgorithm {
     RSA_PKCS1("RSA PKCS#1.5"),
     DSA("DSA (DSS)"),
@@ -19,6 +23,7 @@ public enum SignatureAlgorithm {
     GOSTR34102012_256("GOSTR34102012 (256 bit)"),
     GOSTR34102012_512("GOSTR34102012 (512 bit)");
 
+    /** Human-readable name of the signature algorithm. */
     private String humanReadable;
 
     SignatureAlgorithm(String humanReadable) {
