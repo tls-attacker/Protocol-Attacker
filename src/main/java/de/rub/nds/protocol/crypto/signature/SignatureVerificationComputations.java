@@ -8,4 +8,8 @@
  */
 package de.rub.nds.protocol.crypto.signature;
 
+/**
+ * Container for signature verification computations. Currently a placeholder for future
+ * verification functionality.
+ */
 public class SignatureVerificationComputations {}

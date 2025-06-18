@@ -34,6 +34,10 @@ import org.bouncycastle.asn1.DERNull;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSequence;
 
+/**
+ * Main calculator for computing digital signatures using various algorithms including RSA
+ * (PKCS#1 and PSS), DSA, ECDSA, EdDSA, and GOST algorithms.
+ */
 public class SignatureCalculator {
 
     private static final Logger LOGGER = LogManager.getLogger();

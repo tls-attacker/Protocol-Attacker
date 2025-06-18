@@ -14,6 +14,10 @@ import de.rub.nds.modifiablevariable.bytearray.ModifiableByteArray;
 import de.rub.nds.protocol.constants.HashAlgorithm;
 import java.math.BigInteger;
 
+/**
+ * Computation container for RSA signatures using PSS (Probabilistic Signature Scheme) padding.
+ * Stores RSA parameters, salt, and intermediate PSS computation values.
+ */
 public class RsaSsaPssSignatureComputations extends SignatureComputations {
 
     private ModifiableBigInteger privateKey;
