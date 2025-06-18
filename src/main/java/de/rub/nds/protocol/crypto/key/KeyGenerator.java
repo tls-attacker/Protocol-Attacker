@@ -36,7 +36,7 @@ public class KeyGenerator {
     public static DhPublicKey generateDhPublicKey(
             BigInteger privateKey, int bitLength, Random random) {
         BigInteger modulus = BigInteger.probablePrime(bitLength, random); // Not a safe prime...
-        BigInteger generator = new BigInteger("2"); // Hardcoded generator
+        BigInteger generator = BigInteger.valueOf(2); // Hardcoded generator
         return new DhPublicKey(privateKey.modPow(generator, modulus), generator, modulus);
     }
 

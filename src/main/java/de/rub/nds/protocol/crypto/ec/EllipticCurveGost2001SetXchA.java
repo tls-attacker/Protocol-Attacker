@@ -19,7 +19,7 @@ public class EllipticCurveGost2001SetXchA extends EllipticCurveOverF2m {
                 new BigInteger("166"),
                 new BigInteger(
                         "115792089237316195423570985008687907853269984665640564039457584007913129639319"),
-                new BigInteger("1"),
+                BigInteger.ONE,
                 new BigInteger(
                         "64033881142927202683649881450433473985931760268884941288852745803908878638612"),
                 new BigInteger(

@@ -54,7 +54,7 @@ public class FieldElementF2m extends FieldElement {
 
         BigInteger thisData = this.getData();
         BigInteger fieldData = f.getData();
-        BigInteger tmp = new BigInteger("0");
+        BigInteger tmp = BigInteger.ZERO;
 
         for (int i = 0; i < fieldData.bitLength(); i++) {
             if (fieldData.testBit(i)) {
@@ -88,7 +88,7 @@ public class FieldElementF2m extends FieldElement {
         // Polynomial EEA:
         BigInteger r2 = this.getModulus();
         BigInteger r1 = this.getData();
-        BigInteger t2 = new BigInteger("0");
+        BigInteger t2 = BigInteger.ZERO;
         BigInteger t1 = BigInteger.ONE;
 
         do {
@@ -127,9 +127,9 @@ public class FieldElementF2m extends FieldElement {
      */
     private BigInteger[] polynomialDivision(BigInteger f, BigInteger p) {
         int modLength = p.bitLength();
-        BigInteger q = new BigInteger("0");
+        BigInteger q = BigInteger.ZERO;
         while (f.bitLength() >= modLength && modLength != 0) {
-            BigInteger tmp = new BigInteger("1");
+            BigInteger tmp = BigInteger.ONE;
             tmp = tmp.shiftLeft(f.bitLength() - modLength);
             q = q.xor(tmp);
 
