@@ -27,65 +27,68 @@ public class PointFormatter {
 
     public static byte[] formatToByteArray(
             GroupParameters<?> groupParameters, Point point, PointFormat format) {
-        SilentByteArrayOutputStream stream = new SilentByteArrayOutputStream();
         if (point.isAtInfinity()) {
             return new byte[1];
         }
-        int elementLength =
-                ArrayConverter.bigIntegerToByteArray(point.getFieldX().getModulus()).length;
-        if (groupParameters instanceof NamedEllipticCurveParameters
-                && ((NamedEllipticCurveParameters) groupParameters).getEquationType()
-                        == EcCurveEquationType.SHORT_WEIERSTRASS) {
-            switch (format) {
-                case UNCOMPRESSED:
-                    stream.write(0x04);
-                    stream.write(
-                            ArrayConverter.bigIntegerToNullPaddedByteArray(
-                                    point.getFieldX().getData(), elementLength));
-                    stream.write(
-                            ArrayConverter.bigIntegerToNullPaddedByteArray(
-                                    point.getFieldY().getData(), elementLength));
-                    return stream.toByteArray();
-                case COMPRESSED:
-                    EllipticCurve curve = (EllipticCurve) groupParameters.getGroup();
-                    if (curve.createAPointOnCurve(point.getFieldX().getData())
-                            .getFieldY()
-                            .getData()
-                            .equals(point.getFieldY().getData())) {
-                        stream.write(0x03);
-                    } else {
-                        stream.write(0x02);
-                    }
-                    stream.write(
-                            ArrayConverter.bigIntegerToNullPaddedByteArray(
-                                    point.getFieldX().getData(), elementLength));
-                    return stream.toByteArray();
-                default:
-                    throw new UnsupportedOperationException("Unsupported PointFormat: " + format);
+        try (SilentByteArrayOutputStream stream = new SilentByteArrayOutputStream()) {
+            int elementLength =
+                    ArrayConverter.bigIntegerToByteArray(point.getFieldX().getModulus()).length;
+            if (groupParameters instanceof NamedEllipticCurveParameters
+                    && ((NamedEllipticCurveParameters) groupParameters).getEquationType()
+                            == EcCurveEquationType.SHORT_WEIERSTRASS) {
+                switch (format) {
+                    case UNCOMPRESSED:
+                        stream.write(0x04);
+                        stream.write(
+                                ArrayConverter.bigIntegerToNullPaddedByteArray(
+                                        point.getFieldX().getData(), elementLength));
+                        stream.write(
+                                ArrayConverter.bigIntegerToNullPaddedByteArray(
+                                        point.getFieldY().getData(), elementLength));
+                        return stream.toByteArray();
+                    case COMPRESSED:
+                        EllipticCurve curve = (EllipticCurve) groupParameters.getGroup();
+                        if (curve.createAPointOnCurve(point.getFieldX().getData())
+                                .getFieldY()
+                                .getData()
+                                .equals(point.getFieldY().getData())) {
+                            stream.write(0x03);
+                        } else {
+                            stream.write(0x02);
+                        }
+                        stream.write(
+                                ArrayConverter.bigIntegerToNullPaddedByteArray(
+                                        point.getFieldX().getData(), elementLength));
+                        return stream.toByteArray();
+                    default:
+                        throw new UnsupportedOperationException(
+                                "Unsupported PointFormat: " + format);
+                }
+            } else {
+                byte[] coordinate =
+                        ArrayConverter.bigIntegerToNullPaddedByteArray(
+                                point.getFieldX().getData(), elementLength);
+                stream.write(coordinate);
+                return stream.toByteArray();
             }
-        } else {
-            byte[] coordinate =
-                    ArrayConverter.bigIntegerToNullPaddedByteArray(
-                            point.getFieldX().getData(), elementLength);
-            stream.write(coordinate);
-            return stream.toByteArray();
         }
     }
 
     public static byte[] toRawFormat(Point point) {
-        SilentByteArrayOutputStream stream = new SilentByteArrayOutputStream();
         if (point.isAtInfinity()) {
             return new byte[1];
         }
-        int elementLength =
-                ArrayConverter.bigIntegerToByteArray(point.getFieldX().getModulus()).length;
-        stream.write(
-                ArrayConverter.bigIntegerToNullPaddedByteArray(
-                        point.getFieldX().getData(), elementLength));
-        stream.write(
-                ArrayConverter.bigIntegerToNullPaddedByteArray(
-                        point.getFieldY().getData(), elementLength));
-        return stream.toByteArray();
+        try (SilentByteArrayOutputStream stream = new SilentByteArrayOutputStream()) {
+            int elementLength =
+                    ArrayConverter.bigIntegerToByteArray(point.getFieldX().getModulus()).length;
+            stream.write(
+                    ArrayConverter.bigIntegerToNullPaddedByteArray(
+                            point.getFieldX().getData(), elementLength));
+            stream.write(
+                    ArrayConverter.bigIntegerToNullPaddedByteArray(
+                            point.getFieldY().getData(), elementLength));
+            return stream.toByteArray();
+        }
     }
 
     /**
