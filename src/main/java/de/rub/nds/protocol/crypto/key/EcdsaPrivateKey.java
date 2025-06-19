@@ -27,6 +27,14 @@ public class EcdsaPrivateKey implements PrivateKeyContainer {
         this.parameters = null;
     }
 
+    /**
+     * Constructs an ECDSA private key with the specified private key value, nonce, and curve
+     * parameters.
+     *
+     * @param privateKey the private key value
+     * @param nonce the nonce value used in ECDSA signatures
+     * @param parameters the elliptic curve parameters
+     */
     public EcdsaPrivateKey(
             BigInteger privateKey, BigInteger nonce, NamedEllipticCurveParameters parameters) {
         this.privateKey = privateKey;
@@ -34,14 +42,29 @@ public class EcdsaPrivateKey implements PrivateKeyContainer {
         this.nonce = nonce;
     }
 
+    /**
+     * Gets the private key value.
+     *
+     * @return the private key value
+     */
     public BigInteger getPrivateKey() {
         return privateKey;
     }
 
+    /**
+     * Gets the elliptic curve parameters associated with this private key.
+     *
+     * @return the elliptic curve parameters
+     */
     public NamedEllipticCurveParameters getParameters() {
         return parameters;
     }
 
+    /**
+     * Gets the nonce value used in ECDSA signatures.
+     *
+     * @return the nonce value
+     */
     public BigInteger getNonce() {
         return nonce;
     }

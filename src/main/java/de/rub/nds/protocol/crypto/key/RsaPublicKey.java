@@ -24,32 +24,68 @@ public class RsaPublicKey implements PublicKeyContainer {
         this.modulus = null;
     }
 
+    /**
+     * Constructs an RSA public key with the specified public exponent and modulus.
+     *
+     * @param publicExponent the public exponent
+     * @param modulus the modulus
+     */
     public RsaPublicKey(BigInteger publicExponent, BigInteger modulus) {
         this.publicExponent = publicExponent;
         this.modulus = modulus;
     }
 
+    /**
+     * Gets the public exponent.
+     *
+     * @return the public exponent
+     */
     public BigInteger getPublicExponent() {
         return publicExponent;
     }
 
+    /**
+     * Sets the public exponent.
+     *
+     * @param publicExponent the public exponent to set
+     */
     public void setPublicExponent(BigInteger publicExponent) {
         this.publicExponent = publicExponent;
     }
 
+    /**
+     * Gets the modulus.
+     *
+     * @return the modulus
+     */
     public BigInteger getModulus() {
         return modulus;
     }
 
+    /**
+     * Sets the modulus.
+     *
+     * @param modulus the modulus to set
+     */
     public void setModulus(BigInteger modulus) {
         this.modulus = modulus;
     }
 
+    /**
+     * Returns the bit length of the modulus.
+     *
+     * @return the bit length of the modulus
+     */
     @Override
     public int length() {
         return modulus.bitLength();
     }
 
+    /**
+     * Returns a hash code value for this RSA public key.
+     *
+     * @return a hash code value for this object
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -59,6 +95,12 @@ public class RsaPublicKey implements PublicKeyContainer {
         return result;
     }
 
+    /**
+     * Indicates whether some other object is "equal to" this RSA public key.
+     *
+     * @param obj the reference object with which to compare
+     * @return true if this object is the same as the obj argument; false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -74,6 +116,11 @@ public class RsaPublicKey implements PublicKeyContainer {
         return true;
     }
 
+    /**
+     * Returns the asymmetric algorithm type for this key.
+     *
+     * @return AsymmetricAlgorithmType.RSA
+     */
     @Override
     public AsymmetricAlgorithmType getAlgorithmType() {
         return AsymmetricAlgorithmType.RSA;

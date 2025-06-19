@@ -20,6 +20,13 @@ public class KeyGenerator {
 
     private KeyGenerator() {}
 
+    /**
+     * Generates a Diffie-Hellman public key from a private key and group parameters.
+     *
+     * @param privateKey the private key
+     * @param parameters the finite field Diffie-Hellman group parameters
+     * @return the generated DH public key
+     */
     public static DhPublicKey generateDhPublicKey(
             BigInteger privateKey, FfdhGroupParameters parameters) {
         return new DhPublicKey(
@@ -28,11 +35,28 @@ public class KeyGenerator {
                 parameters.getModulus());
     }
 
+    /**
+     * Generates a Diffie-Hellman public key from a private key, generator, and modulus.
+     *
+     * @param privateKey the private key
+     * @param generator the generator value
+     * @param modulus the modulus value
+     * @return the generated DH public key
+     */
     public static DhPublicKey generateDhPublicKey(
             BigInteger privateKey, BigInteger generator, BigInteger modulus) {
         return new DhPublicKey(privateKey.modPow(generator, modulus), generator, modulus);
     }
 
+    /**
+     * Generates a Diffie-Hellman public key with a randomly generated modulus of specified bit
+     * length.
+     *
+     * @param privateKey the private key
+     * @param bitLength the bit length of the modulus to generate
+     * @param random the random number generator
+     * @return the generated DH public key
+     */
     public static DhPublicKey generateDhPublicKey(
             BigInteger privateKey, int bitLength, Random random) {
         BigInteger modulus = BigInteger.probablePrime(bitLength, random); // Not a safe prime...
@@ -40,18 +64,39 @@ public class KeyGenerator {
         return new DhPublicKey(privateKey.modPow(generator, modulus), generator, modulus);
     }
 
+    /**
+     * Generates an ECDH public key from a private key and elliptic curve parameters.
+     *
+     * @param privateKey the private key
+     * @param parameters the elliptic curve parameters
+     * @return the generated ECDH public key
+     */
     public static EcdhPublicKey generateEcdhPublicKey(
             BigInteger privateKey, NamedEllipticCurveParameters parameters) {
         return new EcdhPublicKey(
                 parameters.getGroup().nTimesGroupOperationOnGenerator(privateKey), parameters);
     }
 
+    /**
+     * Generates an ECDSA public key from a private key and elliptic curve parameters.
+     *
+     * @param privateKey the private key
+     * @param parameters the elliptic curve parameters
+     * @return the generated ECDSA public key
+     */
     public static EcdsaPublicKey generateEcdsaPublicKey(
             BigInteger privateKey, NamedEllipticCurveParameters parameters) {
         return new EcdsaPublicKey(
                 parameters.getGroup().nTimesGroupOperationOnGenerator(privateKey), parameters);
     }
 
+    /**
+     * Generates an EdDSA public key from a private key and elliptic curve parameters.
+     *
+     * @param privateKey the private key
+     * @param parameters the elliptic curve parameters
+     * @return the generated EdDSA public key
+     */
     public static EddsaPublicKey generateEddsaPublicKey(
             BigInteger privateKey, NamedEllipticCurveParameters parameters) {
         return new EddsaPublicKey(
@@ -59,11 +104,13 @@ public class KeyGenerator {
     }
 
     /**
+     * Generates a DSA public key with randomly generated parameters.
+     *
      * @param privateKey A private key that should be used
      * @param pLength 1024-3072 (bits) usually
      * @param qLenght 160-256 (bits)
      * @param random A random number generator
-     * @return
+     * @return the generated DSA public key
      */
     public static DsaPublicKey generateDsaPublicKey(
             BigInteger privateKey, int pLength, int qLenght, Random random) {
@@ -105,6 +152,15 @@ public class KeyGenerator {
         return generateDsaPublicKey(privateKey, g, p, q);
     }
 
+    /**
+     * Generates a DSA public key from a private key and DSA parameters.
+     *
+     * @param privateKey the private key
+     * @param g the generator
+     * @param p the modulus
+     * @param q the subgroup order
+     * @return the generated DSA public key
+     */
     public static DsaPublicKey generateDsaPublicKey(
             BigInteger privateKey, BigInteger g, BigInteger p, BigInteger q) {
 
@@ -113,14 +169,37 @@ public class KeyGenerator {
         return new DsaPublicKey(q, y, g, p);
     }
 
+    /**
+     * Generates an RSA public key with the specified modulus and public exponent.
+     *
+     * @param modulus the modulus
+     * @param publicExponent the public exponent
+     * @return the generated RSA public key
+     */
     public static RsaPublicKey generateRsaPublicKey(BigInteger modulus, BigInteger publicExponent) {
         return new RsaPublicKey(modulus, publicExponent);
     }
 
+    /**
+     * Generates an RSA key pair with the default public exponent (65537).
+     *
+     * @param bitLength the bit length of the modulus
+     * @param random the random number generator
+     * @return a pair containing the RSA public and private keys
+     */
     public static Pair<RsaPublicKey, RsaPrivateKey> generateRsaKeys(int bitLength, Random random) {
         return generateRsaKeys(new BigInteger("65537"), bitLength, random);
     }
 
+    /**
+     * Generates an RSA key pair with the specified public exponent.
+     *
+     * @param publicExponent the public exponent
+     * @param bitLength the bit length of the modulus
+     * @param random the random number generator
+     * @return a pair containing the RSA public and private keys
+     * @throws IllegalArgumentException if bitLength is 5 or less
+     */
     public static Pair<RsaPublicKey, RsaPrivateKey> generateRsaKeys(
             BigInteger publicExponent, int bitLength, Random random) {
         if (bitLength <= 5) {

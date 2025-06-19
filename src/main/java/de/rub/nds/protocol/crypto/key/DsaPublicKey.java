@@ -49,39 +49,84 @@ public class DsaPublicKey implements PublicKeyContainer {
         this.Y = Y;
     }
 
+    /**
+     * Gets the DSA parameters associated with this public key.
+     *
+     * @return the DSA parameters
+     */
     public DsaParameters getDsaParameters() {
         return dsaParameters;
     }
 
+    /**
+     * Sets the DSA parameters for this public key.
+     *
+     * @param dsaParameters the DSA parameters to set
+     */
     public void setDsaParameters(DsaParameters dsaParameters) {
         this.dsaParameters = dsaParameters;
     }
 
+    /**
+     * Gets the modulus p from the DSA parameters.
+     *
+     * @return the modulus p
+     */
     public BigInteger getModulus() {
         return dsaParameters.getP();
     }
 
+    /**
+     * Gets the generator g from the DSA parameters.
+     *
+     * @return the generator g
+     */
     public BigInteger getGenerator() {
         return dsaParameters.getG();
     }
 
+    /**
+     * Gets the subgroup order Q from the DSA parameters.
+     *
+     * @return the subgroup order Q
+     */
     public BigInteger getQ() {
         return dsaParameters.getQ();
     }
 
+    /**
+     * Gets the public key value Y.
+     *
+     * @return the public key value Y
+     */
     public BigInteger getY() {
         return Y;
     }
 
+    /**
+     * Sets the public key value Y.
+     *
+     * @param y the public key value to set
+     */
     public void setY(BigInteger y) {
         this.Y = y;
     }
 
+    /**
+     * Returns the bit length of the modulus.
+     *
+     * @return the bit length of the modulus
+     */
     @Override
     public int length() {
         return getModulus().bitLength();
     }
 
+    /**
+     * Returns a hash code value for this DSA public key.
+     *
+     * @return a hash code value for this object
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -91,6 +136,12 @@ public class DsaPublicKey implements PublicKeyContainer {
         return result;
     }
 
+    /**
+     * Indicates whether some other object is "equal to" this DSA public key.
+     *
+     * @param obj the reference object with which to compare
+     * @return true if this object is the same as the obj argument; false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -106,6 +157,11 @@ public class DsaPublicKey implements PublicKeyContainer {
         return true;
     }
 
+    /**
+     * Returns the asymmetric algorithm type for this key.
+     *
+     * @return AsymmetricAlgorithmType.DSA
+     */
     @Override
     public AsymmetricAlgorithmType getAlgorithmType() {
         return AsymmetricAlgorithmType.DSA;
