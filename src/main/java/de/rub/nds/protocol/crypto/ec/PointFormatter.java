@@ -107,11 +107,11 @@ public class PointFormatter {
 
     /**
      * Tries to read the first N byte[] as a point of the curve of the form x|y. If the byte[] has
-     * enough bytes the base point of the named group is returned
+     * not enough bytes the base point of the named group is returned
      *
-     * @param groupParameters
-     * @param pointBytes
-     * @return
+     * @param groupParameters The group parameters defining the elliptic curve
+     * @param pointBytes The raw bytes representing the point (x|y concatenation)
+     * @return The decoded point, or the base point if decoding fails
      */
     public static Point fromRawFormat(GroupParameters<?> groupParameters, byte[] pointBytes) {
         CyclicGroup<?> group = groupParameters.getGroup();
