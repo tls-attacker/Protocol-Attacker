@@ -11,8 +11,12 @@ package de.rub.nds.protocol.crypto.hash;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import de.rub.nds.protocol.constants.HashAlgorithm;
+import de.rub.nds.protocol.exception.CryptoException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -131,6 +135,63 @@ class HashCalculatorTest {
                     expected,
                     result,
                     algorithm + " result should match BouncyCastle for input size " + input.length);
+        }
+    }
+
+    @Test
+    void testPrivateConstructor() throws Exception {
+        // Arrange
+        Constructor<HashCalculator> constructor = HashCalculator.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+
+        // Act
+        HashCalculator instance = constructor.newInstance();
+
+        // Assert
+        assertNotNull(instance, "Private constructor should create an instance");
+    }
+
+    @Test
+    void testInvalidAlgorithmThrowsCryptoException() {
+        // Arrange
+        byte[] data = TEST_DATA;
+
+        // We need to create a mock HashAlgorithm with an invalid Java name
+        // Since HashAlgorithm is an enum, we'll use reflection to invoke the private method
+        // directly
+        try {
+            var method =
+                    HashCalculator.class.getDeclaredMethod(
+                            "computeHash", byte[].class, String.class);
+            method.setAccessible(true);
+
+            // Act & Assert
+            InvocationTargetException exception =
+                    assertThrows(
+                            InvocationTargetException.class,
+                            () -> method.invoke(null, data, "INVALID_ALGORITHM_NAME"),
+                            "Should throw InvocationTargetException wrapping CryptoException");
+
+            // Verify the cause is CryptoException
+            assertNotNull(exception.getCause(), "Should have a cause");
+            assertEquals(
+                    CryptoException.class,
+                    exception.getCause().getClass(),
+                    "Cause should be CryptoException");
+            assertEquals(
+                    "Unknown hash algorithm: INVALID_ALGORITHM_NAME",
+                    exception.getCause().getMessage(),
+                    "Exception message should contain the invalid algorithm name");
+
+            // Verify the cause has NoSuchAlgorithmException as its cause
+            assertNotNull(exception.getCause().getCause(), "CryptoException should have a cause");
+            assertEquals(
+                    NoSuchAlgorithmException.class,
+                    exception.getCause().getCause().getClass(),
+                    "CryptoException's cause should be NoSuchAlgorithmException");
+
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("Method computeHash not found", e);
         }
     }
 }
