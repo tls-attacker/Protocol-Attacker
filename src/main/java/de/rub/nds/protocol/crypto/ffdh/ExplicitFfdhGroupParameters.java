@@ -11,12 +11,27 @@ package de.rub.nds.protocol.crypto.ffdh;
 import de.rub.nds.protocol.constants.FfdhGroupParameters;
 import java.math.BigInteger;
 
+/**
+ * Represents explicit finite field Diffie-Hellman group parameters where the generator and modulus
+ * are explicitly specified rather than using predefined standard groups.
+ */
 public class ExplicitFfdhGroupParameters extends FfdhGroupParameters {
 
+    /**
+     * Constructs explicit FFDH group parameters with the specified generator and modulus.
+     *
+     * @param generator the generator element of the group
+     * @param modulus the modulus (prime p) of the group
+     */
     public ExplicitFfdhGroupParameters(BigInteger generator, BigInteger modulus) {
         super(generator, modulus);
     }
 
+    /**
+     * Computes the hash code for this ExplicitFfdhGroupParameters instance.
+     *
+     * @return the hash code based on the modulus and generator
+     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -26,6 +41,12 @@ public class ExplicitFfdhGroupParameters extends FfdhGroupParameters {
         return result;
     }
 
+    /**
+     * Checks if this ExplicitFfdhGroupParameters instance is equal to another object.
+     *
+     * @param obj the object to compare with
+     * @return true if the objects are equal, false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
