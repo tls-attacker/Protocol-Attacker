@@ -41,6 +41,7 @@ public class FieldElementF2m extends FieldElement {
         super(null, null);
     }
 
+    /** {@inheritDoc} */
     @Override
     public FieldElement add(FieldElement f) {
         // Coefficients are added mod 2.
@@ -48,6 +49,7 @@ public class FieldElementF2m extends FieldElement {
         return new FieldElementF2m(tmp, this.getModulus());
     }
 
+    /** {@inheritDoc} */
     @Override
     public FieldElement mult(FieldElement f) {
         // Binary polynomial school book multiplication.
@@ -66,6 +68,7 @@ public class FieldElementF2m extends FieldElement {
         return new FieldElementF2m(tmp, this.getModulus());
     }
 
+    /** {@inheritDoc} */
     @Override
     public FieldElement addInv() {
         /*
@@ -75,6 +78,7 @@ public class FieldElementF2m extends FieldElement {
         return this;
     }
 
+    /** {@inheritDoc} */
     @Override
     public FieldElement multInv() {
         if (this.getData().equals(BigInteger.ZERO)) {
@@ -154,7 +158,8 @@ public class FieldElementF2m extends FieldElement {
     /**
      * Returns (this^2)^exponent)
      *
-     * @param exponent
+     * @param exponent The number of times to apply the squaring operation
+     * @return The result of repeatedly squaring this element exponent times
      */
     public FieldElementF2m squarePow(int exponent) {
         FieldElement square = this.mult(this);
