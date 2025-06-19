@@ -34,6 +34,14 @@ public class Point implements Serializable {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    /**
+     * Creates a point on the elliptic curve defined by the given curve parameters.
+     *
+     * @param x The x-coordinate of the point
+     * @param y The y-coordinate of the point
+     * @param curveParameters The curve parameters defining the elliptic curve
+     * @return A point on the curve, or null if the parameters do not define an elliptic curve
+     */
     public static Point createPoint(
             BigInteger x, BigInteger y, GroupParameters<?> curveParameters) {
         CyclicGroup<?> group = curveParameters.getGroup();
@@ -95,10 +103,20 @@ public class Point implements Serializable {
         return this.infinity;
     }
 
+    /**
+     * Returns the x-coordinate of this point as a field element.
+     *
+     * @return The x-coordinate field element, or null if this is the point at infinity
+     */
     public FieldElement getFieldX() {
         return this.fieldX;
     }
 
+    /**
+     * Returns the y-coordinate of this point as a field element.
+     *
+     * @return The y-coordinate field element, or null if this is the point at infinity
+     */
     public FieldElement getFieldY() {
         return this.fieldY;
     }
