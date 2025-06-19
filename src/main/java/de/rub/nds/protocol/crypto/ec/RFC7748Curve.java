@@ -14,7 +14,7 @@ import java.util.Arrays;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/** */
+/** Abstract base class for RFC 7748 elliptic curves (X25519 and X448). */
 public abstract class RFC7748Curve extends SimulatedMontgomeryCurve {
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -29,12 +29,36 @@ public abstract class RFC7748Curve extends SimulatedMontgomeryCurve {
         super(a, b, modulus, basePointX, basePointY, basePointOrder);
     }
 
+    /**
+     * Decodes a scalar value according to RFC 7748 specifications.
+     *
+     * @param scalar The scalar value to decode
+     * @return The decoded scalar value
+     */
     public abstract BigInteger decodeScalar(BigInteger scalar);
 
+    /**
+     * Decodes an encoded coordinate according to RFC 7748 specifications.
+     *
+     * @param encCoordinate The encoded coordinate
+     * @return The decoded coordinate value
+     */
     public abstract BigInteger decodeCoordinate(BigInteger encCoordinate);
 
+    /**
+     * Encodes a coordinate according to RFC 7748 specifications.
+     *
+     * @param coordinate The coordinate to encode
+     * @return The encoded coordinate as a byte array
+     */
     public abstract byte[] encodeCoordinate(BigInteger coordinate);
 
+    /**
+     * Computes the public key from a private key.
+     *
+     * @param privateKey The private key
+     * @return The public key as an encoded byte array
+     */
     public byte[] computePublicKey(BigInteger privateKey) {
         privateKey = reduceLongKey(privateKey);
         BigInteger decodedKey = decodeScalar(privateKey);
@@ -58,11 +82,24 @@ public abstract class RFC7748Curve extends SimulatedMontgomeryCurve {
         return encodeCoordinate(sharedPoint.getFieldX().getData());
     }
 
+    /**
+     * Computes the shared secret from a private key and a decoded public key point.
+     *
+     * @param privateKey The private key
+     * @param publicKey The public key as a decoded point
+     * @return The shared secret as an encoded byte array
+     */
     public byte[] computeSharedSecretFromDecodedPoint(BigInteger privateKey, Point publicKey) {
         byte[] reEncoded = encodeCoordinate(publicKey.getFieldX().getData());
         return computeSharedSecret(privateKey, reEncoded);
     }
 
+    /**
+     * Reduces a key that is longer than the modulus to the appropriate length.
+     *
+     * @param key The key to reduce
+     * @return The reduced key
+     */
     public BigInteger reduceLongKey(BigInteger key) {
         byte[] keyBytes = key.toByteArray();
         if (keyBytes.length > DataConverter.bigIntegerToByteArray(getModulus()).length) {
