@@ -16,6 +16,18 @@ import java.io.ObjectOutputStream;
 public class DeepCopyUtil {
     private DeepCopyUtil() {}
 
+    /**
+     * Creates a deep copy of the given object using serialization.
+     *
+     * <p>This method performs a deep copy by serializing the object to a byte array and then
+     * deserializing it back to create a new instance. All nested objects will be copied as well,
+     * provided they are serializable.
+     *
+     * @param <T> the type of the object to copy
+     * @param object the object to be deep copied
+     * @return a deep copy of the provided object
+     * @throws RuntimeException if the object is not serializable or if an I/O error occurs
+     */
     public static <T> T deepCopy(T object) {
         try {
             SilentByteArrayOutputStream outputStream = new SilentByteArrayOutputStream();
