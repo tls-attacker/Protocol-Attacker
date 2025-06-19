@@ -527,36 +527,76 @@ public enum NamedEllipticCurveParameters implements GroupParameters<Point> {
         this.curve = curve;
     }
 
+    /**
+     * Returns the name of this elliptic curve.
+     *
+     * @return the curve name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Returns the X9.62 name of this elliptic curve.
+     *
+     * @return the X9.62 name, or null if not defined
+     */
     public String getX962name() {
         return x962name;
     }
 
+    /**
+     * Returns the NIST name of this elliptic curve.
+     *
+     * @return the NIST name, or null if not defined
+     */
     public String getNistName() {
         return nistName;
     }
 
+    /**
+     * Returns the SEC name of this elliptic curve.
+     *
+     * @return the SEC name, or null if not defined
+     */
     public String getSecName() {
         return secName;
     }
 
+    /**
+     * Returns the equation type of this elliptic curve.
+     *
+     * @return the curve equation type
+     */
     public EcCurveEquationType getEquationType() {
         return equationType;
     }
 
+    /**
+     * Returns the size of group elements in bits.
+     *
+     * @return the bit length of the curve
+     */
     @Override
     public int getElementSizeBits() {
         return bitLength;
     }
 
+    /**
+     * Returns the size of group elements in bytes.
+     *
+     * @return the byte length required to represent group elements
+     */
     @Override
     public int getElementSizeBytes() {
         return (int) Math.ceil(((double) getElementSizeBits()) / 8);
     }
 
+    /**
+     * Returns the elliptic curve instance.
+     *
+     * @return the elliptic curve
+     */
     @Override
     public EllipticCurve getGroup() {
         return curve;
