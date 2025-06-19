@@ -48,6 +48,7 @@ public abstract class FieldElement implements Serializable {
      * Returns this + f.
      *
      * @param f An element of the field, which this is an element of.
+     * @return The sum of this element and f.
      */
     public abstract FieldElement add(FieldElement f);
 
@@ -55,6 +56,7 @@ public abstract class FieldElement implements Serializable {
      * Returns this - f.
      *
      * @param f An element of the field, which this is an element of.
+     * @return The difference of this element minus f.
      */
     public FieldElement subtract(FieldElement f) {
         f = f.addInv();
@@ -65,6 +67,7 @@ public abstract class FieldElement implements Serializable {
      * Returns this * f.
      *
      * @param f An element of the field, which this is an element of.
+     * @return The product of this element and f.
      */
     public abstract FieldElement mult(FieldElement f);
 
@@ -72,16 +75,25 @@ public abstract class FieldElement implements Serializable {
      * Returns this * f^-1.
      *
      * @param f An element of the field, which this is an element of.
+     * @return The quotient of this element divided by f.
      */
     public FieldElement divide(FieldElement f) {
         f = f.multInv();
         return mult(f);
     }
 
-    /** Returns -this. */
+    /**
+     * Returns -this.
+     *
+     * @return The additive inverse of this element.
+     */
     public abstract FieldElement addInv();
 
-    /** Returns this^-1. */
+    /**
+     * Returns this^-1.
+     *
+     * @return The multiplicative inverse of this element.
+     */
     public abstract FieldElement multInv();
 
     /**
@@ -102,6 +114,7 @@ public abstract class FieldElement implements Serializable {
         return this.modulus;
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         int hash = 5;
@@ -110,6 +123,7 @@ public abstract class FieldElement implements Serializable {
         return hash;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -131,6 +145,7 @@ public abstract class FieldElement implements Serializable {
         return true;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return this.getData().toString() + " mod " + this.getModulus().toString();
