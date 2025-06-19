@@ -41,14 +41,29 @@ public enum MacAlgorithm {
         this.javaName = javaName;
     }
 
+    /**
+     * Returns the Java provider name for this MAC algorithm.
+     *
+     * @return the Java provider name, or null if not applicable
+     */
     public String getJavaName() {
         return javaName;
     }
 
+    /**
+     * Returns the length of the MAC output in bytes.
+     *
+     * @return the MAC length in bytes
+     */
     public int getMacLength() {
         return macLength;
     }
 
+    /**
+     * Returns the key size for this MAC algorithm in bytes.
+     *
+     * @return the key size in bytes
+     */
     public int getKeySize() {
         return keySize;
     }
