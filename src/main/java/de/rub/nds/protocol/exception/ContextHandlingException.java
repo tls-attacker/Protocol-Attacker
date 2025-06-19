@@ -10,14 +10,26 @@ package de.rub.nds.protocol.exception;
 
 public class ContextHandlingException extends RuntimeException {
 
+    /** Constructs a new ContextHandlingException with no detail message. */
     public ContextHandlingException() {
         super();
     }
 
+    /**
+     * Constructs a new ContextHandlingException with the specified detail message.
+     *
+     * @param message The detail message
+     */
     public ContextHandlingException(String message) {
         super(message);
     }
 
+    /**
+     * Constructs a new ContextHandlingException with the specified detail message and cause.
+     *
+     * @param message The detail message
+     * @param cause The cause of the exception
+     */
     public ContextHandlingException(String message, Throwable cause) {
         super(message, cause);
     }

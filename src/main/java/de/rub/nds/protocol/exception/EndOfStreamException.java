@@ -10,20 +10,46 @@ package de.rub.nds.protocol.exception;
 
 public class EndOfStreamException extends RuntimeException {
 
+    /** Constructs a new EndOfStreamException with no detail message. */
     public EndOfStreamException() {}
 
+    /**
+     * Constructs a new EndOfStreamException with the specified detail message.
+     *
+     * @param message The detail message
+     */
     public EndOfStreamException(String message) {
         super(message);
     }
 
+    /**
+     * Constructs a new EndOfStreamException with the specified detail message and cause.
+     *
+     * @param message The detail message
+     * @param cause The cause of the exception
+     */
     public EndOfStreamException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Constructs a new EndOfStreamException with the specified cause.
+     *
+     * @param cause The cause of the exception
+     */
     public EndOfStreamException(Throwable cause) {
         super(cause);
     }
 
+    /**
+     * Constructs a new EndOfStreamException with the specified detail message, cause, suppression
+     * enabled or disabled, and writable stack trace enabled or disabled.
+     *
+     * @param message The detail message
+     * @param cause The cause of the exception
+     * @param enableSuppression Whether suppression is enabled or disabled
+     * @param writableStackTrace Whether the stack trace should be writable
+     */
     public EndOfStreamException(
             String message,
             Throwable cause,
