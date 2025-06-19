@@ -66,6 +66,7 @@ public class EllipticCurveOverF2m extends EllipticCurve {
         this.curveB = new FieldElementF2m(b, this.getModulus());
     }
 
+    /** {@inheritDoc} */
     @Override
     public Point getPoint(BigInteger x, BigInteger y) {
         FieldElementF2m elemX = new FieldElementF2m(x, this.getModulus());
@@ -74,6 +75,7 @@ public class EllipticCurveOverF2m extends EllipticCurve {
         return new Point(elemX, elemY);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isOnCurve(Point p) {
         if (p.isAtInfinity()) {
@@ -166,6 +168,7 @@ public class EllipticCurveOverF2m extends EllipticCurve {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public FieldElement createFieldElement(BigInteger value) {
         return new FieldElementF2m(value, this.getModulus());
@@ -177,6 +180,9 @@ public class EllipticCurveOverF2m extends EllipticCurve {
      * of z is odd.
      *
      * @param x The x coordinate of the point
+     * @param returnBasepointUponError If true, returns the base point when a valid point cannot be
+     *     created.
+     * @return A point on the curve with the given x-coordinate, or the base point if specified.
      */
     @Override
     public Point createAPointOnCurve(BigInteger x, boolean returnBasepointUponError) {
