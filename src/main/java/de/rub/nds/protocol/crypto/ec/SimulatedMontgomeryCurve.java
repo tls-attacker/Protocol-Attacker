@@ -12,13 +12,26 @@ import java.math.BigInteger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/** A Montgomery Curve that internally uses a Weierstrass Curve */
+/**
+ * A Montgomery Curve that internally uses a Weierstrass Curve. This class provides Montgomery curve
+ * operations by converting to and from the equivalent Weierstrass form.
+ */
 public class SimulatedMontgomeryCurve extends EllipticCurveOverFp {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
     private final EllipticCurveOverFp weierstrassEquivalent;
 
+    /**
+     * Constructs a simulated Montgomery curve with the given parameters.
+     *
+     * @param a The coefficient a in the Montgomery curve equation
+     * @param b The coefficient b in the Montgomery curve equation
+     * @param modulus The prime modulus of the field
+     * @param basePointX The x-coordinate of the base point
+     * @param basePointY The y-coordinate of the base point
+     * @param basePointOrder The order of the base point
+     */
     public SimulatedMontgomeryCurve(
             BigInteger a,
             BigInteger b,
@@ -30,6 +43,7 @@ public class SimulatedMontgomeryCurve extends EllipticCurveOverFp {
         weierstrassEquivalent = computeWeierstrassEquivalent();
     }
 
+    /** {@inheritDoc} */
     @Override
     public Point getPoint(BigInteger x, BigInteger y) {
         FieldElementFp elemX = new FieldElementFp(x, this.getModulus());
@@ -38,6 +52,7 @@ public class SimulatedMontgomeryCurve extends EllipticCurveOverFp {
         return new Point(elemX, elemY);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isOnCurve(Point p) {
         Point weierstrassP = toWeierstrass(p);
@@ -60,6 +75,7 @@ public class SimulatedMontgomeryCurve extends EllipticCurveOverFp {
         return toMontgomery(weierstrassRes);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Point createAPointOnCurve(BigInteger x) {
         BigInteger val =
@@ -77,6 +93,7 @@ public class SimulatedMontgomeryCurve extends EllipticCurveOverFp {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public FieldElement createFieldElement(BigInteger value) {
         return new FieldElementFp(value, this.getModulus());
@@ -132,6 +149,12 @@ public class SimulatedMontgomeryCurve extends EllipticCurveOverFp {
                 this.getBasePointOrder());
     }
 
+    /**
+     * Converts a point from Montgomery curve representation to Weierstrass curve representation.
+     *
+     * @param mpoint A point on the Montgomery curve
+     * @return The equivalent point on the Weierstrass curve
+     */
     public Point toWeierstrass(Point mpoint) {
         if (mpoint.isAtInfinity()) {
             return mpoint;
@@ -159,6 +182,12 @@ public class SimulatedMontgomeryCurve extends EllipticCurveOverFp {
         }
     }
 
+    /**
+     * Converts a point from Weierstrass curve representation to Montgomery curve representation.
+     *
+     * @param weierstrassPoint A point on the Weierstrass curve
+     * @return The equivalent point on the Montgomery curve
+     */
     public Point toMontgomery(Point weierstrassPoint) {
         if (weierstrassPoint.isAtInfinity()) {
             return weierstrassPoint;
@@ -186,6 +215,8 @@ public class SimulatedMontgomeryCurve extends EllipticCurveOverFp {
     }
 
     /**
+     * Returns the Weierstrass curve equivalent to this Montgomery curve.
+     *
      * @return the weierstrassEquivalent
      */
     public EllipticCurveOverFp getWeierstrassEquivalent() {
