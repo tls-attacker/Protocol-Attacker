@@ -84,10 +84,20 @@ public abstract class FieldElement implements Serializable {
     /** Returns this^-1. */
     public abstract FieldElement multInv();
 
+    /**
+     * Returns the data value of this field element.
+     *
+     * @return The data value as a BigInteger
+     */
     public BigInteger getData() {
         return this.data;
     }
 
+    /**
+     * Returns the modulus of the field this element belongs to.
+     *
+     * @return The field modulus as a BigInteger
+     */
     public BigInteger getModulus() {
         return this.modulus;
     }
