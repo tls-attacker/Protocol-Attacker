@@ -36,7 +36,7 @@ public enum HashAlgorithm {
 
     private String javaName;
 
-    private HashAlgorithm(
+    HashAlgorithm(
             String hashAlgorithmIdentifierOid,
             int bitStrength,
             int securityStrength,

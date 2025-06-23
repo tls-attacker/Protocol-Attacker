@@ -108,9 +108,7 @@ public class SignatureCalculator {
                     hashAlgorithm);
         } else if (computations instanceof GostSignatureComputations) {
             throw new UnsupportedOperationException("Unsupported operation");
-        } else if (computations instanceof NoSignatureComputations) {
-            // Nothing to do
-        } else {
+        } else if (!(computations instanceof NoSignatureComputations)) {
             throw new UnsupportedOperationException("Unsupported operation");
         }
     }
@@ -446,7 +444,7 @@ public class SignatureCalculator {
 
         LOGGER.debug("TruncatedHashBytes: {}", computations.getTruncatedHashBytes().getValue());
         computations.setTruncatedHash(
-                new BigInteger(1, (computations.getTruncatedHashBytes().getValue())));
+                new BigInteger(1, computations.getTruncatedHashBytes().getValue()));
         BigInteger truncatedHash = computations.getTruncatedHash().getValue();
         LOGGER.debug("Truncated hash: {}", truncatedHash);
         BigInteger inverseNonce;
@@ -468,11 +466,12 @@ public class SignatureCalculator {
         LOGGER.debug("Inverse Nonce: {}", inverseNonce);
         LOGGER.debug(
                 "Verify: {}",
-                (inverseNonce.multiply(computations.getNonce().getValue()))
+                inverseNonce
+                        .multiply(computations.getNonce().getValue())
                         .mod(curve.getBasePointOrder()));
         BigInteger rd = r.multiply(privateKey.getPrivateKey());
         rd = rd.mod(curve.getBasePointOrder());
-        BigInteger multiplier = (rd.add(truncatedHash));
+        BigInteger multiplier = rd.add(truncatedHash);
         multiplier = multiplier.mod(curve.getBasePointOrder());
         s = inverseNonce.multiply(multiplier);
         s = s.mod(curve.getBasePointOrder());
@@ -527,7 +526,7 @@ public class SignatureCalculator {
 
         LOGGER.debug("TruncatedHashBytes: {}", computations.getTruncatedHashBytes().getValue());
         computations.setTruncatedHash(
-                new BigInteger(1, (computations.getTruncatedHashBytes().getValue())));
+                new BigInteger(1, computations.getTruncatedHashBytes().getValue()));
         BigInteger truncatedHash = computations.getTruncatedHash().getValue();
         LOGGER.debug("Truncated hash: {}", truncatedHash);
         BigInteger inverseNonce;
@@ -553,7 +552,7 @@ public class SignatureCalculator {
                         .mod(curve.getBasePointOrder()));
         BigInteger rd = r.multiply(privateKey.getPrivateKey());
         rd = rd.mod(curve.getBasePointOrder());
-        BigInteger multiplier = (rd.add(truncatedHash));
+        BigInteger multiplier = rd.add(truncatedHash);
         multiplier = multiplier.mod(curve.getBasePointOrder());
         s = inverseNonce.multiply(multiplier);
         s = s.mod(curve.getBasePointOrder());

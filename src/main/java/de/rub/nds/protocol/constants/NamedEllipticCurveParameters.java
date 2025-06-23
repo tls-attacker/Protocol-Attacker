@@ -510,7 +510,7 @@ public enum NamedEllipticCurveParameters implements GroupParameters<Point> {
     /** The concrete curve that is behind these parameters */
     private final EllipticCurve curve;
 
-    private NamedEllipticCurveParameters(
+    NamedEllipticCurveParameters(
             String name,
             String x962name,
             String nistName,

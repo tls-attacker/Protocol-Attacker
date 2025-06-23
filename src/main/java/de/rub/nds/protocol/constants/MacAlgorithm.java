@@ -35,7 +35,7 @@ public enum MacAlgorithm {
 
     private String javaName;
 
-    private MacAlgorithm(int macLength, int keySize, String javaName) {
+    MacAlgorithm(int macLength, int keySize, String javaName) {
         this.macLength = macLength;
         this.keySize = keySize;
         this.javaName = javaName;

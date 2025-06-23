@@ -17,7 +17,7 @@ public interface GroupParameters<GroupElementT> {
      *
      * @return The size of an element in the group in bits.
      */
-    public abstract int getElementSizeBits();
+    int getElementSizeBits();
 
     /**
      * Returns the size of and element in the group in bytes. If an element would be 13 bits, then
@@ -25,12 +25,12 @@ public interface GroupParameters<GroupElementT> {
      *
      * @return The size of an element in the group in bytes.
      */
-    public abstract int getElementSizeBytes();
+    int getElementSizeBytes();
 
     /**
      * Returns an instance of the mathematical group that is described by these parameters.
      *
      * @return An instasnce of the unterlying group
      */
-    public CyclicGroup<GroupElementT> getGroup();
+    CyclicGroup<GroupElementT> getGroup();
 }
