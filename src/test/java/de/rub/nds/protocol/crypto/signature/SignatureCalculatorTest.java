@@ -323,10 +323,7 @@ public class SignatureCalculatorTest {
                 computations.getSalt().getValue());
         // Generate the public key
 
-        LOGGER.debug(
-                "Signature: {}",
-                ArrayConverter.bytesToHexString(computations.getSignatureBytes().getValue())
-                        .toUpperCase());
+        LOGGER.debug("Signature: {}", computations.getSignatureBytes().getValue());
 
         Signature signature = Signature.getInstance("SHA256withRSA/PSS");
         MGF1ParameterSpec mgf1ParameterSpec = new MGF1ParameterSpec("SHA-256");

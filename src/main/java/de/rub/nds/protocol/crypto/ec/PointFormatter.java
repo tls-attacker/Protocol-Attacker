@@ -153,11 +153,9 @@ public class PointFormatter {
                 case 3:
                     if (compressedPoint.length != elementLength + 1) {
                         LOGGER.warn(
-                                "Could not parse point. Point needs to be "
-                                        + (elementLength + 1)
-                                        + " bytes long, but was "
-                                        + compressedPoint.length
-                                        + "bytes long. Returning base point");
+                                "Could not parse point. Point needs to be {} bytes long, but was {} bytes long. Returning base point",
+                                (elementLength + 1),
+                                compressedPoint.length);
 
                         return curve.getBasePoint();
                     }
@@ -177,11 +175,9 @@ public class PointFormatter {
                 case 4:
                     if (compressedPoint.length != elementLength * 2 + 1) {
                         LOGGER.warn(
-                                "Could not parse point. Point needs to be "
-                                        + (elementLength * 2 + 1)
-                                        + " bytes long, but was "
-                                        + compressedPoint.length
-                                        + "bytes long. Returning base point");
+                                "Could not parse point. Point needs to be {} bytes long, but was {} bytes long. Returning base point",
+                                (elementLength * 2 + 1),
+                                compressedPoint.length);
                         return curve.getBasePoint();
                     }
 
@@ -203,11 +199,9 @@ public class PointFormatter {
         } else {
             if (compressedPoint.length != elementLength) {
                 LOGGER.warn(
-                        "Could not parse point. Point needs to be "
-                                + elementLength
-                                + " bytes long, but was "
-                                + compressedPoint.length
-                                + "bytes long. Returning base point");
+                        "Could not parse point. Point needs to be {} bytes long, but was {} bytes long. Returning base point",
+                        elementLength,
+                        compressedPoint.length);
                 return curve.getBasePoint();
             }
             byte[] coordX = new byte[elementLength];
