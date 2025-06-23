@@ -13,7 +13,7 @@ import de.rub.nds.protocol.constants.AsymmetricAlgorithmType;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public interface PublicKeyContainer {
-    public int length();
+    int length();
 
-    public AsymmetricAlgorithmType getAlgorithmType();
+    AsymmetricAlgorithmType getAlgorithmType();
 }

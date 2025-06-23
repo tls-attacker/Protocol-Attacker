@@ -21,7 +21,7 @@ public enum SignatureAlgorithm {
 
     private String humanReadable;
 
-    private SignatureAlgorithm(String humanReadable) {
+    SignatureAlgorithm(String humanReadable) {
         this.humanReadable = humanReadable;
     }
 

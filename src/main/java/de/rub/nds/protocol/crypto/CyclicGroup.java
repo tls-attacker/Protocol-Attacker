@@ -18,7 +18,7 @@ public interface CyclicGroup<GroupElementT> {
      * @param b Second group element
      * @return The result of c = a o b
      */
-    public GroupElementT groupOperation(GroupElementT a, GroupElementT b);
+    GroupElementT groupOperation(GroupElementT a, GroupElementT b);
 
     /**
      * Performs the group operation on the element a with itself scalar times.
@@ -27,7 +27,7 @@ public interface CyclicGroup<GroupElementT> {
      * @param scalar How often the group operation should be applied
      * @return The result of c = a o a o ... o a
      */
-    public GroupElementT nTimesGroupOperation(GroupElementT a, BigInteger scalar);
+    GroupElementT nTimesGroupOperation(GroupElementT a, BigInteger scalar);
 
     /**
      * Performs the group operation on the generator a with itself scalar times.
@@ -35,12 +35,12 @@ public interface CyclicGroup<GroupElementT> {
      * @param scalar How often the group operation should be applied
      * @return The result of c = g o g o ... o g
      */
-    public GroupElementT nTimesGroupOperationOnGenerator(BigInteger scalar);
+    GroupElementT nTimesGroupOperationOnGenerator(BigInteger scalar);
 
     /**
      * Returns the group generator.
      *
      * @return The group generator
      */
-    public GroupElementT getGenerator();
+    GroupElementT getGenerator();
 }
