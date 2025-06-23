@@ -339,24 +339,18 @@ public class SignatureCalculator {
         LOGGER.trace("Computing DSA signature");
         int groupSize = ArrayConverter.bigIntegerToByteArray(privateKey.getQ()).length;
         // not persisted in computation as they can be set before the calculation
-        LOGGER.debug("g: " + computations.getG().getValue());
-        LOGGER.debug("p: " + computations.getP().getValue());
-        LOGGER.debug("q: " + computations.getQ().getValue());
-        LOGGER.debug("Nonce: " + computations.getNonce().getValue());
+        LOGGER.debug("g: {}", computations.getG().getValue());
+        LOGGER.debug("p: {}", computations.getP().getValue());
+        LOGGER.debug("q: {}", computations.getQ().getValue());
+        LOGGER.debug("Nonce: {}", computations.getNonce().getValue());
         computations.setToBeSignedBytes(toBeSignedBytes);
         byte[] digest =
                 HashCalculator.compute(computations.getToBeSignedBytes().getValue(), hashAlgorithm);
         computations.setDigestBytes(digest);
         digest = computations.getDigestBytes().getValue();
-        LOGGER.debug(
-                "toBeSignedBytes: "
-                        + ArrayConverter.bytesToHexString(
-                                computations.getToBeSignedBytes().getValue()));
+        LOGGER.debug("toBeSignedBytes: {}", computations.getToBeSignedBytes().getValue());
 
-        LOGGER.debug(
-                "Digest: "
-                        + ArrayConverter.bytesToHexString(
-                                computations.getDigestBytes().getValue()));
+        LOGGER.debug("Digest: {}", computations.getDigestBytes().getValue());
 
         // z = e[0:l], with l bit length of group order
         byte[] truncatedHashBytes =
@@ -364,7 +358,7 @@ public class SignatureCalculator {
         computations.setTruncatedHashBytes(truncatedHashBytes);
         BigInteger truncatedHashNumber =
                 new BigInteger(1, computations.getTruncatedHashBytes().getValue());
-        LOGGER.debug("Truncated message digest: " + truncatedHashNumber);
+        LOGGER.debug("Truncated message digest: {}", truncatedHashNumber);
 
         BigInteger randomKey = computations.getNonce().getValue();
         BigInteger r =
@@ -390,7 +384,7 @@ public class SignatureCalculator {
 
         computations.setXr(xr);
         xr = computations.getXr().getValue();
-        LOGGER.debug("Xr: " + xr);
+        LOGGER.debug("Xr: {}", xr);
 
         BigInteger s =
                 inverseNonce
@@ -400,8 +394,8 @@ public class SignatureCalculator {
         computations.setS(s);
         s = computations.getS().getValue();
 
-        LOGGER.debug("s: " + ArrayConverter.bytesToHexString(s.toByteArray()));
-        LOGGER.debug("r: " + ArrayConverter.bytesToHexString(r.toByteArray()));
+        LOGGER.debug("s: {}", s.toByteArray());
+        LOGGER.debug("r: {}", r.toByteArray());
 
         ASN1Integer asn1IntegerR = new ASN1Integer(r);
         ASN1Integer asn1IntegerS = new ASN1Integer(s);
@@ -435,25 +429,22 @@ public class SignatureCalculator {
         Point basePoint = curve.getBasePoint();
 
         BigInteger groupOrder = curve.getBasePointOrder();
-        LOGGER.debug("Group order: " + groupOrder);
+        LOGGER.debug("Group order: {}", groupOrder);
         int groupSize = groupOrder.bitLength() / 8;
-        LOGGER.debug("Group size: " + groupSize);
+        LOGGER.debug("Group size: {}", groupSize);
 
         // e = Hash(m)
         byte[] hash =
                 HashCalculator.compute(computations.getToBeSignedBytes().getValue(), hashAlgorithm);
         computations.setDigestBytes(hash);
         hash = computations.getDigestBytes().getValue();
-        LOGGER.debug("Digest: " + ArrayConverter.bytesToHexString(hash));
+        LOGGER.debug("Digest: {}", hash);
 
         // z = e[0:l], with l bit length of group order
         byte[] truncatedHashBytes = Arrays.copyOfRange(hash, 0, Math.min(groupSize, hash.length));
         computations.setTruncatedHashBytes(truncatedHashBytes);
 
-        LOGGER.debug(
-                "TruncatedHashBytes: "
-                        + ArrayConverter.bytesToHexString(
-                                computations.getTruncatedHashBytes().getValue()));
+        LOGGER.debug("TruncatedHashBytes: {}", computations.getTruncatedHashBytes().getValue());
         computations.setTruncatedHash(
                 new BigInteger(1, (computations.getTruncatedHashBytes().getValue())));
         BigInteger truncatedHash = computations.getTruncatedHash().getValue();
@@ -468,7 +459,7 @@ public class SignatureCalculator {
         computations.setR(r);
         r = computations.getR().getValue();
 
-        LOGGER.debug("R: " + r);
+        LOGGER.debug("R: {}", r);
         inverseNonce =
                 computations.getPrivateKey().getValue().modInverse(curve.getBasePointOrder());
 
@@ -519,25 +510,22 @@ public class SignatureCalculator {
         Point basePoint = curve.getBasePoint();
 
         BigInteger groupOrder = curve.getBasePointOrder();
-        LOGGER.debug("Group order: " + groupOrder);
+        LOGGER.debug("Group order: {}", groupOrder);
         int groupSize = groupOrder.bitLength() / 8;
-        LOGGER.debug("Group size: " + groupSize);
+        LOGGER.debug("Group size: {}", groupSize);
 
         // e = Hash(m)
         byte[] hash =
                 HashCalculator.compute(computations.getToBeSignedBytes().getValue(), hashAlgorithm);
         computations.setDigestBytes(hash);
         hash = computations.getDigestBytes().getValue();
-        LOGGER.debug("Digest: " + ArrayConverter.bytesToHexString(hash));
+        LOGGER.debug("Digest: {}", hash);
 
         // z = e[0:l], with l bit length of group order
         byte[] truncatedHashBytes = Arrays.copyOfRange(hash, 0, Math.min(groupSize, hash.length));
         computations.setTruncatedHashBytes(truncatedHashBytes);
 
-        LOGGER.debug(
-                "TruncatedHashBytes: "
-                        + ArrayConverter.bytesToHexString(
-                                computations.getTruncatedHashBytes().getValue()));
+        LOGGER.debug("TruncatedHashBytes: {}", computations.getTruncatedHashBytes().getValue());
         computations.setTruncatedHash(
                 new BigInteger(1, (computations.getTruncatedHashBytes().getValue())));
         BigInteger truncatedHash = computations.getTruncatedHash().getValue();
