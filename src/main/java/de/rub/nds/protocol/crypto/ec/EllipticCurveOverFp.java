@@ -76,7 +76,8 @@ public class EllipticCurveOverFp extends EllipticCurve {
         }
         FieldElementFp x = (FieldElementFp) p.getFieldX();
         FieldElementFp y = (FieldElementFp) p.getFieldY();
-        if (x.getModulus() != this.getModulus() || y.getModulus() != this.getModulus()) {
+        if (!x.getModulus().equals(this.getModulus())
+                || !y.getModulus().equals(this.getModulus())) {
             return false;
         }
 
