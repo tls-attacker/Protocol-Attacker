@@ -10,9 +10,9 @@ package de.rub.nds.protocol.constants;
 
 public interface IHashAlgorithm {
 
-    public int getBitLength();
+    int getBitLength();
 
-    public int getSecurityStrength();
+    int getSecurityStrength();
 
-    public byte[] computeHash(byte[] data);
+    byte[] computeHash(byte[] data);
 }
