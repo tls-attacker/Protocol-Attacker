@@ -8,7 +8,7 @@
  */
 package de.rub.nds.protocol.crypto.ec;
 
-import de.rub.nds.modifiablevariable.util.ArrayConverter;
+import de.rub.nds.modifiablevariable.util.DataConverter;
 import java.math.BigInteger;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -30,8 +30,8 @@ public class EllipticCurve25519 extends RFC7748Curve {
 
     public BigInteger decodeScalar(BigInteger scalar) {
         byte[] scalarA =
-                ArrayConverter.bigIntegerToByteArray(
-                        scalar, ArrayConverter.bigIntegerToByteArray(getModulus()).length, true);
+                DataConverter.bigIntegerToByteArray(
+                        scalar, DataConverter.bigIntegerToByteArray(getModulus()).length, true);
         scalarA[0] = (byte) (scalarA[0] & 248);
         scalarA[31] = (byte) (scalarA[31] & 127);
         scalarA[31] = (byte) (scalarA[31] | 64);
@@ -42,9 +42,9 @@ public class EllipticCurve25519 extends RFC7748Curve {
 
     public BigInteger decodeCoordinate(BigInteger encCoordinate) {
         byte[] coordinate =
-                ArrayConverter.bigIntegerToByteArray(
+                DataConverter.bigIntegerToByteArray(
                         encCoordinate,
-                        ArrayConverter.bigIntegerToByteArray(getModulus()).length,
+                        DataConverter.bigIntegerToByteArray(getModulus()).length,
                         true);
         coordinate[31] = (byte) (coordinate[31] & ((1 << 7) - 1));
         ArrayUtils.reverse(coordinate);
@@ -54,10 +54,8 @@ public class EllipticCurve25519 extends RFC7748Curve {
 
     public byte[] encodeCoordinate(BigInteger coordinate) {
         byte[] encX =
-                ArrayConverter.bigIntegerToByteArray(
-                        coordinate,
-                        ArrayConverter.bigIntegerToByteArray(getModulus()).length,
-                        true);
+                DataConverter.bigIntegerToByteArray(
+                        coordinate, DataConverter.bigIntegerToByteArray(getModulus()).length, true);
         ArrayUtils.reverse(encX);
         return encX;
     }
