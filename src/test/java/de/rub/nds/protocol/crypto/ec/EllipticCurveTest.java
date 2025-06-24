@@ -21,7 +21,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 /** Testing EllipticCurve, CurveFactory, EllipticCurveOverFp and EllipticCurveOverF2m */
-public class EllipticCurveTest {
+class EllipticCurveTest {
 
     /*
      * Please notice that these tests can provide correctness only in a probabilistic sense. (Though with a very high
@@ -31,14 +31,14 @@ public class EllipticCurveTest {
     private Point inf;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.random = new Random(0);
         this.inf = new Point();
     }
 
     @ParameterizedTest
     @EnumSource(value = NamedEllipticCurveParameters.class)
-    public void test(NamedEllipticCurveParameters namedEllipticCurveParameters) {
+    void test(NamedEllipticCurveParameters namedEllipticCurveParameters) {
         EllipticCurve curve = namedEllipticCurveParameters.getGroup();
         Point basePoint = curve.getBasePoint();
         BigInteger basePointOrder = curve.getBasePointOrder();

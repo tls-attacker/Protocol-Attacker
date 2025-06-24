@@ -15,14 +15,14 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
 /** Test for EllipticCurveOverFp to ensure correct point validation */
-public class EllipticCurveOverFpTest {
+class EllipticCurveOverFpTest {
 
     /**
      * Test that isOnCurve correctly compares modulus values, not references. This test verifies the
      * fix for issue #1 where modulus comparison was done by reference instead of by value.
      */
     @Test
-    public void testIsOnCurveWithDifferentModulusReferences() {
+    void testIsOnCurveWithDifferentModulusReferences() {
         // Create a simple elliptic curve: y^2 = x^3 + ax + b (mod p)
         // Using the curve y^2 = x^3 + 2x + 3 (mod 17)
         BigInteger p = new BigInteger("17");
@@ -68,7 +68,7 @@ public class EllipticCurveOverFpTest {
 
     /** Test that the infinity point is correctly identified as being on the curve */
     @Test
-    public void testInfinityPointOnCurve() {
+    void testInfinityPointOnCurve() {
         BigInteger p = new BigInteger("17");
         BigInteger a = new BigInteger("2");
         BigInteger b = new BigInteger("3");

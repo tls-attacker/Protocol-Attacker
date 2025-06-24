@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
  * Tests for the GostSignatureComputations class which implements GOST signature computation
  * support. This test covers the basic getter/setter functionality of the class.
  */
-public class GostSignatureComputationsTest {
+class GostSignatureComputationsTest {
 
     private GostSignatureComputations gostSignatureComputations;
     private static final BigInteger PRIVATE_KEY = new BigInteger("123456789");
@@ -37,26 +37,26 @@ public class GostSignatureComputationsTest {
     private static final HashAlgorithm HASH_ALGORITHM = HashAlgorithm.SHA256;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         gostSignatureComputations = new GostSignatureComputations();
     }
 
     @Test
-    public void testGetterSetterEcParameters() {
+    void testGetterSetterEcParameters() {
         assertNull(gostSignatureComputations.getEcParameters());
         gostSignatureComputations.setEcParameters(EC_PARAMETERS);
         assertEquals(EC_PARAMETERS, gostSignatureComputations.getEcParameters());
     }
 
     @Test
-    public void testGetterSetterHashAlgorithm() {
+    void testGetterSetterHashAlgorithm() {
         assertNull(gostSignatureComputations.getHashAlgorithm());
         gostSignatureComputations.setHashAlgorithm(HASH_ALGORITHM);
         assertEquals(HASH_ALGORITHM, gostSignatureComputations.getHashAlgorithm());
     }
 
     @Test
-    public void testGetterSetterPrivateKey() {
+    void testGetterSetterPrivateKey() {
         assertNull(gostSignatureComputations.getPrivateKey());
 
         // Test BigInteger setter
@@ -66,7 +66,7 @@ public class GostSignatureComputationsTest {
     }
 
     @Test
-    public void testGetterSetterNonce() {
+    void testGetterSetterNonce() {
         assertNull(gostSignatureComputations.getNonce());
 
         // Test BigInteger setter
@@ -76,7 +76,7 @@ public class GostSignatureComputationsTest {
     }
 
     @Test
-    public void testGetterSetterInverseNonce() {
+    void testGetterSetterInverseNonce() {
         assertNull(gostSignatureComputations.getInverseNonce());
 
         // Test BigInteger setter
@@ -86,7 +86,7 @@ public class GostSignatureComputationsTest {
     }
 
     @Test
-    public void testGetterSetterRX() {
+    void testGetterSetterRX() {
         assertNull(gostSignatureComputations.getrX());
 
         // Test BigInteger setter
@@ -96,7 +96,7 @@ public class GostSignatureComputationsTest {
     }
 
     @Test
-    public void testGetterSetterS() {
+    void testGetterSetterS() {
         assertNull(gostSignatureComputations.getS());
 
         // Test BigInteger setter
@@ -106,7 +106,7 @@ public class GostSignatureComputationsTest {
     }
 
     @Test
-    public void testGetterSetterTruncatedHashBytes() {
+    void testGetterSetterTruncatedHashBytes() {
         assertNull(gostSignatureComputations.getTruncatedHashBytes());
 
         // Test byte[] setter
@@ -118,7 +118,7 @@ public class GostSignatureComputationsTest {
     }
 
     @Test
-    public void testGetterSetterTruncatedHash() {
+    void testGetterSetterTruncatedHash() {
         assertNull(gostSignatureComputations.getTruncatedHash());
 
         // Test BigInteger setter

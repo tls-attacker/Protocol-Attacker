@@ -20,7 +20,7 @@ import java.math.BigInteger;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
 
-public class EcdhKeyTest {
+class EcdhKeyTest {
 
     private static final Random RANDOM = new Random(42); // Fixed seed for reproducibility
     private static final BigInteger PRIVATE_KEY = new BigInteger("123456789", 10);
@@ -28,7 +28,7 @@ public class EcdhKeyTest {
             NamedEllipticCurveParameters.SECP256R1;
 
     @Test
-    public void testEcdhPrivateKey() {
+    void testEcdhPrivateKey() {
         EcdhPrivateKey privateKey = new EcdhPrivateKey(PRIVATE_KEY, CURVE_PARAMS);
 
         assertEquals(PRIVATE_KEY, privateKey.getPrivateKey());
@@ -36,7 +36,7 @@ public class EcdhKeyTest {
     }
 
     @Test
-    public void testEcdhPublicKeyConstruction() {
+    void testEcdhPublicKeyConstruction() {
         // Generate a valid point on the curve for testing
         Point publicPoint = CURVE_PARAMS.getGroup().nTimesGroupOperationOnGenerator(PRIVATE_KEY);
         EcdhPublicKey publicKey = new EcdhPublicKey(publicPoint, CURVE_PARAMS);
@@ -46,7 +46,7 @@ public class EcdhKeyTest {
     }
 
     @Test
-    public void testEcdhPublicKeySetters() {
+    void testEcdhPublicKeySetters() {
         Point publicPoint = CURVE_PARAMS.getGroup().nTimesGroupOperationOnGenerator(PRIVATE_KEY);
         EcdhPublicKey publicKey = new EcdhPublicKey(publicPoint, CURVE_PARAMS);
 
@@ -65,7 +65,7 @@ public class EcdhKeyTest {
     }
 
     @Test
-    public void testEcdhPublicKeyLength() {
+    void testEcdhPublicKeyLength() {
         Point publicPoint = CURVE_PARAMS.getGroup().nTimesGroupOperationOnGenerator(PRIVATE_KEY);
         EcdhPublicKey publicKey = new EcdhPublicKey(publicPoint, CURVE_PARAMS);
 
@@ -73,7 +73,7 @@ public class EcdhKeyTest {
     }
 
     @Test
-    public void testEcdhPublicKeyAlgorithmType() {
+    void testEcdhPublicKeyAlgorithmType() {
         Point publicPoint = CURVE_PARAMS.getGroup().nTimesGroupOperationOnGenerator(PRIVATE_KEY);
         EcdhPublicKey publicKey = new EcdhPublicKey(publicPoint, CURVE_PARAMS);
 
@@ -81,7 +81,7 @@ public class EcdhKeyTest {
     }
 
     @Test
-    public void testEcdhPublicKeyEqualsAndHashCode() {
+    void testEcdhPublicKeyEqualsAndHashCode() {
         Point publicPoint = CURVE_PARAMS.getGroup().nTimesGroupOperationOnGenerator(PRIVATE_KEY);
         EcdhPublicKey publicKey1 = new EcdhPublicKey(publicPoint, CURVE_PARAMS);
         EcdhPublicKey publicKey2 = new EcdhPublicKey(publicPoint, CURVE_PARAMS);
@@ -110,7 +110,7 @@ public class EcdhKeyTest {
     }
 
     @Test
-    public void testEcdhKeyGeneration() {
+    void testEcdhKeyGeneration() {
         BigInteger privateKey = new BigInteger(256, RANDOM);
 
         // Test with SECP256R1 curve
@@ -130,7 +130,7 @@ public class EcdhKeyTest {
     }
 
     @Test
-    public void testEcdhKeyExchange() {
+    void testEcdhKeyExchange() {
         // Create Alice's key pair
         BigInteger alicePrivateKey = new BigInteger(256, RANDOM);
         EcdhPrivateKey alicePrivate = new EcdhPrivateKey(alicePrivateKey, CURVE_PARAMS);

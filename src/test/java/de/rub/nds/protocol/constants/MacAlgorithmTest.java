@@ -15,10 +15,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-public class MacAlgorithmTest {
+class MacAlgorithmTest {
 
     @Test
-    public void testNoneAlgorithm() {
+    void testNoneAlgorithm() {
         MacAlgorithm algorithm = MacAlgorithm.NONE;
         assertEquals(0, algorithm.getMacLength());
         assertEquals(0, algorithm.getKeySize());
@@ -35,7 +35,7 @@ public class MacAlgorithmTest {
         "HMAC_SHA512_224, 28, 28, HmacSHA512/224",
         "HMAC_SHA512_256, 32, 32, HmacSHA512/256"
     })
-    public void testStandardHmacAlgorithms(
+    void testStandardHmacAlgorithms(
             String algorithmName, int macLength, int keySize, String javaName) {
         MacAlgorithm algorithm = MacAlgorithm.valueOf(algorithmName);
         assertEquals(macLength, algorithm.getMacLength());
@@ -44,7 +44,7 @@ public class MacAlgorithmTest {
     }
 
     @Test
-    public void testSslMacMD5() {
+    void testSslMacMD5() {
         MacAlgorithm algorithm = MacAlgorithm.SSLMAC_MD5;
         assertEquals(16, algorithm.getMacLength());
         assertEquals(16, algorithm.getKeySize());
@@ -52,7 +52,7 @@ public class MacAlgorithmTest {
     }
 
     @Test
-    public void testSslMacSHA1() {
+    void testSslMacSHA1() {
         MacAlgorithm algorithm = MacAlgorithm.SSLMAC_SHA1;
         assertEquals(20, algorithm.getMacLength());
         assertEquals(20, algorithm.getKeySize());
@@ -60,7 +60,7 @@ public class MacAlgorithmTest {
     }
 
     @Test
-    public void testImitGost28147() {
+    void testImitGost28147() {
         MacAlgorithm algorithm = MacAlgorithm.IMIT_GOST28147;
         assertEquals(4, algorithm.getMacLength());
         assertEquals(32, algorithm.getKeySize());
@@ -68,7 +68,7 @@ public class MacAlgorithmTest {
     }
 
     @Test
-    public void testHmacGostR3411() {
+    void testHmacGostR3411() {
         MacAlgorithm algorithm = MacAlgorithm.HMAC_GOSTR3411;
         assertEquals(32, algorithm.getMacLength());
         assertEquals(32, algorithm.getKeySize());
@@ -76,7 +76,7 @@ public class MacAlgorithmTest {
     }
 
     @Test
-    public void testHmacGostR3411_2012_256() {
+    void testHmacGostR3411_2012_256() {
         MacAlgorithm algorithm = MacAlgorithm.HMAC_GOSTR3411_2012_256;
         assertEquals(32, algorithm.getMacLength());
         assertEquals(32, algorithm.getKeySize());
@@ -84,7 +84,7 @@ public class MacAlgorithmTest {
     }
 
     @Test
-    public void testHmacSM3() {
+    void testHmacSM3() {
         MacAlgorithm algorithm = MacAlgorithm.HMAC_SM3;
         assertEquals(32, algorithm.getMacLength());
         assertEquals(32, algorithm.getKeySize());

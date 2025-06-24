@@ -13,10 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
-public class EcCurveEquationTypeTest {
+class EcCurveEquationTypeTest {
 
     @Test
-    public void testEnumValues() {
+    void testEnumValues() {
         // Test the number of defined types
         assertEquals(3, EcCurveEquationType.values().length);
 
@@ -29,7 +29,7 @@ public class EcCurveEquationTypeTest {
     }
 
     @Test
-    public void testEnumNamesAndToString() {
+    void testEnumNamesAndToString() {
         // Test that each enum has valid name and toString
         for (EcCurveEquationType type : EcCurveEquationType.values()) {
             assertNotNull(type.name());
@@ -38,7 +38,7 @@ public class EcCurveEquationTypeTest {
     }
 
     @Test
-    public void testEnumOrdinals() {
+    void testEnumOrdinals() {
         // Test that ordinals start at 0 and increment by 1
         assertEquals(0, EcCurveEquationType.SHORT_WEIERSTRASS.ordinal());
         assertEquals(1, EcCurveEquationType.MONTGOMERY.ordinal());

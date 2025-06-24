@@ -13,10 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
-public class AsymmetricAlgorithmTypeTest {
+class AsymmetricAlgorithmTypeTest {
 
     @Test
-    public void testEnumValues() {
+    void testEnumValues() {
         // Test the number of defined algorithms
         assertEquals(6, AsymmetricAlgorithmType.values().length);
 
@@ -30,7 +30,7 @@ public class AsymmetricAlgorithmTypeTest {
     }
 
     @Test
-    public void testEnumNamesAndToString() {
+    void testEnumNamesAndToString() {
         // Test that each enum has valid name and toString
         for (AsymmetricAlgorithmType type : AsymmetricAlgorithmType.values()) {
             assertNotNull(type.name());
@@ -39,7 +39,7 @@ public class AsymmetricAlgorithmTypeTest {
     }
 
     @Test
-    public void testEnumOrdinals() {
+    void testEnumOrdinals() {
         // Test that ordinals start at 0 and increment by 1
         assertEquals(0, AsymmetricAlgorithmType.RSA.ordinal());
         assertEquals(1, AsymmetricAlgorithmType.ECDSA.ordinal());

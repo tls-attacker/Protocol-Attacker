@@ -17,18 +17,18 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class EddsaSignatureComputationsTest {
+class EddsaSignatureComputationsTest {
 
     private EddsaSignatureComputations computations;
     private BigInteger testBigInt = new BigInteger("12345678901234567890");
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         computations = new EddsaSignatureComputations();
     }
 
     @Test
-    public void testPrivateKeyGetterSetter() {
+    void testPrivateKeyGetterSetter() {
         // Initially null
         assertNull(computations.getPrivateKey());
 

@@ -38,18 +38,18 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class SignatureCalculatorTest {
+class SignatureCalculatorTest {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
     @BeforeAll
-    public static void setup() {
+    static void setup() {
         Security.addProvider(new BouncyCastleProvider());
     }
 
     /** Test of computeRsaPkcs1Signature method, of class SignatureCalculator. */
     @Test
-    public void testComputeRsaPkcs1Signature() {
+    void testComputeRsaPkcs1Signature() {
         RsaPkcs1SignatureComputations computations = new RsaPkcs1SignatureComputations();
         BigInteger modulus =
                 new BigInteger(
@@ -106,7 +106,7 @@ public class SignatureCalculatorTest {
      * @throws NoSuchAlgorithmException
      */
     @Test
-    public void testComputeDsaSignature() throws Exception {
+    void testComputeDsaSignature() throws Exception {
         DsaSignatureComputations computations = new DsaSignatureComputations();
         BigInteger privateKey =
                 new BigInteger(
@@ -223,7 +223,7 @@ public class SignatureCalculatorTest {
 
     /** Test of computeEcdsaSignature method, of class SignatureCalculator. */
     @Test
-    public void testComputeEcdsaSignature() {
+    void testComputeEcdsaSignature() {
         EcdsaSignatureComputations computations = new EcdsaSignatureComputations();
 
         BigInteger privateKey =
@@ -298,7 +298,7 @@ public class SignatureCalculatorTest {
     }
 
     @Test
-    public void testRsaSsaPssSignatureComputation() throws Exception {
+    void testRsaSsaPssSignatureComputation() throws Exception {
         byte[] originalData = "test".getBytes();
         SignatureCalculator signatureCalculator = new SignatureCalculator();
         RsaSsaPssSignatureComputations computations = new RsaSsaPssSignatureComputations();

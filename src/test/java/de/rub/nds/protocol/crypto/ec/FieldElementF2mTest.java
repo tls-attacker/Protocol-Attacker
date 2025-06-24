@@ -14,7 +14,7 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class FieldElementF2mTest {
+class FieldElementF2mTest {
 
     private BigInteger modulus;
     private FieldElementF2m p1;
@@ -25,7 +25,7 @@ public class FieldElementF2mTest {
     private FieldElementF2m zero;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         /*
          * x^3 + x + 1 has no roots over F_2 and it's degree is less than 4. This implies that it is irreducible over
          * F_2[x].
@@ -40,21 +40,21 @@ public class FieldElementF2mTest {
     }
 
     @Test
-    public void testAdd() {
+    void testAdd() {
         FieldElementF2m tmp = (FieldElementF2m) p1.add(p2);
         FieldElementF2m result = new FieldElementF2m(new BigInteger("10", 2), modulus);
         assertEquals(result, tmp);
     }
 
     @Test
-    public void testSubtract() {
+    void testSubtract() {
         FieldElementF2m tmp = (FieldElementF2m) p1.subtract(p2);
         FieldElementF2m result = new FieldElementF2m(new BigInteger("10", 2), modulus);
         assertEquals(result, tmp);
     }
 
     @Test
-    public void testMult() {
+    void testMult() {
         FieldElementF2m tmp = (FieldElementF2m) p1.mult(neutral);
         assertEquals(p1, tmp);
 
@@ -72,7 +72,7 @@ public class FieldElementF2mTest {
     }
 
     @Test
-    public void testDivide() {
+    void testDivide() {
         FieldElementF2m tmp = (FieldElementF2m) p1.divide(p1);
         assertEquals(neutral, tmp);
 
@@ -90,13 +90,13 @@ public class FieldElementF2mTest {
     }
 
     @Test
-    public void testAddInv() {
+    void testAddInv() {
         FieldElementF2m tmp = (FieldElementF2m) p4.addInv();
         assertEquals(p4, tmp);
     }
 
     @Test
-    public void testMultInv() {
+    void testMultInv() {
         FieldElementF2m tmp = (FieldElementF2m) neutral.multInv();
         assertEquals(neutral, tmp);
 
@@ -112,7 +112,7 @@ public class FieldElementF2mTest {
     }
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         assertNotEquals(p1, p2);
         assertEquals(p1, p1);
 

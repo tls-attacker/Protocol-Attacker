@@ -20,7 +20,7 @@ import java.util.Random;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 
-public class RsaKeyTest {
+class RsaKeyTest {
 
     private static final Random RANDOM = new Random(42); // Fixed seed for reproducibility
     private static final BigInteger PUBLIC_EXPONENT = new BigInteger("65537");
@@ -28,7 +28,7 @@ public class RsaKeyTest {
     private static final BigInteger MODULUS = new BigInteger("9876543210123456789");
 
     @Test
-    public void testRsaPrivateKey() {
+    void testRsaPrivateKey() {
         RsaPrivateKey privateKey = new RsaPrivateKey(PRIVATE_EXPONENT, MODULUS);
 
         assertEquals(PRIVATE_EXPONENT, privateKey.getPrivateExponent());
@@ -36,7 +36,7 @@ public class RsaKeyTest {
     }
 
     @Test
-    public void testRsaPublicKeyConstruction() {
+    void testRsaPublicKeyConstruction() {
         RsaPublicKey publicKey = new RsaPublicKey(PUBLIC_EXPONENT, MODULUS);
 
         assertEquals(PUBLIC_EXPONENT, publicKey.getPublicExponent());
@@ -44,7 +44,7 @@ public class RsaKeyTest {
     }
 
     @Test
-    public void testRsaPublicKeySetters() {
+    void testRsaPublicKeySetters() {
         RsaPublicKey publicKey = new RsaPublicKey(PUBLIC_EXPONENT, MODULUS);
 
         BigInteger newExponent = new BigInteger("17");
@@ -58,19 +58,19 @@ public class RsaKeyTest {
     }
 
     @Test
-    public void testRsaPublicKeyLength() {
+    void testRsaPublicKeyLength() {
         RsaPublicKey publicKey = new RsaPublicKey(PUBLIC_EXPONENT, MODULUS);
         assertEquals(MODULUS.bitLength(), publicKey.length());
     }
 
     @Test
-    public void testRsaPublicKeyAlgorithmType() {
+    void testRsaPublicKeyAlgorithmType() {
         RsaPublicKey publicKey = new RsaPublicKey(PUBLIC_EXPONENT, MODULUS);
         assertEquals(AsymmetricAlgorithmType.RSA, publicKey.getAlgorithmType());
     }
 
     @Test
-    public void testRsaPublicKeyEqualsAndHashCode() {
+    void testRsaPublicKeyEqualsAndHashCode() {
         RsaPublicKey publicKey1 = new RsaPublicKey(PUBLIC_EXPONENT, MODULUS);
         RsaPublicKey publicKey2 = new RsaPublicKey(PUBLIC_EXPONENT, MODULUS);
         RsaPublicKey differentExponent =
@@ -91,7 +91,7 @@ public class RsaKeyTest {
     }
 
     @Test
-    public void testRsaKeyGeneration() {
+    void testRsaKeyGeneration() {
         // Test with explicit exponent
         Pair<RsaPublicKey, RsaPrivateKey> keyPair1 =
                 KeyGenerator.generateRsaKeys(PUBLIC_EXPONENT, 1024, RANDOM);
@@ -125,7 +125,7 @@ public class RsaKeyTest {
     }
 
     @Test
-    public void testRsaKeyGenerationValidation() {
+    void testRsaKeyGenerationValidation() {
         // Test with too small bit length
         assertThrows(IllegalArgumentException.class, () -> KeyGenerator.generateRsaKeys(5, RANDOM));
     }

@@ -14,7 +14,7 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class FieldElementFpTest {
+class FieldElementFpTest {
 
     private BigInteger modulus;
     private FieldElementFp e1;
@@ -24,7 +24,7 @@ public class FieldElementFpTest {
     private FieldElementFp zero;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         modulus = new BigInteger("113");
         e1 = new FieldElementFp(new BigInteger("57"), modulus);
         e2 = new FieldElementFp(new BigInteger("24"), modulus);
@@ -34,7 +34,7 @@ public class FieldElementFpTest {
     }
 
     @Test
-    public void testAdd() {
+    void testAdd() {
         // Addition without reduction
         FieldElementFp tmp = (FieldElementFp) e1.add(e2);
         FieldElementFp result = new FieldElementFp(new BigInteger("81"), modulus);
@@ -49,7 +49,7 @@ public class FieldElementFpTest {
     }
 
     @Test
-    public void testSubtract() {
+    void testSubtract() {
         // Subtraction without reduction
         FieldElementFp tmp = (FieldElementFp) e1.subtract(e2);
         FieldElementFp result = new FieldElementFp(new BigInteger("33"), modulus);
@@ -64,7 +64,7 @@ public class FieldElementFpTest {
     }
 
     @Test
-    public void testMult() {
+    void testMult() {
         // Multiplication without reduction
         FieldElementFp tmp = (FieldElementFp) e2.mult(e4);
         FieldElementFp result = new FieldElementFp(new BigInteger("72"), modulus);
@@ -79,7 +79,7 @@ public class FieldElementFpTest {
     }
 
     @Test
-    public void testDivide() {
+    void testDivide() {
         // Division without reduction
         FieldElementFp tmp = (FieldElementFp) e2.divide(e1);
         FieldElementFp result = new FieldElementFp(new BigInteger("48"), modulus);
@@ -96,14 +96,14 @@ public class FieldElementFpTest {
     }
 
     @Test
-    public void testAddInv() {
+    void testAddInv() {
         FieldElementFp tmp = (FieldElementFp) e1.addInv();
         FieldElementFp result = new FieldElementFp(new BigInteger("56"), modulus);
         assertEquals(result, tmp);
     }
 
     @Test
-    public void testMultInv() {
+    void testMultInv() {
         FieldElementFp tmp = (FieldElementFp) e2.multInv();
         FieldElementFp result = new FieldElementFp(new BigInteger("33"), modulus);
         assertEquals(result, tmp);
@@ -112,7 +112,7 @@ public class FieldElementFpTest {
     }
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         assertNotEquals(e1, e2);
         assertEquals(e1, e1);
 

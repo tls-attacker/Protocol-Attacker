@@ -17,13 +17,13 @@ import de.rub.nds.protocol.crypto.CyclicGroup;
 import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
-public class ExplicitFfdhGroupParametersTest {
+class ExplicitFfdhGroupParametersTest {
 
     private final BigInteger testGenerator = BigInteger.valueOf(2);
     private final BigInteger testModulus = new BigInteger("FFFFFFFFFFFFFFFFADF85458A2BB4A9A", 16);
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         ExplicitFfdhGroupParameters params =
                 new ExplicitFfdhGroupParameters(testGenerator, testModulus);
         assertEquals(testGenerator, params.getGenerator());
@@ -31,14 +31,14 @@ public class ExplicitFfdhGroupParametersTest {
     }
 
     @Test
-    public void testGetElementSizeBits() {
+    void testGetElementSizeBits() {
         ExplicitFfdhGroupParameters params =
                 new ExplicitFfdhGroupParameters(testGenerator, testModulus);
         assertEquals(testModulus.bitLength(), params.getElementSizeBits());
     }
 
     @Test
-    public void testGetElementSizeBytes() {
+    void testGetElementSizeBytes() {
         ExplicitFfdhGroupParameters params =
                 new ExplicitFfdhGroupParameters(testGenerator, testModulus);
         int expectedBytes = (int) Math.ceil(((double) testModulus.bitLength()) / 8);
@@ -46,7 +46,7 @@ public class ExplicitFfdhGroupParametersTest {
     }
 
     @Test
-    public void testGetGroup() {
+    void testGetGroup() {
         ExplicitFfdhGroupParameters params =
                 new ExplicitFfdhGroupParameters(testGenerator, testModulus);
         CyclicGroup<BigInteger> group = params.getGroup();
@@ -56,7 +56,7 @@ public class ExplicitFfdhGroupParametersTest {
     }
 
     @Test
-    public void testEqualsAndHashCode() {
+    void testEqualsAndHashCode() {
         ExplicitFfdhGroupParameters params1 =
                 new ExplicitFfdhGroupParameters(testGenerator, testModulus);
         ExplicitFfdhGroupParameters params2 =

@@ -19,19 +19,19 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class DsaSignatureComputationsTest {
+class DsaSignatureComputationsTest {
 
     private DsaSignatureComputations computations;
     private byte[] testData = "test data".getBytes();
     private BigInteger testBigInt = new BigInteger("12345678901234567890");
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         computations = new DsaSignatureComputations();
     }
 
     @Test
-    public void testPrivateKeyGetterSetter() {
+    void testPrivateKeyGetterSetter() {
         // Initially null
         assertNull(computations.getPrivateKey());
 
@@ -48,7 +48,7 @@ public class DsaSignatureComputationsTest {
     }
 
     @Test
-    public void testQGetterSetter() {
+    void testQGetterSetter() {
         // Initially null
         assertNull(computations.getQ());
 
@@ -65,7 +65,7 @@ public class DsaSignatureComputationsTest {
     }
 
     @Test
-    public void testGGetterSetter() {
+    void testGGetterSetter() {
         // Initially null
         assertNull(computations.getG());
 
@@ -82,7 +82,7 @@ public class DsaSignatureComputationsTest {
     }
 
     @Test
-    public void testPGetterSetter() {
+    void testPGetterSetter() {
         // Initially null
         assertNull(computations.getP());
 
@@ -99,7 +99,7 @@ public class DsaSignatureComputationsTest {
     }
 
     @Test
-    public void testRGetterSetter() {
+    void testRGetterSetter() {
         // Initially null
         assertNull(computations.getR());
 
@@ -116,7 +116,7 @@ public class DsaSignatureComputationsTest {
     }
 
     @Test
-    public void testInverseNonceGetterSetter() {
+    void testInverseNonceGetterSetter() {
         // Initially null
         assertNull(computations.getInverseNonce());
 
@@ -133,7 +133,7 @@ public class DsaSignatureComputationsTest {
     }
 
     @Test
-    public void testSGetterSetter() {
+    void testSGetterSetter() {
         // Initially null
         assertNull(computations.getS());
 
@@ -150,7 +150,7 @@ public class DsaSignatureComputationsTest {
     }
 
     @Test
-    public void testXrGetterSetter() {
+    void testXrGetterSetter() {
         // Initially null
         assertNull(computations.getXr());
 
@@ -167,7 +167,7 @@ public class DsaSignatureComputationsTest {
     }
 
     @Test
-    public void testNonceGetterSetter() {
+    void testNonceGetterSetter() {
         // Initially null
         assertNull(computations.getNonce());
 
@@ -184,7 +184,7 @@ public class DsaSignatureComputationsTest {
     }
 
     @Test
-    public void testTruncatedHashBytesGetterSetter() {
+    void testTruncatedHashBytesGetterSetter() {
         // Initially null
         assertNull(computations.getTruncatedHashBytes());
 

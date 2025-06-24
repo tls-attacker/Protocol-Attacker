@@ -18,7 +18,7 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class CyclicGroupTest {
+class CyclicGroupTest {
 
     private CyclicGroup<BigInteger> dsaGroup;
     private CyclicGroup<BigInteger> ffdhGroup;

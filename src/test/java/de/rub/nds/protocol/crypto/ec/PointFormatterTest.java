@@ -22,11 +22,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class PointFormatterTest {
+class PointFormatterTest {
 
     /** Test of formatToByteArray method, of class PointFormatter. */
     @Test
-    public void cyclicTest() {
+    void cyclicTest() {
         for (int i = 0; i < 5; i++) {
             for (NamedEllipticCurveParameters namedEllipticCurveParameters :
                     NamedEllipticCurveParameters.values()) {
@@ -53,7 +53,7 @@ public class PointFormatterTest {
     }
 
     @Test
-    public void compressionFormatCyclicTest() {
+    void compressionFormatCyclicTest() {
         for (int i = 1; i < 5; i++) {
             for (NamedEllipticCurveParameters parameters : NamedEllipticCurveParameters.values()) {
                 if (parameters.getEquationType() == EcCurveEquationType.SHORT_WEIERSTRASS) {
@@ -78,7 +78,7 @@ public class PointFormatterTest {
      * Provides test vectors of format (providedNamedGroup, expectedCompressedBasePoint) for {@link
      * #testCompressionFormat(NamedGroup, String)}.
      */
-    public static Stream<Arguments> provideCompressionFormatTestVectors() {
+    static Stream<Arguments> provideCompressionFormatTestVectors() {
         return Stream.of(
                 Arguments.of(
                         NamedEllipticCurveParameters.SECP160R1,
@@ -102,7 +102,7 @@ public class PointFormatterTest {
 
     @ParameterizedTest
     @MethodSource("provideCompressionFormatTestVectors")
-    public void testCompressionFormat(
+    void testCompressionFormat(
             NamedEllipticCurveParameters namedCurveParameters, String expectedCompressedBasePoint) {
         byte[] expectedCompressedBasePointBytes =
                 DataConverter.hexStringToByteArray(expectedCompressedBasePoint);

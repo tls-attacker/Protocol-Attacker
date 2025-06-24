@@ -20,7 +20,7 @@ import java.math.BigInteger;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
 
-public class EddsaKeyTest {
+class EddsaKeyTest {
 
     private static final Random RANDOM = new Random(42); // Fixed seed for reproducibility
     private static final BigInteger PRIVATE_KEY = new BigInteger("123456789", 10);
@@ -28,7 +28,7 @@ public class EddsaKeyTest {
             NamedEllipticCurveParameters.CURVE_X25519;
 
     @Test
-    public void testEddsaPrivateKey() {
+    void testEddsaPrivateKey() {
         EddsaPrivateKey privateKey = new EddsaPrivateKey(PRIVATE_KEY, CURVE_PARAMS);
 
         assertEquals(PRIVATE_KEY, privateKey.getPrivateKey());
@@ -36,7 +36,7 @@ public class EddsaKeyTest {
     }
 
     @Test
-    public void testEddsaPublicKeyConstruction() {
+    void testEddsaPublicKeyConstruction() {
         // Generate a valid point on the curve for testing
         Point publicPoint = CURVE_PARAMS.getGroup().nTimesGroupOperationOnGenerator(PRIVATE_KEY);
         EddsaPublicKey publicKey = new EddsaPublicKey(publicPoint, CURVE_PARAMS);
@@ -46,7 +46,7 @@ public class EddsaKeyTest {
     }
 
     @Test
-    public void testEddsaPublicKeySetters() {
+    void testEddsaPublicKeySetters() {
         Point publicPoint = CURVE_PARAMS.getGroup().nTimesGroupOperationOnGenerator(PRIVATE_KEY);
         EddsaPublicKey publicKey = new EddsaPublicKey(publicPoint, CURVE_PARAMS);
 
@@ -65,7 +65,7 @@ public class EddsaKeyTest {
     }
 
     @Test
-    public void testEddsaPublicKeyLength() {
+    void testEddsaPublicKeyLength() {
         Point publicPoint = CURVE_PARAMS.getGroup().nTimesGroupOperationOnGenerator(PRIVATE_KEY);
         EddsaPublicKey publicKey = new EddsaPublicKey(publicPoint, CURVE_PARAMS);
 
@@ -73,7 +73,7 @@ public class EddsaKeyTest {
     }
 
     @Test
-    public void testEddsaPublicKeyAlgorithmType() {
+    void testEddsaPublicKeyAlgorithmType() {
         Point publicPoint = CURVE_PARAMS.getGroup().nTimesGroupOperationOnGenerator(PRIVATE_KEY);
         EddsaPublicKey publicKey = new EddsaPublicKey(publicPoint, CURVE_PARAMS);
 
@@ -81,7 +81,7 @@ public class EddsaKeyTest {
     }
 
     @Test
-    public void testEddsaPublicKeyEqualsAndHashCode() {
+    void testEddsaPublicKeyEqualsAndHashCode() {
         Point publicPoint = CURVE_PARAMS.getGroup().nTimesGroupOperationOnGenerator(PRIVATE_KEY);
         EddsaPublicKey publicKey1 = new EddsaPublicKey(publicPoint, CURVE_PARAMS);
         EddsaPublicKey publicKey2 = new EddsaPublicKey(publicPoint, CURVE_PARAMS);
@@ -111,7 +111,7 @@ public class EddsaKeyTest {
     }
 
     @Test
-    public void testEddsaKeyGeneration() {
+    void testEddsaKeyGeneration() {
         BigInteger privateKey = new BigInteger(255, RANDOM);
 
         // Test with Curve25519

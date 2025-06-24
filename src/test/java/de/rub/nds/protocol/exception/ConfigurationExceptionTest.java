@@ -14,34 +14,34 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.junit.jupiter.api.Test;
 
-public class ConfigurationExceptionTest {
+class ConfigurationExceptionTest {
 
     private static final String TEST_MESSAGE = "Test configuration error message";
     private static final Exception TEST_CAUSE = new IllegalArgumentException("Test cause");
 
     @Test
-    public void testDefaultConstructor() {
+    void testDefaultConstructor() {
         ConfigurationException exception = new ConfigurationException();
         assertNull(exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
-    public void testMessageConstructor() {
+    void testMessageConstructor() {
         ConfigurationException exception = new ConfigurationException(TEST_MESSAGE);
         assertEquals(TEST_MESSAGE, exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
-    public void testMessageAndCauseConstructor() {
+    void testMessageAndCauseConstructor() {
         ConfigurationException exception = new ConfigurationException(TEST_MESSAGE, TEST_CAUSE);
         assertEquals(TEST_MESSAGE, exception.getMessage());
         assertSame(TEST_CAUSE, exception.getCause());
     }
 
     @Test
-    public void testExceptionChaining() {
+    void testExceptionChaining() {
         // Test exception chaining
         RuntimeException rootCause = new RuntimeException("Root cause");
         IllegalArgumentException intermediateCause =

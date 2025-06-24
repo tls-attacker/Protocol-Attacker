@@ -21,19 +21,19 @@ import java.math.BigInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class EcdsaSignatureComputationsTest {
+class EcdsaSignatureComputationsTest {
 
     private EcdsaSignatureComputations computations;
     private byte[] testData = "test data".getBytes();
     private BigInteger testBigInt = new BigInteger("12345678901234567890");
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         computations = new EcdsaSignatureComputations();
     }
 
     @Test
-    public void testTruncatedHashBytesGetterSetter() {
+    void testTruncatedHashBytesGetterSetter() {
         // Initially null
         assertNull(computations.getTruncatedHashBytes());
 
@@ -50,7 +50,7 @@ public class EcdsaSignatureComputationsTest {
     }
 
     @Test
-    public void testTruncatedHashGetterSetter() {
+    void testTruncatedHashGetterSetter() {
         // Initially null
         assertNull(computations.getTruncatedHash());
 
@@ -67,7 +67,7 @@ public class EcdsaSignatureComputationsTest {
     }
 
     @Test
-    public void testEcParametersGetterSetter() {
+    void testEcParametersGetterSetter() {
         // Initially null
         assertNull(computations.getEcParameters());
 
@@ -78,7 +78,7 @@ public class EcdsaSignatureComputationsTest {
     }
 
     @Test
-    public void testHashAlgorithmGetterSetter() {
+    void testHashAlgorithmGetterSetter() {
         // Initially null
         assertNull(computations.getHashAlgorithm());
 
@@ -88,7 +88,7 @@ public class EcdsaSignatureComputationsTest {
     }
 
     @Test
-    public void testPrivateKeyGetterSetter() {
+    void testPrivateKeyGetterSetter() {
         // Initially null
         assertNull(computations.getPrivateKey());
 
@@ -105,7 +105,7 @@ public class EcdsaSignatureComputationsTest {
     }
 
     @Test
-    public void testNonceGetterSetter() {
+    void testNonceGetterSetter() {
         // Initially null
         assertNull(computations.getNonce());
 
@@ -122,7 +122,7 @@ public class EcdsaSignatureComputationsTest {
     }
 
     @Test
-    public void testInverseNonceGetterSetter() {
+    void testInverseNonceGetterSetter() {
         // Initially null
         assertNull(computations.getInverseNonce());
 
@@ -139,7 +139,7 @@ public class EcdsaSignatureComputationsTest {
     }
 
     @Test
-    public void testSGetterSetter() {
+    void testSGetterSetter() {
         // Initially null
         assertNull(computations.getS());
 
@@ -156,7 +156,7 @@ public class EcdsaSignatureComputationsTest {
     }
 
     @Test
-    public void testRGetterSetter() {
+    void testRGetterSetter() {
         // Initially null
         assertNull(computations.getR());
 

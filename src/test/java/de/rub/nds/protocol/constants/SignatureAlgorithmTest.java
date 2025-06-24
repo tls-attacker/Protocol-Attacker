@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-public class SignatureAlgorithmTest {
+class SignatureAlgorithmTest {
 
     @ParameterizedTest
     @CsvSource({
@@ -29,21 +29,20 @@ public class SignatureAlgorithmTest {
         "GOSTR34102012_256, GOSTR34102012 (256 bit)",
         "GOSTR34102012_512, GOSTR34102012 (512 bit)"
     })
-    public void testSignatureAlgorithmHumanReadable(
-            String algorithmName, String expectedHumanReadable) {
+    void testSignatureAlgorithmHumanReadable(String algorithmName, String expectedHumanReadable) {
         SignatureAlgorithm algorithm = SignatureAlgorithm.valueOf(algorithmName);
         assertEquals(expectedHumanReadable, algorithm.getHumanReadable());
     }
 
     @Test
-    public void testAllAlgorithmsHaveHumanReadableValue() {
+    void testAllAlgorithmsHaveHumanReadableValue() {
         for (SignatureAlgorithm algorithm : SignatureAlgorithm.values()) {
             assertNotNull(algorithm.getHumanReadable());
         }
     }
 
     @Test
-    public void testEnumValues() {
+    void testEnumValues() {
         // Test the number of defined signature algorithms
         assertEquals(9, SignatureAlgorithm.values().length);
 

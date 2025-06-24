@@ -17,7 +17,7 @@ import java.math.BigInteger;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
 
-public class DsaKeyTest {
+class DsaKeyTest {
 
     private static final Random RANDOM = new Random(42); // Fixed seed for reproducibility
     private static final BigInteger Q = new BigInteger("127", 10); // Small prime for q
@@ -27,7 +27,7 @@ public class DsaKeyTest {
     private static final BigInteger Y = G.modPow(X, P); // Public key
 
     @Test
-    public void testDsaPrivateKey() {
+    void testDsaPrivateKey() {
         // Create a nonce value
         BigInteger k = new BigInteger("123", 10);
         DsaPrivateKey privateKey = new DsaPrivateKey(Q, X, k, G, P);
@@ -40,7 +40,7 @@ public class DsaKeyTest {
     }
 
     @Test
-    public void testDsaPublicKeyConstruction() {
+    void testDsaPublicKeyConstruction() {
         DsaPublicKey publicKey = new DsaPublicKey(Q, Y, G, P);
 
         assertEquals(Q, publicKey.getQ());
@@ -50,19 +50,19 @@ public class DsaKeyTest {
     }
 
     @Test
-    public void testDsaPublicKeyLength() {
+    void testDsaPublicKeyLength() {
         DsaPublicKey publicKey = new DsaPublicKey(Q, Y, G, P);
         assertEquals(P.bitLength(), publicKey.length());
     }
 
     @Test
-    public void testDsaPublicKeyAlgorithmType() {
+    void testDsaPublicKeyAlgorithmType() {
         DsaPublicKey publicKey = new DsaPublicKey(Q, Y, G, P);
         assertEquals(AsymmetricAlgorithmType.DSA, publicKey.getAlgorithmType());
     }
 
     @Test
-    public void testDsaPublicKeyEqualsAndHashCode() {
+    void testDsaPublicKeyEqualsAndHashCode() {
         DsaPublicKey publicKey1 = new DsaPublicKey(Q, Y, G, P);
         DsaPublicKey publicKey2 = new DsaPublicKey(Q, Y, G, P);
         DsaPublicKey differentQ = new DsaPublicKey(Q.add(BigInteger.ONE), Y, G, P);
