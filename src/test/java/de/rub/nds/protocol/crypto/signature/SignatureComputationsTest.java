@@ -18,18 +18,18 @@ import de.rub.nds.modifiablevariable.util.Modifiable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class SignatureComputationsTest {
+class SignatureComputationsTest {
 
     private TestSignatureComputations computations;
     private byte[] testData = "test signature data".getBytes();
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         computations = new TestSignatureComputations();
     }
 
     @Test
-    public void testSignatureValidGetterSetter() {
+    void testSignatureValidGetterSetter() {
         // Initially null
         assertNull(computations.getSignatureValid());
 
@@ -39,7 +39,7 @@ public class SignatureComputationsTest {
     }
 
     @Test
-    public void testSignatureBytesGetterSetter() {
+    void testSignatureBytesGetterSetter() {
         // Initially null
         assertNull(computations.getSignatureBytes());
 
@@ -56,7 +56,7 @@ public class SignatureComputationsTest {
     }
 
     @Test
-    public void testToBeSignedBytesGetterSetter() {
+    void testToBeSignedBytesGetterSetter() {
         // Initially null
         assertNull(computations.getToBeSignedBytes());
 
@@ -73,7 +73,7 @@ public class SignatureComputationsTest {
     }
 
     @Test
-    public void testDigestBytesGetterSetter() {
+    void testDigestBytesGetterSetter() {
         // Initially null
         assertNull(computations.getDigestBytes());
 

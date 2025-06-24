@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-public class DeepCopyUtilTest {
+class DeepCopyUtilTest {
 
     @Test
     void testDeepCopyWithPrimitiveArray() {
@@ -126,27 +126,27 @@ public class DeepCopyUtilTest {
             this.value = value;
         }
 
-        public String getName() {
+        String getName() {
             return name;
         }
 
-        public void setName(String name) {
+        void setName(String name) {
             this.name = name;
         }
 
-        public int getValue() {
+        int getValue() {
             return value;
         }
 
-        public void setValue(int value) {
+        void setValue(int value) {
             this.value = value;
         }
 
-        public TestObject getNestedObject() {
+        TestObject getNestedObject() {
             return nestedObject;
         }
 
-        public void setNestedObject(TestObject nestedObject) {
+        void setNestedObject(TestObject nestedObject) {
             this.nestedObject = nestedObject;
         }
     }

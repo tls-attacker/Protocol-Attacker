@@ -14,27 +14,27 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.junit.jupiter.api.Test;
 
-public class WorkflowExecutionExceptionTest {
+class WorkflowExecutionExceptionTest {
 
     private static final String TEST_MESSAGE = "Test workflow execution error message";
     private static final Exception TEST_CAUSE = new IllegalArgumentException("Test cause");
 
     @Test
-    public void testDefaultConstructor() {
+    void testDefaultConstructor() {
         WorkflowExecutionException exception = new WorkflowExecutionException();
         assertNull(exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
-    public void testMessageConstructor() {
+    void testMessageConstructor() {
         WorkflowExecutionException exception = new WorkflowExecutionException(TEST_MESSAGE);
         assertEquals(TEST_MESSAGE, exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
-    public void testMessageAndCauseConstructor() {
+    void testMessageAndCauseConstructor() {
         WorkflowExecutionException exception =
                 new WorkflowExecutionException(TEST_MESSAGE, TEST_CAUSE);
         assertEquals(TEST_MESSAGE, exception.getMessage());
@@ -42,7 +42,7 @@ public class WorkflowExecutionExceptionTest {
     }
 
     @Test
-    public void testExceptionThrowAndCatch() {
+    void testExceptionThrowAndCatch() {
         try {
             throwWorkflowExecutionException();
         } catch (WorkflowExecutionException e) {

@@ -15,10 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class NoSignatureComputationsTest {
+class NoSignatureComputationsTest {
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // Verify that NoSignatureComputations can be instantiated
         NoSignatureComputations computations = new NoSignatureComputations();
         assertNotNull(computations);
@@ -34,7 +34,7 @@ public class NoSignatureComputationsTest {
     }
 
     @Test
-    public void testInheritedMethods() {
+    void testInheritedMethods() {
         // Test inherited methods work correctly
         NoSignatureComputations computations = new NoSignatureComputations();
         byte[] testData = "test data".getBytes();
@@ -60,7 +60,7 @@ public class NoSignatureComputationsTest {
     }
 
     @Test
-    public void testModifiableVariableSupport() {
+    void testModifiableVariableSupport() {
         NoSignatureComputations computations = new NoSignatureComputations();
         byte[] testData = "test data".getBytes();
 

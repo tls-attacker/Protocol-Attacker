@@ -21,7 +21,7 @@ import java.math.BigInteger;
 import java.util.Random;
 import org.junit.jupiter.api.Test;
 
-public class DhKeyTest {
+class DhKeyTest {
 
     private static final Random RANDOM = new Random(42); // Fixed seed for reproducibility
     private static final BigInteger PRIVATE_KEY = new BigInteger("1234567890");
@@ -29,7 +29,7 @@ public class DhKeyTest {
     private static final BigInteger MODULUS = new BigInteger("7919", 10); // Small prime for testing
 
     @Test
-    public void testDhPrivateKey() {
+    void testDhPrivateKey() {
         FfdhGroupParameters parameters = new ExplicitFfdhGroupParameters(GENERATOR, MODULUS);
         DhPrivateKey privateKey = new DhPrivateKey(PRIVATE_KEY, parameters);
 
@@ -40,7 +40,7 @@ public class DhKeyTest {
     }
 
     @Test
-    public void testDhPublicKeyConstruction() {
+    void testDhPublicKeyConstruction() {
         // Test constructor with explicit generator and modulus
         DhPublicKey publicKey1 = new DhPublicKey(PRIVATE_KEY, GENERATOR, MODULUS);
         assertEquals(PRIVATE_KEY, publicKey1.getPublicKey());
@@ -56,19 +56,19 @@ public class DhKeyTest {
     }
 
     @Test
-    public void testDhPublicKeyLength() {
+    void testDhPublicKeyLength() {
         DhPublicKey publicKey = new DhPublicKey(PRIVATE_KEY, GENERATOR, MODULUS);
         assertEquals(MODULUS.bitLength(), publicKey.length());
     }
 
     @Test
-    public void testDhPublicKeyAlgorithmType() {
+    void testDhPublicKeyAlgorithmType() {
         DhPublicKey publicKey = new DhPublicKey(PRIVATE_KEY, GENERATOR, MODULUS);
         assertEquals(AsymmetricAlgorithmType.DH, publicKey.getAlgorithmType());
     }
 
     @Test
-    public void testDhPublicKeyEqualsAndHashCode() {
+    void testDhPublicKeyEqualsAndHashCode() {
         DhPublicKey publicKey1 = new DhPublicKey(PRIVATE_KEY, GENERATOR, MODULUS);
         DhPublicKey publicKey2 = new DhPublicKey(PRIVATE_KEY, GENERATOR, MODULUS);
         DhPublicKey differentPublicKey =
@@ -86,7 +86,7 @@ public class DhKeyTest {
     }
 
     @Test
-    public void testKeyGenerationWithParameters() {
+    void testKeyGenerationWithParameters() {
         FfdhGroupParameters parameters = new Rfc7919Group2048();
         BigInteger privateKey = new BigInteger(parameters.getElementSizeBits(), RANDOM);
         DhPublicKey publicKey = KeyGenerator.generateDhPublicKey(privateKey, parameters);
@@ -100,7 +100,7 @@ public class DhKeyTest {
     }
 
     @Test
-    public void testKeyGenerationWithExplicitParameters() {
+    void testKeyGenerationWithExplicitParameters() {
         BigInteger privateKey = new BigInteger(64, RANDOM);
         DhPublicKey publicKey = KeyGenerator.generateDhPublicKey(privateKey, GENERATOR, MODULUS);
 
@@ -113,7 +113,7 @@ public class DhKeyTest {
     }
 
     @Test
-    public void testKeyGenerationWithBitLength() {
+    void testKeyGenerationWithBitLength() {
         BigInteger privateKey = new BigInteger(64, RANDOM);
         int bitLength = 512;
         DhPublicKey publicKey = KeyGenerator.generateDhPublicKey(privateKey, bitLength, RANDOM);

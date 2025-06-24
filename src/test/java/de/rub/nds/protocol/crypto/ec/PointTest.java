@@ -14,10 +14,10 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
-public class PointTest {
+class PointTest {
 
     @Test
-    public void testEquals() {
+    void testEquals() {
         BigInteger i1 = new BigInteger("12345678");
         BigInteger i2 = new BigInteger("23456789");
         BigInteger i3 = new BigInteger("34567891");

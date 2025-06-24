@@ -13,10 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
-public class PointFormatTest {
+class PointFormatTest {
 
     @Test
-    public void testEnumValues() {
+    void testEnumValues() {
         // Test the number of defined point formats
         assertEquals(2, PointFormat.values().length);
 
@@ -26,7 +26,7 @@ public class PointFormatTest {
     }
 
     @Test
-    public void testEnumNamesAndToString() {
+    void testEnumNamesAndToString() {
         // Test that each enum has valid name and toString
         for (PointFormat format : PointFormat.values()) {
             assertNotNull(format.name());
@@ -35,14 +35,14 @@ public class PointFormatTest {
     }
 
     @Test
-    public void testEnumOrdinals() {
+    void testEnumOrdinals() {
         // Test that ordinals start at 0 and increment by 1
         assertEquals(0, PointFormat.UNCOMPRESSED.ordinal());
         assertEquals(1, PointFormat.COMPRESSED.ordinal());
     }
 
     @Test
-    public void testValueOfMethod() {
+    void testValueOfMethod() {
         // Test valueOf with both values
         assertEquals(PointFormat.UNCOMPRESSED, PointFormat.valueOf("UNCOMPRESSED"));
         assertEquals(PointFormat.COMPRESSED, PointFormat.valueOf("COMPRESSED"));

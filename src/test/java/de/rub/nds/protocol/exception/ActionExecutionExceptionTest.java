@@ -14,34 +14,34 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.junit.jupiter.api.Test;
 
-public class ActionExecutionExceptionTest {
+class ActionExecutionExceptionTest {
 
     private static final String TEST_MESSAGE = "Test action execution error message";
     private static final Exception TEST_CAUSE = new IllegalArgumentException("Test cause");
 
     @Test
-    public void testDefaultConstructor() {
+    void testDefaultConstructor() {
         ActionExecutionException exception = new ActionExecutionException();
         assertNull(exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
-    public void testMessageConstructor() {
+    void testMessageConstructor() {
         ActionExecutionException exception = new ActionExecutionException(TEST_MESSAGE);
         assertEquals(TEST_MESSAGE, exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
-    public void testMessageAndCauseConstructor() {
+    void testMessageAndCauseConstructor() {
         ActionExecutionException exception = new ActionExecutionException(TEST_MESSAGE, TEST_CAUSE);
         assertEquals(TEST_MESSAGE, exception.getMessage());
         assertSame(TEST_CAUSE, exception.getCause());
     }
 
     @Test
-    public void testExceptionThrowAndCatch() {
+    void testExceptionThrowAndCatch() {
         // Test throwing and catching the exception
         try {
             throwActionExecutionException();

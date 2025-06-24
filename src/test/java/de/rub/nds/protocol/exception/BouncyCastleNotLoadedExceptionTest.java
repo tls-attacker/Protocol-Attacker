@@ -14,27 +14,27 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.junit.jupiter.api.Test;
 
-public class BouncyCastleNotLoadedExceptionTest {
+class BouncyCastleNotLoadedExceptionTest {
 
     private static final String TEST_MESSAGE = "Test BouncyCastle not loaded message";
     private static final Exception TEST_CAUSE = new IllegalArgumentException("Test cause");
 
     @Test
-    public void testDefaultConstructor() {
+    void testDefaultConstructor() {
         BouncyCastleNotLoadedException exception = new BouncyCastleNotLoadedException();
         assertNull(exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
-    public void testMessageConstructor() {
+    void testMessageConstructor() {
         BouncyCastleNotLoadedException exception = new BouncyCastleNotLoadedException(TEST_MESSAGE);
         assertEquals(TEST_MESSAGE, exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
-    public void testMessageAndCauseConstructor() {
+    void testMessageAndCauseConstructor() {
         BouncyCastleNotLoadedException exception =
                 new BouncyCastleNotLoadedException(TEST_MESSAGE, TEST_CAUSE);
         assertEquals(TEST_MESSAGE, exception.getMessage());
@@ -42,7 +42,7 @@ public class BouncyCastleNotLoadedExceptionTest {
     }
 
     @Test
-    public void testExceptionThrowAndCatch() {
+    void testExceptionThrowAndCatch() {
         try {
             throwBouncyCastleNotLoadedException();
         } catch (BouncyCastleNotLoadedException e) {

@@ -14,34 +14,34 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.junit.jupiter.api.Test;
 
-public class EndOfStreamExceptionTest {
+class EndOfStreamExceptionTest {
 
     private static final String TEST_MESSAGE = "Test end of stream error message";
     private static final Exception TEST_CAUSE = new IllegalArgumentException("Test cause");
 
     @Test
-    public void testDefaultConstructor() {
+    void testDefaultConstructor() {
         EndOfStreamException exception = new EndOfStreamException();
         assertNull(exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
-    public void testMessageConstructor() {
+    void testMessageConstructor() {
         EndOfStreamException exception = new EndOfStreamException(TEST_MESSAGE);
         assertEquals(TEST_MESSAGE, exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
-    public void testMessageAndCauseConstructor() {
+    void testMessageAndCauseConstructor() {
         EndOfStreamException exception = new EndOfStreamException(TEST_MESSAGE, TEST_CAUSE);
         assertEquals(TEST_MESSAGE, exception.getMessage());
         assertSame(TEST_CAUSE, exception.getCause());
     }
 
     @Test
-    public void testExceptionThrowAndCatch() {
+    void testExceptionThrowAndCatch() {
         try {
             throwEndOfStreamException();
         } catch (EndOfStreamException e) {

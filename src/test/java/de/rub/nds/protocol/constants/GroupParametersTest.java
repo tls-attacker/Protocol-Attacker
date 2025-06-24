@@ -17,10 +17,10 @@ import de.rub.nds.protocol.crypto.ffdh.Rfc7919Group2048;
 import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
-public class GroupParametersTest {
+class GroupParametersTest {
 
     @Test
-    public void testFfdhGroupParameters() {
+    void testFfdhGroupParameters() {
         // Test using Rfc7919Group2048 as a concrete implementation of GroupParameters
         FfdhGroupParameters params = new Rfc7919Group2048();
 

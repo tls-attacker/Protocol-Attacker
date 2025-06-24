@@ -14,10 +14,10 @@ import de.rub.nds.protocol.constants.FfdhGroupParameters;
 import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
-public class FFDHGroupTest {
+class FFDHGroupTest {
 
     @Test
-    public void groupFFDHE2048Test() {
+    void groupFFDHE2048Test() {
         FfdhGroupParameters group = new Rfc7919Group2048();
         assertEquals(BigInteger.TWO, group.getGenerator());
         BigInteger q = group.getModulus().subtract(BigInteger.ONE).divide(BigInteger.TWO);
@@ -29,7 +29,7 @@ public class FFDHGroupTest {
     }
 
     @Test
-    public void groupFFDHE3072Test() {
+    void groupFFDHE3072Test() {
         FfdhGroupParameters group = new Rfc7919Group3072();
         assertEquals(BigInteger.TWO, group.getGenerator());
         BigInteger q = group.getModulus().subtract(BigInteger.ONE).divide(BigInteger.TWO);
@@ -41,7 +41,7 @@ public class FFDHGroupTest {
     }
 
     @Test
-    public void groupFFDHE4096Test() {
+    void groupFFDHE4096Test() {
         FfdhGroupParameters group = new Rfc7919Group4096();
         assertEquals(BigInteger.TWO, group.getGenerator());
         BigInteger q = group.getModulus().subtract(BigInteger.ONE).divide(BigInteger.TWO);
@@ -53,7 +53,7 @@ public class FFDHGroupTest {
     }
 
     @Test
-    public void groupFFDHE6144Test() {
+    void groupFFDHE6144Test() {
         FfdhGroupParameters group = new Rfc7919Group6144();
         assertEquals(BigInteger.TWO, group.getGenerator());
         BigInteger q = group.getModulus().subtract(BigInteger.ONE).divide(BigInteger.TWO);
@@ -65,7 +65,7 @@ public class FFDHGroupTest {
     }
 
     @Test
-    public void groupFFDHE8192Test() {
+    void groupFFDHE8192Test() {
         FfdhGroupParameters group = new Rfc7919Group8192();
         assertEquals(BigInteger.TWO, group.getGenerator());
         BigInteger q = group.getModulus().subtract(BigInteger.ONE).divide(BigInteger.TWO);

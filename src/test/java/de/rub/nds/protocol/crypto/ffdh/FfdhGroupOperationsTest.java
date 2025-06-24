@@ -14,10 +14,10 @@ import de.rub.nds.protocol.constants.FfdhGroupParameters;
 import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
-public class FfdhGroupOperationsTest {
+class FfdhGroupOperationsTest {
 
     @Test
-    public void testFFDHGroupOperations() {
+    void testFFDHGroupOperations() {
         // Create a simple FfdhGroup for testing
         BigInteger modulus = new BigInteger("23"); // Small prime for testing
         BigInteger generator = new BigInteger("2");
