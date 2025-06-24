@@ -10,7 +10,7 @@ package de.rub.nds.protocol.crypto.ec;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-import de.rub.nds.modifiablevariable.util.ArrayConverter;
+import de.rub.nds.modifiablevariable.util.DataConverter;
 import de.rub.nds.protocol.constants.EcCurveEquationType;
 import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
 import de.rub.nds.protocol.constants.PointFormat;
@@ -105,7 +105,7 @@ public class PointFormatterTest {
     public void testCompressionFormat(
             NamedEllipticCurveParameters namedCurveParameters, String expectedCompressedBasePoint) {
         byte[] expectedCompressedBasePointBytes =
-                ArrayConverter.hexStringToByteArray(expectedCompressedBasePoint);
+                DataConverter.hexStringToByteArray(expectedCompressedBasePoint);
         EllipticCurve curve = namedCurveParameters.getGroup();
         byte[] actualCompressedBasePointBytes =
                 PointFormatter.formatToByteArray(

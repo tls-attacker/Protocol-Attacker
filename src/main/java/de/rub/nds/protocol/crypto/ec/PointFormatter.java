@@ -8,7 +8,7 @@
  */
 package de.rub.nds.protocol.crypto.ec;
 
-import de.rub.nds.modifiablevariable.util.ArrayConverter;
+import de.rub.nds.modifiablevariable.util.DataConverter;
 import de.rub.nds.protocol.constants.EcCurveEquationType;
 import de.rub.nds.protocol.constants.GroupParameters;
 import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
@@ -32,7 +32,7 @@ public class PointFormatter {
         }
         try (SilentByteArrayOutputStream stream = new SilentByteArrayOutputStream()) {
             int elementLength =
-                    ArrayConverter.bigIntegerToByteArray(point.getFieldX().getModulus()).length;
+                    DataConverter.bigIntegerToByteArray(point.getFieldX().getModulus()).length;
             if (groupParameters instanceof NamedEllipticCurveParameters
                     && ((NamedEllipticCurveParameters) groupParameters).getEquationType()
                             == EcCurveEquationType.SHORT_WEIERSTRASS) {
@@ -40,10 +40,10 @@ public class PointFormatter {
                     case UNCOMPRESSED:
                         stream.write(0x04);
                         stream.write(
-                                ArrayConverter.bigIntegerToNullPaddedByteArray(
+                                DataConverter.bigIntegerToNullPaddedByteArray(
                                         point.getFieldX().getData(), elementLength));
                         stream.write(
-                                ArrayConverter.bigIntegerToNullPaddedByteArray(
+                                DataConverter.bigIntegerToNullPaddedByteArray(
                                         point.getFieldY().getData(), elementLength));
                         return stream.toByteArray();
                     case COMPRESSED:
@@ -57,7 +57,7 @@ public class PointFormatter {
                             stream.write(0x02);
                         }
                         stream.write(
-                                ArrayConverter.bigIntegerToNullPaddedByteArray(
+                                DataConverter.bigIntegerToNullPaddedByteArray(
                                         point.getFieldX().getData(), elementLength));
                         return stream.toByteArray();
                     default:
@@ -66,7 +66,7 @@ public class PointFormatter {
                 }
             } else {
                 byte[] coordinate =
-                        ArrayConverter.bigIntegerToNullPaddedByteArray(
+                        DataConverter.bigIntegerToNullPaddedByteArray(
                                 point.getFieldX().getData(), elementLength);
                 stream.write(coordinate);
                 return stream.toByteArray();
@@ -80,12 +80,12 @@ public class PointFormatter {
         }
         try (SilentByteArrayOutputStream stream = new SilentByteArrayOutputStream()) {
             int elementLength =
-                    ArrayConverter.bigIntegerToByteArray(point.getFieldX().getModulus()).length;
+                    DataConverter.bigIntegerToByteArray(point.getFieldX().getModulus()).length;
             stream.write(
-                    ArrayConverter.bigIntegerToNullPaddedByteArray(
+                    DataConverter.bigIntegerToNullPaddedByteArray(
                             point.getFieldX().getData(), elementLength));
             stream.write(
-                    ArrayConverter.bigIntegerToNullPaddedByteArray(
+                    DataConverter.bigIntegerToNullPaddedByteArray(
                             point.getFieldY().getData(), elementLength));
             return stream.toByteArray();
         }

@@ -8,7 +8,7 @@
  */
 package de.rub.nds.protocol.crypto.ec;
 
-import de.rub.nds.modifiablevariable.util.ArrayConverter;
+import de.rub.nds.modifiablevariable.util.DataConverter;
 import java.math.BigInteger;
 import java.util.Arrays;
 import org.apache.logging.log4j.LogManager;
@@ -65,10 +65,10 @@ public abstract class RFC7748Curve extends SimulatedMontgomeryCurve {
 
     public BigInteger reduceLongKey(BigInteger key) {
         byte[] keyBytes = key.toByteArray();
-        if (keyBytes.length > ArrayConverter.bigIntegerToByteArray(getModulus()).length) {
+        if (keyBytes.length > DataConverter.bigIntegerToByteArray(getModulus()).length) {
             keyBytes =
                     Arrays.copyOfRange(
-                            keyBytes, 0, ArrayConverter.bigIntegerToByteArray(getModulus()).length);
+                            keyBytes, 0, DataConverter.bigIntegerToByteArray(getModulus()).length);
             return new BigInteger(1, keyBytes);
         } else {
             return key;

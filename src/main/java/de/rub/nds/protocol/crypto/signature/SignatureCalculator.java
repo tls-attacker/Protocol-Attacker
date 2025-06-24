@@ -8,7 +8,7 @@
  */
 package de.rub.nds.protocol.crypto.signature;
 
-import de.rub.nds.modifiablevariable.util.ArrayConverter;
+import de.rub.nds.modifiablevariable.util.DataConverter;
 import de.rub.nds.protocol.constants.HashAlgorithm;
 import de.rub.nds.protocol.constants.SignatureAlgorithm;
 import de.rub.nds.protocol.crypto.ec.EllipticCurve;
@@ -144,7 +144,7 @@ public class SignatureCalculator {
 
         // M' = (0x)00 00 00 00 00 00 00 00 || mHash || salt
         byte[] paddedSaltedDigest =
-                ArrayConverter.concatenate(new byte[8], digest, computations.getSalt().getValue());
+                DataConverter.concatenate(new byte[8], digest, computations.getSalt().getValue());
         computations.setPaddedSaltedDigest(paddedSaltedDigest);
         paddedSaltedDigest = computations.getPaddedSaltedDigest().getValue();
         LOGGER.debug("Padded salted digest: {}", paddedSaltedDigest);
@@ -169,7 +169,7 @@ public class SignatureCalculator {
         LOGGER.debug("Ps value: {}", psValue);
         // Generate the DB = PS || 0x01 || salt
         byte[] db =
-                ArrayConverter.concatenate(
+                DataConverter.concatenate(
                         psValue, new byte[] {0x01}, computations.getSalt().getValue());
         computations.setDbValue(db);
         db = computations.getDbValue().getValue();
@@ -189,7 +189,7 @@ public class SignatureCalculator {
         }
         // Construct the encoded message EM = maskedDB || H || 0xBC
         byte[] em =
-                ArrayConverter.concatenate(maskedDB, hValue, computations.getTfValue().getValue());
+                DataConverter.concatenate(maskedDB, hValue, computations.getTfValue().getValue());
         computations.setEmValue(em);
         em = computations.getEmValue().getValue();
         LOGGER.debug("EM: {}", em);
@@ -201,7 +201,7 @@ public class SignatureCalculator {
                 emInteger.modPow(
                         computations.getPrivateKey().getValue(),
                         computations.getModulus().getValue());
-        computations.setSignatureBytes(ArrayConverter.bigIntegerToByteArray(signature));
+        computations.setSignatureBytes(DataConverter.bigIntegerToByteArray(signature));
         computations.setSignatureValid(true);
     }
 
@@ -225,22 +225,22 @@ public class SignatureCalculator {
         int counter = 0;
 
         while (counter < (length / mgfhLen)) {
-            counterBytes = ArrayConverter.intToBytes(counter, 4);
+            counterBytes = DataConverter.intToBytes(counter, 4);
 
             hashBuf =
                     HashCalculator.compute(
-                            ArrayConverter.concatenate(input, counterBytes), mgfAlgorithm);
+                            DataConverter.concatenate(input, counterBytes), mgfAlgorithm);
             System.arraycopy(hashBuf, 0, mask, counter * mgfhLen, mgfhLen);
 
             counter++;
         }
 
         if ((counter * mgfhLen) < length) {
-            counterBytes = ArrayConverter.intToBytes(counter, 4);
+            counterBytes = DataConverter.intToBytes(counter, 4);
 
             hashBuf =
                     HashCalculator.compute(
-                            ArrayConverter.concatenate(input, counterBytes), mgfAlgorithm);
+                            DataConverter.concatenate(input, counterBytes), mgfAlgorithm);
 
             System.arraycopy(
                     hashBuf, 0, mask, counter * mgfhLen, mask.length - (counter * mgfhLen));
@@ -273,11 +273,11 @@ public class SignatureCalculator {
             derEncoded = computations.getDerEncodedDigest().getValue();
         }
         int modLength =
-                ArrayConverter.bigIntegerToByteArray(computations.getModulus().getValue()).length;
+                DataConverter.bigIntegerToByteArray(computations.getModulus().getValue()).length;
         byte[] padding = computePkcs1Padding(derEncoded.length, modLength);
         computations.setPadding(padding);
         padding = computations.getPadding().getValue();
-        byte[] plainData = ArrayConverter.concatenate(padding, derEncoded);
+        byte[] plainData = DataConverter.concatenate(padding, derEncoded);
         computations.setPlainToBeSigned(plainData);
         plainData = computations.getPlainToBeSigned().getValue();
         BigInteger plainInteger = new BigInteger(plainData);
@@ -286,7 +286,7 @@ public class SignatureCalculator {
                         computations.getPrivateKey().getValue(),
                         computations.getModulus().getValue());
         computations.setSignatureBytes(
-                ArrayConverter.bigIntegerToByteArray(signature, modLength, true));
+                DataConverter.bigIntegerToByteArray(signature, modLength, true));
         computations.setSignatureValid(true);
     }
 
@@ -335,7 +335,7 @@ public class SignatureCalculator {
         computations.setPrivateKey(privateKey.getX());
 
         LOGGER.trace("Computing DSA signature");
-        int groupSize = ArrayConverter.bigIntegerToByteArray(privateKey.getQ()).length;
+        int groupSize = DataConverter.bigIntegerToByteArray(privateKey.getQ()).length;
         // not persisted in computation as they can be set before the calculation
         LOGGER.debug("g: {}", computations.getG().getValue());
         LOGGER.debug("p: {}", computations.getP().getValue());
@@ -485,8 +485,8 @@ public class SignatureCalculator {
 
         byte[] completeSignature;
         try (SilentByteArrayOutputStream outputStream = new SilentByteArrayOutputStream()) {
-            outputStream.write(ArrayConverter.bigIntegerToByteArray(r, 32, true));
-            outputStream.write(ArrayConverter.bigIntegerToByteArray(s, 32, true));
+            outputStream.write(DataConverter.bigIntegerToByteArray(r, 32, true));
+            outputStream.write(DataConverter.bigIntegerToByteArray(s, 32, true));
             completeSignature = outputStream.toByteArray();
         }
         computations.setSignatureBytes(completeSignature);
