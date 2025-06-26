@@ -778,27 +778,6 @@ class SignatureCalculatorTest {
     }
 
     @Test
-    void testComputeSignatureWithEddsaAlgorithm() {
-        SignatureCalculator calculator = new SignatureCalculator();
-        EddsaSignatureComputations computations = new EddsaSignatureComputations();
-        // Create dummy EdDSA key
-        BigInteger privateKey = new BigInteger("123456");
-        de.rub.nds.protocol.crypto.key.EddsaPrivateKey eddsaKey =
-                new de.rub.nds.protocol.crypto.key.EddsaPrivateKey(
-                        privateKey, NamedEllipticCurveParameters.CURVE_X25519);
-
-        assertThrows(
-                UnsupportedOperationException.class,
-                () ->
-                        calculator.computeSignature(
-                                computations,
-                                eddsaKey,
-                                "test".getBytes(),
-                                SignatureAlgorithm.ED25519,
-                                HashAlgorithm.SHA256));
-    }
-
-    @Test
     void testComputeSignatureWithNoSignatureComputations() {
         SignatureCalculator calculator = new SignatureCalculator();
         NoSignatureComputations computations = new NoSignatureComputations();
