@@ -10,24 +10,36 @@ package de.rub.nds.protocol.crypto.signature;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.rub.nds.modifiablevariable.util.DataConverter;
 import de.rub.nds.modifiablevariable.util.Modifiable;
 import de.rub.nds.protocol.constants.HashAlgorithm;
 import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
+import de.rub.nds.protocol.constants.SignatureAlgorithm;
 import de.rub.nds.protocol.crypto.key.DsaPrivateKey;
 import de.rub.nds.protocol.crypto.key.EcdsaPrivateKey;
 import de.rub.nds.protocol.crypto.key.RsaPrivateKey;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.Security;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.interfaces.DSAPrivateKey;
+import java.security.interfaces.DSAPublicKey;
+import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.DSAPublicKeySpec;
+import java.security.spec.ECGenParameterSpec;
 import java.security.spec.KeySpec;
 import java.security.spec.MGF1ParameterSpec;
 import java.security.spec.PSSParameterSpec;
@@ -37,6 +49,8 @@ import org.apache.logging.log4j.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 class SignatureCalculatorTest {
 
@@ -339,5 +353,517 @@ class SignatureCalculatorTest {
         signature.update(originalData);
         boolean isSignatureValid = signature.verify(computations.getSignatureBytes().getValue());
         assertTrue(isSignatureValid);
+    }
+
+    @Test
+    void testCreateSignatureComputations() {
+        SignatureCalculator calculator = new SignatureCalculator();
+
+        // Test RSA-PKCS1
+        SignatureComputations rsaPkcs1 =
+                calculator.createSignatureComputations(SignatureAlgorithm.RSA_PKCS1);
+        assertTrue(rsaPkcs1 instanceof RsaPkcs1SignatureComputations);
+
+        // Test RSA-PSS
+        SignatureComputations rsaPss =
+                calculator.createSignatureComputations(SignatureAlgorithm.RSA_SSA_PSS);
+        assertTrue(rsaPss instanceof RsaSsaPssSignatureComputations);
+
+        // Test DSA
+        SignatureComputations dsa = calculator.createSignatureComputations(SignatureAlgorithm.DSA);
+        assertTrue(dsa instanceof DsaSignatureComputations);
+
+        // Test ECDSA
+        SignatureComputations ecdsa =
+                calculator.createSignatureComputations(SignatureAlgorithm.ECDSA);
+        assertTrue(ecdsa instanceof EcdsaSignatureComputations);
+
+        // Test EdDSA
+        SignatureComputations ed25519 =
+                calculator.createSignatureComputations(SignatureAlgorithm.ED25519);
+        assertTrue(ed25519 instanceof EddsaSignatureComputations);
+
+        SignatureComputations ed448 =
+                calculator.createSignatureComputations(SignatureAlgorithm.ED448);
+        assertTrue(ed448 instanceof EddsaSignatureComputations);
+
+        // Test GOST
+        SignatureComputations gost1 =
+                calculator.createSignatureComputations(SignatureAlgorithm.GOSTR34102001);
+        assertTrue(gost1 instanceof GostSignatureComputations);
+
+        SignatureComputations gost256 =
+                calculator.createSignatureComputations(SignatureAlgorithm.GOSTR34102012_256);
+        assertTrue(gost256 instanceof GostSignatureComputations);
+
+        SignatureComputations gost512 =
+                calculator.createSignatureComputations(SignatureAlgorithm.GOSTR34102012_512);
+        assertTrue(gost512 instanceof GostSignatureComputations);
+
+        // Test null
+        SignatureComputations noSig = calculator.createSignatureComputations(null);
+        assertTrue(noSig instanceof NoSignatureComputations);
+    }
+
+    @Test
+    void testComputeSignatureWithWrongKeyType() {
+        SignatureCalculator calculator = new SignatureCalculator();
+
+        // Test RSA computations with wrong key type
+        RsaPkcs1SignatureComputations rsaComputations = new RsaPkcs1SignatureComputations();
+        DsaPrivateKey dsaKey =
+                new DsaPrivateKey(
+                        new BigInteger("123"),
+                        new BigInteger("456"),
+                        new BigInteger("789"),
+                        new BigInteger("111"),
+                        new BigInteger("222"));
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        calculator.computeSignature(
+                                rsaComputations,
+                                dsaKey,
+                                "test".getBytes(),
+                                SignatureAlgorithm.RSA_PKCS1,
+                                HashAlgorithm.SHA256));
+
+        // Test DSA computations with wrong key type
+        DsaSignatureComputations dsaComputations = new DsaSignatureComputations();
+        RsaPrivateKey rsaKey = new RsaPrivateKey(new BigInteger("123"), new BigInteger("456"));
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        calculator.computeSignature(
+                                dsaComputations,
+                                rsaKey,
+                                "test".getBytes(),
+                                SignatureAlgorithm.DSA,
+                                HashAlgorithm.SHA256));
+
+        // Test ECDSA computations with wrong key type
+        EcdsaSignatureComputations ecdsaComputations = new EcdsaSignatureComputations();
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        calculator.computeSignature(
+                                ecdsaComputations,
+                                rsaKey,
+                                "test".getBytes(),
+                                SignatureAlgorithm.ECDSA,
+                                HashAlgorithm.SHA256));
+    }
+
+    @ParameterizedTest
+    @EnumSource(
+            value = HashAlgorithm.class,
+            names = {"MD5", "SHA1", "SHA224", "SHA256", "SHA384", "SHA512"})
+    void testRsaPkcs1WithDifferentHashAlgorithms(HashAlgorithm hashAlgorithm) throws Exception {
+        // Generate RSA key pair
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+        keyGen.initialize(2048);
+        var keyPair = keyGen.generateKeyPair();
+        RSAPrivateKey privKey = (RSAPrivateKey) keyPair.getPrivate();
+        RSAPublicKey pubKey = (RSAPublicKey) keyPair.getPublic();
+
+        RsaPrivateKey protocolPrivKey =
+                new RsaPrivateKey(privKey.getPrivateExponent(), privKey.getModulus());
+
+        byte[] message = "Test message for different hash algorithms".getBytes();
+
+        SignatureCalculator calculator = new SignatureCalculator();
+        RsaPkcs1SignatureComputations computations = new RsaPkcs1SignatureComputations();
+
+        calculator.computeRsaPkcs1Signature(computations, protocolPrivKey, message, hashAlgorithm);
+
+        // Verify with BouncyCastle
+        String signatureAlgo = hashAlgorithm.getJavaName() + "withRSA";
+        Signature verifier = Signature.getInstance(signatureAlgo);
+        verifier.initVerify(pubKey);
+        verifier.update(message);
+
+        assertTrue(verifier.verify(computations.getSignatureBytes().getValue()));
+    }
+
+    @Test
+    void testRsaPkcs1WithEmptyMessage() throws Exception {
+        SignatureCalculator calculator = new SignatureCalculator();
+        RsaPkcs1SignatureComputations computations = new RsaPkcs1SignatureComputations();
+
+        BigInteger modulus =
+                new BigInteger(
+                        1,
+                        DataConverter.hexStringToByteArray(
+                                "00cbfb45e6b09f1af40df60ddc865b6f98a1fd724678b583bfb5ae8539627bffdcd930d7c3f996f75e15172a017f143101ecd28fc629b800e24f0a83665d77c0a3"));
+        BigInteger privateKey =
+                new BigInteger(
+                        1,
+                        DataConverter.hexStringToByteArray(
+                                "61a4eb153f3f2a9be18303a7a8f964366074fe9b15756e97fad48c19a8374b870589dde72e4377f3837ab59fa76b55563642f2df635da71a3aa50ab835201b61"));
+
+        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(privateKey, modulus);
+        byte[] emptyMessage = new byte[0];
+
+        calculator.computeRsaPkcs1Signature(
+                computations, rsaPrivateKey, emptyMessage, HashAlgorithm.SHA256);
+
+        assertNotNull(computations.getSignatureBytes().getValue());
+        assertTrue(computations.getSignatureValid());
+
+        // Verify with BouncyCastle
+        BigInteger publicExponent = new BigInteger("65537");
+        RSAPublicKeySpec pubKeySpec = new RSAPublicKeySpec(modulus, publicExponent);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PublicKey pubKey = keyFactory.generatePublic(pubKeySpec);
+
+        Signature verifier = Signature.getInstance("SHA256withRSA");
+        verifier.initVerify(pubKey);
+        verifier.update(emptyMessage);
+
+        assertTrue(verifier.verify(computations.getSignatureBytes().getValue()));
+    }
+
+    @Test
+    void testRsaPkcs1WithLargeMessage() throws Exception {
+        SignatureCalculator calculator = new SignatureCalculator();
+        RsaPkcs1SignatureComputations computations = new RsaPkcs1SignatureComputations();
+
+        // Generate RSA key pair
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+        keyGen.initialize(2048);
+        var keyPair = keyGen.generateKeyPair();
+        RSAPrivateKey privKey = (RSAPrivateKey) keyPair.getPrivate();
+        RSAPublicKey pubKey = (RSAPublicKey) keyPair.getPublic();
+
+        RsaPrivateKey protocolPrivKey =
+                new RsaPrivateKey(privKey.getPrivateExponent(), privKey.getModulus());
+
+        // Create a large message (10KB)
+        byte[] largeMessage = new byte[10 * 1024];
+        new SecureRandom().nextBytes(largeMessage);
+
+        calculator.computeRsaPkcs1Signature(
+                computations, protocolPrivKey, largeMessage, HashAlgorithm.SHA256);
+
+        assertNotNull(computations.getSignatureBytes().getValue());
+        assertTrue(computations.getSignatureValid());
+
+        // Verify with BouncyCastle
+        Signature verifier = Signature.getInstance("SHA256withRSA");
+        verifier.initVerify(pubKey);
+        verifier.update(largeMessage);
+
+        assertTrue(verifier.verify(computations.getSignatureBytes().getValue()));
+    }
+
+    @Test
+    void testRsaPkcs1WithHashAlgorithmNone() {
+        SignatureCalculator calculator = new SignatureCalculator();
+        RsaPkcs1SignatureComputations computations = new RsaPkcs1SignatureComputations();
+
+        BigInteger modulus =
+                new BigInteger(
+                        1,
+                        DataConverter.hexStringToByteArray(
+                                "00cbfb45e6b09f1af40df60ddc865b6f98a1fd724678b583bfb5ae8539627bffdcd930d7c3f996f75e15172a017f143101ecd28fc629b800e24f0a83665d77c0a3"));
+        BigInteger privateKey =
+                new BigInteger(
+                        1,
+                        DataConverter.hexStringToByteArray(
+                                "61a4eb153f3f2a9be18303a7a8f964366074fe9b15756e97fad48c19a8374b870589dde72e4377f3837ab59fa76b55563642f2df635da71a3aa50ab835201b61"));
+
+        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(privateKey, modulus);
+        byte[] message = "Test message without hashing".getBytes();
+
+        calculator.computeRsaPkcs1Signature(
+                computations, rsaPrivateKey, message, HashAlgorithm.NONE);
+
+        assertNotNull(computations.getSignatureBytes().getValue());
+        assertTrue(computations.getSignatureValid());
+        // With NONE hash algorithm, the message itself is used as digest
+        assertArrayEquals(message, computations.getDigestBytes().getValue());
+        assertArrayEquals(message, computations.getDerEncodedDigest().getValue());
+    }
+
+    @ParameterizedTest
+    @EnumSource(
+            value = HashAlgorithm.class,
+            names = {"SHA256", "SHA384", "SHA512"})
+    void testRsaPssWithDifferentHashAlgorithms(HashAlgorithm hashAlgorithm) throws Exception {
+        // Generate RSA key pair
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+        keyGen.initialize(2048);
+        var keyPair = keyGen.generateKeyPair();
+        RSAPrivateKey privKey = (RSAPrivateKey) keyPair.getPrivate();
+        RSAPublicKey pubKey = (RSAPublicKey) keyPair.getPublic();
+
+        RsaPrivateKey protocolPrivKey =
+                new RsaPrivateKey(privKey.getPrivateExponent(), privKey.getModulus());
+
+        byte[] message = "Test message for PSS with different hash algorithms".getBytes();
+        // Use a reasonable salt length (typically same as hash length, but ensure it fits)
+        int saltLength = Math.min(hashAlgorithm.getBitLength() / 8, 20);
+        byte[] salt = new byte[saltLength];
+        new SecureRandom().nextBytes(salt);
+
+        SignatureCalculator calculator = new SignatureCalculator();
+        RsaSsaPssSignatureComputations computations = new RsaSsaPssSignatureComputations();
+        computations.setSalt(salt);
+
+        calculator.computeRsaPssSignature(
+                computations, protocolPrivKey, message, hashAlgorithm, salt);
+
+        // Verify with BouncyCastle
+        Signature verifier = Signature.getInstance("RSASSA-PSS");
+        MGF1ParameterSpec mgf1Spec = new MGF1ParameterSpec(hashAlgorithm.getJavaName());
+        PSSParameterSpec pssSpec =
+                new PSSParameterSpec(hashAlgorithm.getJavaName(), "MGF1", mgf1Spec, saltLength, 1);
+        verifier.setParameter(pssSpec);
+        verifier.initVerify(pubKey);
+        verifier.update(message);
+
+        assertTrue(verifier.verify(computations.getSignatureBytes().getValue()));
+    }
+
+    @Test
+    void testRsaPssWithoutSalt() {
+        SignatureCalculator calculator = new SignatureCalculator();
+        RsaSsaPssSignatureComputations computations = new RsaSsaPssSignatureComputations();
+
+        BigInteger modulus = new BigInteger("12345");
+        BigInteger privateKey = new BigInteger("67890");
+        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(privateKey, modulus);
+
+        // Don't set salt - should throw exception
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        calculator.computeSignature(
+                                computations,
+                                rsaPrivateKey,
+                                "test".getBytes(),
+                                SignatureAlgorithm.RSA_SSA_PSS,
+                                HashAlgorithm.SHA256));
+    }
+
+    @Test
+    void testDsaWithEmptyMessage() throws Exception {
+        SignatureCalculator calculator = new SignatureCalculator();
+        DsaSignatureComputations computations = new DsaSignatureComputations();
+
+        // Generate DSA parameters
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
+        keyGen.initialize(1024);
+        var keyPair = keyGen.generateKeyPair();
+        DSAPrivateKey privKey = (DSAPrivateKey) keyPair.getPrivate();
+        DSAPublicKey pubKey = (DSAPublicKey) keyPair.getPublic();
+
+        BigInteger nonce = new BigInteger(159, new SecureRandom());
+        DsaPrivateKey protocolPrivKey =
+                new DsaPrivateKey(
+                        privKey.getParams().getQ(),
+                        privKey.getX(),
+                        nonce,
+                        privKey.getParams().getG(),
+                        privKey.getParams().getP());
+
+        byte[] emptyMessage = new byte[0];
+
+        calculator.computeDsaSignature(
+                computations, protocolPrivKey, emptyMessage, HashAlgorithm.SHA1);
+
+        assertNotNull(computations.getSignatureBytes().getValue());
+        assertTrue(computations.getSignatureValid());
+
+        // Verify with Java crypto
+        Signature verifier = Signature.getInstance("SHA1withDSA");
+        verifier.initVerify(pubKey);
+        verifier.update(emptyMessage);
+
+        assertTrue(verifier.verify(computations.getSignatureBytes().getValue()));
+    }
+
+    @Test
+    void testEcdsaWithDifferentCurves() throws Exception {
+        NamedEllipticCurveParameters[] curves = {
+            NamedEllipticCurveParameters.SECP256R1,
+            NamedEllipticCurveParameters.SECP384R1,
+            NamedEllipticCurveParameters.SECP521R1
+        };
+
+        for (NamedEllipticCurveParameters curve : curves) {
+            SignatureCalculator calculator = new SignatureCalculator();
+            EcdsaSignatureComputations computations = new EcdsaSignatureComputations();
+
+            // Generate ECDSA key pair for the curve
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
+            ECGenParameterSpec ecSpec = new ECGenParameterSpec(curve.name().toLowerCase());
+            keyGen.initialize(ecSpec);
+            var keyPair = keyGen.generateKeyPair();
+            ECPrivateKey privKey = (ECPrivateKey) keyPair.getPrivate();
+            ECPublicKey pubKey = (ECPublicKey) keyPair.getPublic();
+
+            BigInteger nonce =
+                    new BigInteger(
+                            curve.getGroup().getBasePointOrder().bitLength() - 1,
+                            new SecureRandom());
+            EcdsaPrivateKey protocolPrivKey = new EcdsaPrivateKey(privKey.getS(), nonce, curve);
+
+            byte[] message = ("Test message for curve " + curve.name()).getBytes();
+
+            calculator.computeEcdsaSignature(
+                    computations, protocolPrivKey, message, HashAlgorithm.SHA256);
+
+            assertNotNull(computations.getSignatureBytes().getValue());
+            assertTrue(computations.getSignatureValid());
+
+            // Verify with BouncyCastle
+            Signature verifier = Signature.getInstance("SHA256withECDSA");
+            verifier.initVerify(pubKey);
+            verifier.update(message);
+
+            assertTrue(
+                    verifier.verify(computations.getSignatureBytes().getValue()),
+                    "Failed to verify signature for curve " + curve.name());
+        }
+    }
+
+    @Test
+    void testComputeRawEcdsaSignature() {
+        SignatureCalculator calculator = new SignatureCalculator();
+        EcdsaSignatureComputations computations = new EcdsaSignatureComputations();
+
+        BigInteger privateKey =
+                new BigInteger(
+                        1,
+                        DataConverter.hexStringToByteArray(
+                                "519b423d715f8b581f4fa8ee59f4771a5b44c8130b4e3eacca54a56dda72b464"));
+        BigInteger nonce =
+                new BigInteger(
+                        1,
+                        DataConverter.hexStringToByteArray(
+                                "94a1bbb14b906a61a280f245f9e93c7f3b4a6247824f5d33b9670787642a68de"));
+        NamedEllipticCurveParameters ecParameters = NamedEllipticCurveParameters.SECP256R1;
+
+        EcdsaPrivateKey protocolPrivKey = new EcdsaPrivateKey(privateKey, nonce, ecParameters);
+        byte[] message = "Test raw ECDSA signature".getBytes();
+
+        calculator.computeRawEcdsaSignature(
+                computations, protocolPrivKey, message, HashAlgorithm.SHA256);
+
+        assertNotNull(computations.getSignatureBytes().getValue());
+        assertTrue(computations.getSignatureValid());
+        // Raw ECDSA signature should be exactly 64 bytes for SECP256R1 (32 bytes r + 32 bytes s)
+        assertEquals(64, computations.getSignatureBytes().getValue().length);
+    }
+
+    @Test
+    void testComputeSignatureWithGostAlgorithm() {
+        SignatureCalculator calculator = new SignatureCalculator();
+        GostSignatureComputations computations = new GostSignatureComputations();
+        RsaPrivateKey dummyKey = new RsaPrivateKey(new BigInteger("123"), new BigInteger("456"));
+
+        assertThrows(
+                UnsupportedOperationException.class,
+                () ->
+                        calculator.computeSignature(
+                                computations,
+                                dummyKey,
+                                "test".getBytes(),
+                                SignatureAlgorithm.GOSTR34102001,
+                                HashAlgorithm.SHA256));
+    }
+
+    @Test
+    void testComputeSignatureWithEddsaAlgorithm() {
+        SignatureCalculator calculator = new SignatureCalculator();
+        EddsaSignatureComputations computations = new EddsaSignatureComputations();
+        // Create dummy EdDSA key
+        BigInteger privateKey = new BigInteger("123456");
+        de.rub.nds.protocol.crypto.key.EddsaPrivateKey eddsaKey =
+                new de.rub.nds.protocol.crypto.key.EddsaPrivateKey(
+                        privateKey, NamedEllipticCurveParameters.CURVE_X25519);
+
+        assertThrows(
+                UnsupportedOperationException.class,
+                () ->
+                        calculator.computeSignature(
+                                computations,
+                                eddsaKey,
+                                "test".getBytes(),
+                                SignatureAlgorithm.ED25519,
+                                HashAlgorithm.SHA256));
+    }
+
+    @Test
+    void testComputeSignatureWithNoSignatureComputations() {
+        SignatureCalculator calculator = new SignatureCalculator();
+        NoSignatureComputations computations = new NoSignatureComputations();
+        RsaPrivateKey dummyKey = new RsaPrivateKey(new BigInteger("123"), new BigInteger("456"));
+
+        // Should not throw exception, just do nothing
+        calculator.computeSignature(
+                computations,
+                dummyKey,
+                "test".getBytes(),
+                SignatureAlgorithm.RSA_PKCS1,
+                HashAlgorithm.SHA256);
+    }
+
+    @Test
+    void testInverseNonceCalculationInEcdsa() {
+        SignatureCalculator calculator = new SignatureCalculator();
+        EcdsaSignatureComputations computations = new EcdsaSignatureComputations();
+
+        BigInteger privateKey =
+                new BigInteger(
+                        1,
+                        DataConverter.hexStringToByteArray(
+                                "519b423d715f8b581f4fa8ee59f4771a5b44c8130b4e3eacca54a56dda72b464"));
+        byte[] toBeSignedBytes =
+                DataConverter.hexStringToByteArray(
+                        "44acf6b7e36c1342c2c5897204fe09504e1e2efb1a900377dbc4e7a6a133ec56");
+        computations.setDigestBytes(Modifiable.explicit(toBeSignedBytes));
+        computations.setTruncatedHashBytes(Modifiable.explicit(toBeSignedBytes));
+        BigInteger nonce =
+                new BigInteger(
+                        1,
+                        DataConverter.hexStringToByteArray(
+                                "94a1bbb14b906a61a280f245f9e93c7f3b4a6247824f5d33b9670787642a68de"));
+        NamedEllipticCurveParameters ecParameters = NamedEllipticCurveParameters.SECP256R1;
+
+        // First computation uses nonce for inverse calculation
+        calculator.computeEcdsaSignature(
+                computations,
+                new EcdsaPrivateKey(privateKey, nonce, ecParameters),
+                toBeSignedBytes,
+                HashAlgorithm.SHA256);
+
+        BigInteger firstInverseNonce = computations.getInverseNonce().getValue();
+
+        // Verify that inverseNonce * nonce = 1 (mod order)
+        BigInteger order = ecParameters.getGroup().getBasePointOrder();
+        BigInteger product = firstInverseNonce.multiply(nonce).mod(order);
+        assertEquals(BigInteger.ONE, product);
+
+        // Second computation with computeRawEcdsaSignature uses privateKey for inverse
+        EcdsaSignatureComputations computations2 = new EcdsaSignatureComputations();
+        computations2.setDigestBytes(Modifiable.explicit(toBeSignedBytes));
+        computations2.setTruncatedHashBytes(Modifiable.explicit(toBeSignedBytes));
+
+        calculator.computeRawEcdsaSignature(
+                computations2,
+                new EcdsaPrivateKey(privateKey, nonce, ecParameters),
+                toBeSignedBytes,
+                HashAlgorithm.SHA256);
+
+        BigInteger secondInverseNonce = computations2.getInverseNonce().getValue();
+
+        // Verify that inverseNonce * privateKey = 1 (mod order)
+        BigInteger product2 = secondInverseNonce.multiply(privateKey).mod(order);
+        assertEquals(BigInteger.ONE, product2);
     }
 }
