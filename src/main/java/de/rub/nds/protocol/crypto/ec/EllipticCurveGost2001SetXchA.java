@@ -10,7 +10,7 @@ package de.rub.nds.protocol.crypto.ec;
 
 import java.math.BigInteger;
 
-public class EllipticCurveGost2001SetXchA extends EllipticCurveOverF2m {
+public class EllipticCurveGost2001SetXchA extends EllipticCurveOverFp {
 
     public EllipticCurveGost2001SetXchA() {
         super(

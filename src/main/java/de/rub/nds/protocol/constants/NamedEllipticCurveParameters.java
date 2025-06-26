@@ -25,6 +25,15 @@ import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP384R1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP384T1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP512R1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP512T1;
+import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2001SetA;
+import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2001SetB;
+import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2001SetC;
+import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2001SetXchA;
+import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2001SetXchB;
+import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2012SetA256;
+import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2012SetA512;
+import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2012SetB512;
+import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2012SetC512;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP112R1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP112R2;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP128R1;
@@ -491,7 +500,84 @@ public enum NamedEllipticCurveParameters implements GroupParameters<Point> {
             null,
             EcCurveEquationType.SHORT_WEIERSTRASS,
             256,
-            new EllipticCurveSM2());
+            new EllipticCurveSM2()),
+    /*
+     * ###############################
+     * GOST
+     * ###############################
+     */
+    GOST2001_SETA(
+            "GOST2001SetA",
+            null,
+            null,
+            null,
+            EcCurveEquationType.SHORT_WEIERSTRASS,
+            256,
+            new EllipticCurveGost2001SetA()),
+    GOST2001_SETB(
+            "GOST2001SetB",
+            null,
+            null,
+            null,
+            EcCurveEquationType.SHORT_WEIERSTRASS,
+            256,
+            new EllipticCurveGost2001SetB()),
+    GOST2001_SETC(
+            "GOST2001SetC",
+            null,
+            null,
+            null,
+            EcCurveEquationType.SHORT_WEIERSTRASS,
+            256,
+            new EllipticCurveGost2001SetC()),
+    GOST2001_SETXCHA(
+            "GOST2001SetXchA",
+            null,
+            null,
+            null,
+            EcCurveEquationType.SHORT_WEIERSTRASS,
+            256,
+            new EllipticCurveGost2001SetXchA()),
+    GOST2001_SETXCHB(
+            "GOST2001SetXchB",
+            null,
+            null,
+            null,
+            EcCurveEquationType.SHORT_WEIERSTRASS,
+            256,
+            new EllipticCurveGost2001SetXchB()),
+    GOST2012_SETA256(
+            "GOST2012SetA256",
+            null,
+            null,
+            null,
+            EcCurveEquationType.SHORT_WEIERSTRASS,
+            256,
+            new EllipticCurveGost2012SetA256()),
+    GOST2012_SETA512(
+            "GOST2012SetA512",
+            null,
+            null,
+            null,
+            EcCurveEquationType.SHORT_WEIERSTRASS,
+            512,
+            new EllipticCurveGost2012SetA512()),
+    GOST2012_SETB512(
+            "GOST2012SetB512",
+            null,
+            null,
+            null,
+            EcCurveEquationType.SHORT_WEIERSTRASS,
+            512,
+            new EllipticCurveGost2012SetB512()),
+    GOST2012_SETC512(
+            "GOST2012SetC512",
+            null,
+            null,
+            null,
+            EcCurveEquationType.SHORT_WEIERSTRASS,
+            512,
+            new EllipticCurveGost2012SetC512());
 
     /** The name referred by us internally, always present */
     private final String name;

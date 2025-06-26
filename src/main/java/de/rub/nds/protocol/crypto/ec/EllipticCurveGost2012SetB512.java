@@ -10,7 +10,7 @@ package de.rub.nds.protocol.crypto.ec;
 
 import java.math.BigInteger;
 
-public class EllipticCurveGost2012SetB512 extends EllipticCurveOverF2m {
+public class EllipticCurveGost2012SetB512 extends EllipticCurveOverFp {
 
     @SuppressWarnings("SpellCheckingInspection")
     public EllipticCurveGost2012SetB512() {

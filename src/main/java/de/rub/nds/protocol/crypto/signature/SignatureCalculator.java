@@ -17,6 +17,7 @@ import de.rub.nds.protocol.crypto.hash.HashCalculator;
 import de.rub.nds.protocol.crypto.key.DsaPrivateKey;
 import de.rub.nds.protocol.crypto.key.EcdsaPrivateKey;
 import de.rub.nds.protocol.crypto.key.EddsaPrivateKey;
+import de.rub.nds.protocol.crypto.key.GostPrivateKey;
 import de.rub.nds.protocol.crypto.key.PrivateKeyContainer;
 import de.rub.nds.protocol.crypto.key.RsaPrivateKey;
 import de.rub.nds.protocol.exception.CryptoException;
@@ -123,7 +124,16 @@ public class SignatureCalculator {
                     toBeSignedBytes,
                     hashAlgorithm);
         } else if (computations instanceof GostSignatureComputations) {
-            throw new UnsupportedOperationException("Unsupported operation");
+            // Check That parameters are compatible
+            if (!(privateKey instanceof GostPrivateKey)) {
+                throw new IllegalArgumentException(
+                        "GOST SignatureComputations must be used with a GOST PrivateKey");
+            }
+            computeGostSignature(
+                    (GostSignatureComputations) computations,
+                    (GostPrivateKey) privateKey,
+                    toBeSignedBytes,
+                    hashAlgorithm);
         } else if (!(computations instanceof NoSignatureComputations)) {
             throw new UnsupportedOperationException("Unsupported operation");
         }
@@ -487,7 +497,7 @@ public class SignatureCalculator {
 
         BigInteger groupOrder = curve.getBasePointOrder();
         LOGGER.debug("Group order: {}", groupOrder);
-        int groupSize = groupOrder.bitLength() / 8;
+        int groupSize = (groupOrder.bitLength() + 7) / 8; // Proper rounding up
         LOGGER.debug("Group size: {}", groupSize);
 
         // e = Hash(m)
@@ -578,7 +588,7 @@ public class SignatureCalculator {
 
         BigInteger groupOrder = curve.getBasePointOrder();
         LOGGER.debug("Group order: {}", groupOrder);
-        int groupSize = groupOrder.bitLength() / 8;
+        int groupSize = (groupOrder.bitLength() + 7) / 8; // Proper rounding up
         LOGGER.debug("Group size: {}", groupSize);
 
         // e = Hash(m)
@@ -644,6 +654,102 @@ public class SignatureCalculator {
             completeSignature = outputStream.toByteArray();
         } catch (IOException ex) {
             throw new CryptoException("Could not write Signature to output stream");
+        }
+        computations.setSignatureBytes(completeSignature);
+        computations.setSignatureValid(true);
+    }
+
+    public void computeGostSignature(
+            GostSignatureComputations computations,
+            GostPrivateKey privateKey,
+            byte[] toBeSignedBytes,
+            HashAlgorithm hashAlgorithm) {
+        LOGGER.trace("Computing GOST signature");
+        computations.setEcParameters(privateKey.getParameters());
+        computations.setHashAlgorithm(hashAlgorithm);
+        computations.setNonce(privateKey.getNonce());
+        computations.setPrivateKey(privateKey.getPrivateKey());
+        computations.setToBeSignedBytes(toBeSignedBytes);
+
+        EllipticCurve curve = computations.getEcParameters().getGroup();
+        Point basePoint = curve.getBasePoint();
+
+        BigInteger groupOrder = curve.getBasePointOrder();
+        LOGGER.debug("Group order: {}", groupOrder);
+        int groupSize = (groupOrder.bitLength() + 7) / 8; // Proper rounding up
+        LOGGER.debug("Group size: {}", groupSize);
+
+        // e = Hash(m)
+        byte[] hash =
+                HashCalculator.compute(computations.getToBeSignedBytes().getValue(), hashAlgorithm);
+        computations.setDigestBytes(hash);
+        hash = computations.getDigestBytes().getValue();
+        LOGGER.debug("Digest: {}", hash);
+
+        // e = hash(m) interpreted as little-endian integer
+        byte[] reversedHash = new byte[hash.length];
+        for (int i = 0; i < hash.length; i++) {
+            reversedHash[i] = hash[hash.length - 1 - i];
+        }
+        BigInteger e = new BigInteger(1, reversedHash);
+
+        // e = e mod q; if e == 0, set e = 1
+        e = e.mod(groupOrder);
+        if (e.equals(BigInteger.ZERO)) {
+            e = BigInteger.ONE;
+        }
+
+        // Store truncated hash for compatibility with existing structure
+        computations.setTruncatedHashBytes(reversedHash);
+        computations.setTruncatedHash(e);
+
+        LOGGER.debug("E value: {}", e);
+
+        BigInteger k = computations.getNonce().getValue();
+        BigInteger d = computations.getPrivateKey().getValue();
+
+        // C = k*G
+        Point C = curve.mult(k, basePoint);
+
+        // r = Cx mod q
+        BigInteger r = C.getFieldX().getData().mod(groupOrder);
+        computations.setrX(r);
+        r = computations.getrX().getValue();
+
+        // if r == 0, need to regenerate k (but for testing we proceed)
+        LOGGER.debug("R: {}", r);
+
+        // s = (r*d + k*e) mod q
+        BigInteger rd = r.multiply(d).mod(groupOrder);
+        BigInteger ke = k.multiply(e).mod(groupOrder);
+        BigInteger s = rd.add(ke).mod(groupOrder);
+
+        computations.setS(s);
+        s = computations.getS().getValue();
+
+        // if s == 0, need to regenerate k (but for testing we proceed)
+        LOGGER.debug("S: {}", s);
+
+        // GOST signature format uses little-endian representation
+        byte[] rBytes = DataConverter.bigIntegerToByteArray(r, groupSize, true);
+        byte[] sBytes = DataConverter.bigIntegerToByteArray(s, groupSize, true);
+
+        // Reverse bytes for little-endian format
+        byte[] rReversed = new byte[rBytes.length];
+        byte[] sReversed = new byte[sBytes.length];
+        for (int i = 0; i < rBytes.length; i++) {
+            rReversed[i] = rBytes[rBytes.length - 1 - i];
+        }
+        for (int i = 0; i < sBytes.length; i++) {
+            sReversed[i] = sBytes[sBytes.length - 1 - i];
+        }
+
+        // Concatenate s||r (note: GOST uses s||r order, not r||s like ECDSA)
+        byte[] completeSignature;
+        try (SilentByteArrayOutputStream outputStream = new SilentByteArrayOutputStream()) {
+            outputStream.write(sReversed);
+            outputStream.write(rReversed);
+            completeSignature = outputStream.toByteArray();
         }
         computations.setSignatureBytes(completeSignature);
         computations.setSignatureValid(true);
