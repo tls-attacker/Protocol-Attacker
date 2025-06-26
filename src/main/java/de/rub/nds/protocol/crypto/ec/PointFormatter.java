@@ -154,7 +154,7 @@ public class PointFormatter {
                     if (compressedPoint.length != elementLength + 1) {
                         LOGGER.warn(
                                 "Could not parse point. Point needs to be {} bytes long, but was {} bytes long. Returning base point",
-                                (elementLength + 1),
+                                elementLength + 1,
                                 compressedPoint.length);
 
                         return curve.getBasePoint();
@@ -176,7 +176,7 @@ public class PointFormatter {
                     if (compressedPoint.length != elementLength * 2 + 1) {
                         LOGGER.warn(
                                 "Could not parse point. Point needs to be {} bytes long, but was {} bytes long. Returning base point",
-                                (elementLength * 2 + 1),
+                                elementLength * 2 + 1,
                                 compressedPoint.length);
                         return curve.getBasePoint();
                     }
