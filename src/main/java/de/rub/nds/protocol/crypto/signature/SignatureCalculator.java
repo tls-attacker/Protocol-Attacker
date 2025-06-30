@@ -205,7 +205,7 @@ public class SignatureCalculator {
         computations.setSignatureValid(true);
     }
 
-    private byte[] mask(byte[] value, byte[] mask) {
+    private static byte[] mask(byte[] value, byte[] mask) {
         // Usually value and mask will be of equal length, but invalid values may cause this to not
         // hold
         // that is why we take the minimum of both lengths here.
@@ -217,7 +217,8 @@ public class SignatureCalculator {
         return maskedValue;
     }
 
-    private byte[] maskGeneratorFunction1(byte[] input, HashAlgorithm mgfAlgorithm, int length) {
+    private static byte[] maskGeneratorFunction1(
+            byte[] input, HashAlgorithm mgfAlgorithm, int length) {
         int mgfhLen = mgfAlgorithm.getBitLength() / 8;
         byte[] mask = new byte[length];
         byte[] hashBuf;
@@ -290,7 +291,7 @@ public class SignatureCalculator {
         computations.setSignatureValid(true);
     }
 
-    private byte[] computePkcs1Padding(int toBePaddedLength, int modLengthInByte) {
+    private static byte[] computePkcs1Padding(int toBePaddedLength, int modLengthInByte) {
         if (toBePaddedLength + 3 >= modLengthInByte) {
             // Dont pad in this case
             return new byte[0];
@@ -306,7 +307,7 @@ public class SignatureCalculator {
         }
     }
 
-    private byte[] derEncodePkcs1(HashAlgorithm algorithm, byte[] data) {
+    private static byte[] derEncodePkcs1(HashAlgorithm algorithm, byte[] data) {
         ASN1ObjectIdentifier asn1objectIdnetifier =
                 new ASN1ObjectIdentifier(algorithm.getHashAlgorithmIdentifierOid());
         ASN1OctetString asn1octetString = new DEROctetString(data);

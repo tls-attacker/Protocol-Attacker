@@ -49,7 +49,7 @@ class EllipticCurveTest {
         this.assertDecompression(curve, basePoint);
     }
 
-    private void assertCurveParameters(EllipticCurve curve, Point basePoint) {
+    private static void assertCurveParameters(EllipticCurve curve, Point basePoint) {
         assertTrue(curve.isOnCurve(basePoint));
 
         // Constructing a point, that is not on the curve, to ensure that the
@@ -137,7 +137,7 @@ class EllipticCurveTest {
         }
     }
 
-    private void assertDecompression(EllipticCurve curve, Point basePoint) {
+    private static void assertDecompression(EllipticCurve curve, Point basePoint) {
         Point decompressed = curve.createAPointOnCurve(basePoint.getFieldX().getData());
 
         // two points share the same x-coordinate - apply inverse if necessary
