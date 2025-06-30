@@ -196,7 +196,7 @@ public class EllipticCurveOverFp extends EllipticCurve {
         return fieldB;
     }
 
-    private int legendreSymbol(BigInteger a, BigInteger p) {
+    private static int legendreSymbol(BigInteger a, BigInteger p) {
         BigInteger ls = a.modPow(p.subtract(BigInteger.ONE).divide(BigInteger.valueOf(2)), p);
         if (ls.compareTo(p.subtract(BigInteger.ONE)) == 0) {
             return -1;

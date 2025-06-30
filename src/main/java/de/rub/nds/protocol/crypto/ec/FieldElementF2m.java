@@ -125,7 +125,7 @@ public class FieldElementF2m extends FieldElement {
      * @param f A BigInteger representing a binary polynomial.
      * @param p A BigInteger representing a binary polynomial.
      */
-    private BigInteger[] polynomialDivision(BigInteger f, BigInteger p) {
+    private static BigInteger[] polynomialDivision(BigInteger f, BigInteger p) {
         int modLength = p.bitLength();
         BigInteger q = BigInteger.ZERO;
         while (f.bitLength() >= modLength && modLength != 0) {
