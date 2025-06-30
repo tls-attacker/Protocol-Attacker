@@ -113,10 +113,9 @@ public class PointFormatter {
                     "Cannot decode byte[] to point of {}. Returning base point", groupParameters);
             return basePoint;
         }
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(pointBytes);
         byte[] coordX = new byte[elementLength];
         byte[] coordY = new byte[elementLength];
-        try {
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(pointBytes)) {
             inputStream.read(coordX);
             inputStream.read(coordY);
         } catch (IOException ex) {
@@ -129,7 +128,6 @@ public class PointFormatter {
 
     public static Point formatFromByteArray(
             GroupParameters<?> groupParameters, byte[] compressedPoint) {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(compressedPoint);
         CyclicGroup<?> group = groupParameters.getGroup();
         if (!(group instanceof EllipticCurve)) {
             LOGGER.warn(
@@ -143,77 +141,67 @@ public class PointFormatter {
             LOGGER.warn("Could not parse point. Point is empty. Returning base point");
             return curve.getBasePoint();
         }
-        if (groupParameters instanceof NamedEllipticCurveParameters
-                && ((NamedEllipticCurveParameters) groupParameters).getEquationType()
-                        == EcCurveEquationType.SHORT_WEIERSTRASS) {
-            int pointFormat = inputStream.read();
-            byte[] coordX = new byte[elementLength];
-            switch (pointFormat) {
-                case 2:
-                case 3:
-                    if (compressedPoint.length != elementLength + 1) {
-                        LOGGER.warn(
-                                "Could not parse point. Point needs to be {} bytes long, but was {} bytes long. Returning base point",
-                                elementLength + 1,
-                                compressedPoint.length);
 
-                        return curve.getBasePoint();
-                    }
-                    try {
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(compressedPoint)) {
+            if (groupParameters instanceof NamedEllipticCurveParameters
+                    && ((NamedEllipticCurveParameters) groupParameters).getEquationType()
+                            == EcCurveEquationType.SHORT_WEIERSTRASS) {
+                int pointFormat = inputStream.read();
+                byte[] coordX = new byte[elementLength];
+                switch (pointFormat) {
+                    case 2:
+                    case 3:
+                        if (compressedPoint.length != elementLength + 1) {
+                            LOGGER.warn(
+                                    "Could not parse point. Point needs to be {} bytes long, but was {} bytes long. Returning base point",
+                                    elementLength + 1,
+                                    compressedPoint.length);
+
+                            return curve.getBasePoint();
+                        }
                         inputStream.read(coordX);
-                    } catch (IOException ex) {
-                        LOGGER.warn(
-                                "Could not read from byteArrayStream. Returning base point", ex);
-                        return curve.getBasePoint();
-                    }
-                    Point decompressedPoint = curve.createAPointOnCurve(new BigInteger(1, coordX));
-                    if (pointFormat == 2) {
-                        decompressedPoint = curve.inverseAffine(decompressedPoint);
-                    }
-                    return decompressedPoint;
+                        Point decompressedPoint =
+                                curve.createAPointOnCurve(new BigInteger(1, coordX));
+                        if (pointFormat == 2) {
+                            decompressedPoint = curve.inverseAffine(decompressedPoint);
+                        }
+                        return decompressedPoint;
 
-                case 4:
-                    if (compressedPoint.length != elementLength * 2 + 1) {
-                        LOGGER.warn(
-                                "Could not parse point. Point needs to be {} bytes long, but was {} bytes long. Returning base point",
-                                elementLength * 2 + 1,
-                                compressedPoint.length);
-                        return curve.getBasePoint();
-                    }
+                    case 4:
+                        if (compressedPoint.length != elementLength * 2 + 1) {
+                            LOGGER.warn(
+                                    "Could not parse point. Point needs to be {} bytes long, but was {} bytes long. Returning base point",
+                                    elementLength * 2 + 1,
+                                    compressedPoint.length);
+                            return curve.getBasePoint();
+                        }
 
-                    byte[] coordY = new byte[elementLength];
-                    try {
+                        byte[] coordY = new byte[elementLength];
                         inputStream.read(coordX);
                         inputStream.read(coordY);
-                    } catch (IOException ex) {
-                        LOGGER.warn(
-                                "Could not read from byteArrayStream. Returning base point", ex);
-                        return curve.getBasePoint();
-                    }
-                    return curve.getPoint(new BigInteger(1, coordX), new BigInteger(1, coordY));
+                        return curve.getPoint(new BigInteger(1, coordX), new BigInteger(1, coordY));
 
-                default:
-                    throw new UnsupportedOperationException(
-                            "Unsupported PointFormat: " + pointFormat);
-            }
-        } else {
-            if (compressedPoint.length != elementLength) {
-                LOGGER.warn(
-                        "Could not parse point. Point needs to be {} bytes long, but was {} bytes long. Returning base point",
-                        elementLength,
-                        compressedPoint.length);
-                return curve.getBasePoint();
-            }
-            byte[] coordX = new byte[elementLength];
-            try {
+                    default:
+                        throw new UnsupportedOperationException(
+                                "Unsupported PointFormat: " + pointFormat);
+                }
+            } else {
+                if (compressedPoint.length != elementLength) {
+                    LOGGER.warn(
+                            "Could not parse point. Point needs to be {} bytes long, but was {} bytes long. Returning base point",
+                            elementLength,
+                            compressedPoint.length);
+                    return curve.getBasePoint();
+                }
+                byte[] coordX = new byte[elementLength];
                 inputStream.read(coordX);
-            } catch (IOException ex) {
-                LOGGER.warn("Could not read from byteArrayStream. Returning base point", ex);
-                return curve.getBasePoint();
+                RFC7748Curve rfc7748Curve = (RFC7748Curve) group;
+                return curve.createAPointOnCurve(
+                        rfc7748Curve.decodeCoordinate(new BigInteger(1, coordX)));
             }
-            RFC7748Curve rfc7748Curve = (RFC7748Curve) group;
-            return curve.createAPointOnCurve(
-                    rfc7748Curve.decodeCoordinate(new BigInteger(1, coordX)));
+        } catch (IOException ex) {
+            LOGGER.warn("Could not read from byteArrayStream. Returning base point", ex);
+            return curve.getBasePoint();
         }
     }
 
