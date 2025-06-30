@@ -32,9 +32,10 @@ class SilentByteArrayOutputStreamTest {
 
     @Test
     void testSizedConstructor() {
-        SilentByteArrayOutputStream sizedStream = new SilentByteArrayOutputStream(64);
-        assertNotNull(sizedStream);
-        assertEquals(0, sizedStream.size());
+        try (SilentByteArrayOutputStream sizedStream = new SilentByteArrayOutputStream(64)) {
+            assertNotNull(sizedStream);
+            assertEquals(0, sizedStream.size());
+        }
     }
 
     @Test
