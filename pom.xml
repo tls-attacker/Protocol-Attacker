@@ -55,6 +55,7 @@
     </properties>
 
     <dependencies>
+        <!-- scope: compile -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
@@ -71,7 +72,6 @@
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
         </dependency>
-        <!-- scope: compile -->
         <dependency>
             <groupId>de.rub.nds</groupId>
             <artifactId>modifiable-variable</artifactId>
@@ -139,7 +139,7 @@
                             <spacesPerTab>4</spacesPerTab>
                         </indent>
                         <googleJavaFormat>
-                            <version>1.25.2</version>
+                            <version>${plugin.spotless-maven-plugin.google-java-format.version}</version>
                             <style>AOSP</style>
                         </googleJavaFormat>
                         <licenseHeader>
