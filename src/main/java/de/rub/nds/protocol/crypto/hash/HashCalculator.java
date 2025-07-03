@@ -27,10 +27,23 @@ public class HashCalculator {
 
     private static byte[] computeHash(byte[] toHash, String algorithmName) {
         try {
-            MessageDigest digest = MessageDigest.getInstance(algorithmName);
+            MessageDigest digest;
+            // For GOST algorithms, try to use BouncyCastle provider first
+            if (algorithmName.startsWith("GOST")) {
+                try {
+                    digest = MessageDigest.getInstance(algorithmName, "BC");
+                } catch (Exception e) {
+                    // Fall back to default provider if BC is not available
+                    digest = MessageDigest.getInstance(algorithmName);
+                }
+            } else {
+                digest = MessageDigest.getInstance(algorithmName);
+            }
             return digest.digest(toHash);
         } catch (NoSuchAlgorithmException ex) {
             throw new CryptoException("Unknown hash algorithm: " + algorithmName, ex);
+        } catch (Exception ex) {
+            throw new CryptoException("Error computing hash with algorithm: " + algorithmName, ex);
         }
     }
 }

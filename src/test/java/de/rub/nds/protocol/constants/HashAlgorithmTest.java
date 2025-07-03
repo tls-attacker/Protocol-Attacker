@@ -55,12 +55,12 @@ class HashAlgorithmTest {
                 "1.2.643.7.1.1.2.2", HashAlgorithm.GOST_R3411_12.getHashAlgorithmIdentifierOid());
         assertEquals(256, HashAlgorithm.GOST_R3411_12.getBitLength());
         assertEquals(128, HashAlgorithm.GOST_R3411_12.getSecurityStrength());
-        assertEquals("GOST341112", HashAlgorithm.GOST_R3411_12.getJavaName());
+        assertEquals("GOST3411-2012-256", HashAlgorithm.GOST_R3411_12.getJavaName());
 
         assertEquals(
                 "1.2.643.2.2.30.0", HashAlgorithm.GOST_R3411_94.getHashAlgorithmIdentifierOid());
         assertEquals(256, HashAlgorithm.GOST_R3411_94.getBitLength());
         assertEquals(128, HashAlgorithm.GOST_R3411_94.getSecurityStrength());
-        assertEquals("GOST341194", HashAlgorithm.GOST_R3411_94.getJavaName());
+        assertEquals("GOST3411", HashAlgorithm.GOST_R3411_94.getJavaName());
     }
 }
