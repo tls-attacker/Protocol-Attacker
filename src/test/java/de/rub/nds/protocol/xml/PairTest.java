@@ -9,8 +9,11 @@
 package de.rub.nds.protocol.xml;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import org.junit.jupiter.api.Test;
 
 class PairTest {
@@ -71,5 +74,26 @@ class PairTest {
         // Assert
         assertEquals(leftValue, pair.getLeftElement());
         assertEquals(rightValue, pair.getRightElement());
+    }
+
+    @Test
+    void testPrivateDefaultConstructor()
+            throws NoSuchMethodException,
+                    IllegalAccessException,
+                    InvocationTargetException,
+                    InstantiationException {
+        // Arrange
+        Constructor<Pair> constructor = Pair.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+
+        // Act
+        Pair<?, ?> pair = constructor.newInstance();
+
+        // Assert
+        assertNotNull(pair);
+        assertNull(pair.getLeftElement());
+        assertNull(pair.getRightElement());
+        assertNull(pair.getKey());
+        assertNull(pair.getValue());
     }
 }
