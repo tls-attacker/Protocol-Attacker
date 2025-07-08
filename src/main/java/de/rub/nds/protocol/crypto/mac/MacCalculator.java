@@ -23,6 +23,16 @@ public class MacCalculator {
 
     private MacCalculator() {}
 
+    /**
+     * Computes a Message Authentication Code (MAC) for the given data using the specified
+     * algorithm.
+     *
+     * @param key the secret key to use for MAC computation
+     * @param toMac the data to compute the MAC for
+     * @param algorithm the MAC algorithm to use
+     * @return the computed MAC value, or the original data if algorithm is NONE
+     * @throws CryptoException if the MAC algorithm is not supported or key is invalid
+     */
     public static byte[] compute(byte[] key, byte[] toMac, MacAlgorithm algorithm) {
         if (algorithm == MacAlgorithm.NONE) {
             return toMac;
