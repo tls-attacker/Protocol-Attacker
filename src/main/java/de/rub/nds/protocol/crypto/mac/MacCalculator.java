@@ -18,8 +18,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Utility class for computing Message Authentication Codes (MACs) using standard algorithms. If the key is zero-length,
- * it returns a zeroed MAC of the specified length. If the algorithm is NONE, it returns the original data.
+ * Utility class for computing Message Authentication Codes (MACs) using standard algorithms. If the
+ * key is zero-length, it returns a zeroed MAC of the specified length. If the algorithm is NONE, it
+ * returns the original data.
  */
 public class MacCalculator {
 
