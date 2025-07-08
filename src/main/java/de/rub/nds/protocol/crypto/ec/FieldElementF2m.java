@@ -13,11 +13,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * An element of a galois field F_{2^m}.<br>
- * Please notice that every element in the field (and the reduction polynomial that defines the
- * field) is represented by a binary polynomial.<br>
- * These polynomials are represented by BigInteger bit-strings, where the i-th bit represents the
- * i-th coefficient.
+ * Represents an element of a binary field F2m (characteristic 2).
+ *
+ * <p>Elements are represented as binary polynomials where each bit in the BigInteger corresponds to
+ * a coefficient (0 or 1) of the polynomial. Field arithmetic is performed modulo an irreducible
+ * reduction polynomial.
  */
 public class FieldElementF2m extends FieldElement {
 
@@ -25,11 +25,10 @@ public class FieldElementF2m extends FieldElement {
     private static final Logger LOGGER = LogManager.getLogger();
 
     /**
-     * Instantiates an element of a galois field F{2^m}.
+     * Creates a binary field element.
      *
-     * @param data The binary polynomial representing the element.<br>
-     *     The degree must be smaller than the reduction polynomial's degree.
-     * @param modulus The binary reduction polynomial defining the field.
+     * @param data binary polynomial representing the element
+     * @param modulus irreducible reduction polynomial defining the field
      */
     public FieldElementF2m(BigInteger data, BigInteger modulus) {
         super(data, modulus);

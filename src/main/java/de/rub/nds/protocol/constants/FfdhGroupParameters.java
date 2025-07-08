@@ -12,9 +12,16 @@ import de.rub.nds.protocol.crypto.CyclicGroup;
 import de.rub.nds.protocol.crypto.ffdh.FfdhGroup;
 import java.math.BigInteger;
 
+/**
+ * Abstract base class for Finite Field Diffie-Hellman group parameters. Provides generator and
+ * modulus for FFDH operations.
+ */
 public abstract class FfdhGroupParameters implements GroupParameters<BigInteger> {
 
+    /** The generator element of the group. */
     private final BigInteger generator;
+
+    /** The prime modulus defining the finite field. */
     private final BigInteger modulus;
 
     /**

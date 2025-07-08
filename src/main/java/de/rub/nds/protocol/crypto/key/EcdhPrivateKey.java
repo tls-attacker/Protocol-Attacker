@@ -11,6 +11,7 @@ package de.rub.nds.protocol.crypto.key;
 import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
 import java.math.BigInteger;
 
+/** Stores an ECDH private key and its associated curve parameters. */
 public class EcdhPrivateKey implements PrivateKeyContainer {
 
     private BigInteger privateKey;

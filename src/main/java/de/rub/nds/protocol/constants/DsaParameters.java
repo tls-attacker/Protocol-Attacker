@@ -12,11 +12,20 @@ import de.rub.nds.protocol.crypto.CyclicGroup;
 import de.rub.nds.protocol.crypto.dsa.DsaGroup;
 import java.math.BigInteger;
 
+/**
+ * Abstract base class for DSA (Digital Signature Algorithm) parameters. Provides the prime modulus
+ * p, subgroup order q, and generator g.
+ */
 public abstract class DsaParameters implements GroupParameters<BigInteger> {
 
-    private final BigInteger p; // modulus
-    private final BigInteger q; // subgroup order
-    private final BigInteger g; // generator
+    /** The prime modulus p. */
+    private final BigInteger p;
+
+    /** The prime subgroup order q. */
+    private final BigInteger q;
+
+    /** The generator g of the subgroup. */
+    private final BigInteger g;
 
     /**
      * Constructs a new DsaParameters instance with the specified DSA domain parameters.

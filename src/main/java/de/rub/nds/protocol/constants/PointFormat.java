@@ -8,7 +8,13 @@
  */
 package de.rub.nds.protocol.constants;
 
+/**
+ * Enumeration of elliptic curve point representation formats according to X9.62. Defines how points
+ * are encoded on elliptic curves.
+ */
 public enum PointFormat {
+    /** Point represented with both x and y coordinates. */
     UNCOMPRESSED,
+    /** Point represented with x coordinate and y sign bit. */
     COMPRESSED
 }

@@ -61,7 +61,11 @@ import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT571R1;
 import de.rub.nds.protocol.crypto.ec.EllipticCurveSM2;
 import de.rub.nds.protocol.crypto.ec.Point;
 
-/** Metainformation for named elliptic curves. */
+/**
+ * Enumeration of named elliptic curve parameters. Provides standard curve definitions including
+ * SECT, SECP, Brainpool, and modern curves. Each entry contains curve metadata and a concrete curve
+ * implementation.
+ */
 public enum NamedEllipticCurveParameters implements GroupParameters<Point> {
     /*
      * ###############################

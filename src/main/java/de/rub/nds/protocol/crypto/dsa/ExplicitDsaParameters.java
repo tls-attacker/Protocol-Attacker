@@ -11,7 +11,10 @@ package de.rub.nds.protocol.crypto.dsa;
 import de.rub.nds.protocol.constants.DsaParameters;
 import java.math.BigInteger;
 
-/** DSA Parameters with explicitly defined values rather than a named parameter set */
+/**
+ * DSA parameters with explicitly defined values rather than a named parameter set. Allows custom
+ * DSA parameter configurations for non-standard implementations.
+ */
 public class ExplicitDsaParameters extends DsaParameters {
 
     /**

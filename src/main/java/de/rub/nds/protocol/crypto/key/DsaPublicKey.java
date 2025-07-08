@@ -13,6 +13,7 @@ import de.rub.nds.protocol.constants.DsaParameters;
 import de.rub.nds.protocol.crypto.dsa.ExplicitDsaParameters;
 import java.math.BigInteger;
 
+/** Stores DSA public key (Y) and algorithm parameters. */
 public class DsaPublicKey implements PublicKeyContainer {
 
     private BigInteger Y;

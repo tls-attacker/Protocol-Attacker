@@ -13,6 +13,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * Utility class for creating deep copies of serializable objects through serialization. Uses Java
+ * serialization mechanism to create independent copies of complex object graphs.
+ */
 public class DeepCopyUtil {
     private DeepCopyUtil() {}
 

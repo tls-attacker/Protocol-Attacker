@@ -10,6 +10,7 @@ package de.rub.nds.protocol.crypto.key;
 
 import java.math.BigInteger;
 
+/** Stores RSA private key components: private exponent and modulus. */
 public class RsaPrivateKey implements PrivateKeyContainer {
 
     private BigInteger privateExponent;

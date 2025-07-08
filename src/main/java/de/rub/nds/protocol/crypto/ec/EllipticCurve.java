@@ -11,7 +11,15 @@ package de.rub.nds.protocol.crypto.ec;
 import de.rub.nds.protocol.crypto.CyclicGroup;
 import java.math.BigInteger;
 
-/** An abstract class that provides functionality for elliptic curve over galois fields. */
+/**
+ * Abstract base class for elliptic curves over finite fields.
+ *
+ * <p>This class provides the fundamental operations for elliptic curve cryptography, including
+ * point arithmetic, scalar multiplication, and field operations. Supports both prime field (Fp) and
+ * binary field (F2m) curves through subclasses.
+ *
+ * <p>Implements the CyclicGroup interface to provide group operations on curve points.
+ */
 public abstract class EllipticCurve implements CyclicGroup<Point> {
 
     private Point basePoint;

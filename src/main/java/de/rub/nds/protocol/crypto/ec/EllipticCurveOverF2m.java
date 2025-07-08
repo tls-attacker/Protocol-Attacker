@@ -14,9 +14,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * An elliptic curve over a galois field F_{2^m}.<br>
- * Please notice that the coordinates of affine points are binary polynomials.<br>
- * They are represented by BigIntegers, where the i-th bit represents the i-th coefficient.
+ * Elliptic curve implementation over binary fields F2m.
+ *
+ * <p>Implements the equation y² + xy = x³ + ax² + b over F2m. Uses polynomial basis representation
+ * where field elements are binary polynomials. Supports binary curves used in standards like NIST
+ * B-curves.
  */
 public class EllipticCurveOverF2m extends EllipticCurve {
 

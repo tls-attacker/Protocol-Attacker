@@ -14,6 +14,10 @@ import java.math.BigInteger;
 import java.util.Random;
 import org.apache.commons.lang3.tuple.Pair;
 
+/**
+ * Utility class for generating cryptographic key pairs. Provides methods for generating RSA, DH,
+ * DSA, ECDH, ECDSA, and EdDSA keys.
+ */
 public class KeyGenerator {
 
     private static final int MAX_NUMBER_OF_DSA_ITERATIONS = 100;

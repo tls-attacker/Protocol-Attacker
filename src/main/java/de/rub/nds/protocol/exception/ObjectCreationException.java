@@ -8,6 +8,7 @@
  */
 package de.rub.nds.protocol.exception;
 
+/** Thrown when protocol objects or messages cannot be instantiated. */
 public class ObjectCreationException extends RuntimeException {
 
     /** Constructs a new ObjectCreationException with no detail message. */

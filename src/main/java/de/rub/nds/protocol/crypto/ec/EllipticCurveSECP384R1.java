@@ -10,6 +10,7 @@ package de.rub.nds.protocol.crypto.ec;
 
 import java.math.BigInteger;
 
+/** NIST P-384 elliptic curve (secp384r1) */
 @SuppressWarnings("SpellCheckingInspection")
 public class EllipticCurveSECP384R1 extends EllipticCurveOverFp {
     public EllipticCurveSECP384R1() {

@@ -10,6 +10,12 @@ package de.rub.nds.protocol.constants;
 
 import de.rub.nds.protocol.crypto.CyclicGroup;
 
+/**
+ * Interface for cryptographic group parameters. Defines methods for accessing properties of
+ * mathematical groups used in cryptography.
+ *
+ * @param <GroupElementT> the type of elements in the group
+ */
 public interface GroupParameters<GroupElementT> {
 
     /**
@@ -30,7 +36,7 @@ public interface GroupParameters<GroupElementT> {
     /**
      * Returns an instance of the mathematical group that is described by these parameters.
      *
-     * @return An instasnce of the unterlying group
+     * @return An instance of the underlying group
      */
     CyclicGroup<GroupElementT> getGroup();
 }

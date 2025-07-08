@@ -10,6 +10,10 @@ package de.rub.nds.protocol.crypto.signature;
 
 import de.rub.nds.modifiablevariable.biginteger.ModifiableBigInteger;
 
+/**
+ * Computation container for EdDSA (Edwards-curve Digital Signature Algorithm) signatures including
+ * Ed25519 and Ed448. Currently minimal implementation.
+ */
 public class EddsaSignatureComputations extends SignatureComputations {
 
     private ModifiableBigInteger privateKey;

@@ -8,11 +8,21 @@
  */
 package de.rub.nds.protocol.constants;
 
+/**
+ * Enumeration of asymmetric cryptographic algorithm types. Distinguishes between different public
+ * key cryptography families.
+ */
 public enum AsymmetricAlgorithmType {
+    /** Rivest-Shamir-Adleman algorithm. */
     RSA,
+    /** Elliptic Curve Digital Signature Algorithm. */
     ECDSA,
+    /** Edwards-curve Digital Signature Algorithm. */
     EDDSA,
+    /** Digital Signature Algorithm. */
     DSA,
+    /** Diffie-Hellman key exchange. */
     DH,
+    /** Elliptic Curve Diffie-Hellman. */
     ECDH,
 }

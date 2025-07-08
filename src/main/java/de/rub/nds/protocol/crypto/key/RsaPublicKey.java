@@ -11,10 +11,13 @@ package de.rub.nds.protocol.crypto.key;
 import de.rub.nds.protocol.constants.AsymmetricAlgorithmType;
 import java.math.BigInteger;
 
+/** RSA public key container. Stores the public exponent and modulus for RSA operations. */
 public class RsaPublicKey implements PublicKeyContainer {
 
+    /** The public exponent (typically e). */
     private BigInteger publicExponent;
 
+    /** The modulus (n = p*q). */
     private BigInteger modulus;
 
     /** Default constructor for deserialization. */

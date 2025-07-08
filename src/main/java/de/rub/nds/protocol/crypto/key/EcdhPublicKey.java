@@ -13,6 +13,7 @@ import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
 import de.rub.nds.protocol.crypto.ec.Point;
 import java.math.BigInteger;
 
+/** Stores an ECDH public key consisting of a point on an elliptic curve. */
 public class EcdhPublicKey implements PublicKeyContainer {
 
     private Point publicPoint;

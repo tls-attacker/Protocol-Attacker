@@ -11,6 +11,7 @@ package de.rub.nds.protocol.crypto.key;
 import de.rub.nds.protocol.constants.FfdhGroupParameters;
 import java.math.BigInteger;
 
+/** Stores Diffie-Hellman private key and group parameters. */
 public class DhPrivateKey implements PrivateKeyContainer {
 
     private BigInteger privateKey;

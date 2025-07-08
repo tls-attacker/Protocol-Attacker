@@ -13,6 +13,7 @@ import de.rub.nds.protocol.constants.FfdhGroupParameters;
 import de.rub.nds.protocol.crypto.ffdh.ExplicitFfdhGroupParameters;
 import java.math.BigInteger;
 
+/** Stores Diffie-Hellman public key and group parameters. */
 public class DhPublicKey implements PublicKeyContainer {
 
     private FfdhGroupParameters parameters;

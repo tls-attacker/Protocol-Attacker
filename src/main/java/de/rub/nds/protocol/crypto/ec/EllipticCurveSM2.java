@@ -10,6 +10,10 @@ package de.rub.nds.protocol.crypto.ec;
 
 import java.math.BigInteger;
 
+/**
+ * SM2 elliptic curve - a 256-bit prime field curve specified in Chinese national standard GM/T
+ * 0003.
+ */
 public class EllipticCurveSM2 extends EllipticCurveOverFp {
     @SuppressWarnings("SpellCheckingInspection")
     public EllipticCurveSM2() {

@@ -12,7 +12,13 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-/** Custom implementation of Pair to enable XML serialisation */
+/**
+ * XML-serializable generic pair container for storing two related objects. Provides both
+ * element-based (left/right) and key-value access patterns.
+ *
+ * @param <L> the type of the left element (key)
+ * @param <R> the type of the right element (value)
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Pair<L, R> {

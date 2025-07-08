@@ -8,7 +8,10 @@
  */
 package de.rub.nds.protocol.constants;
 
-/** Metadata for hash algorithms. */
+/**
+ * Enumeration of cryptographic hash algorithms with their properties. Provides OID, bit length,
+ * security strength, and Java provider name for each algorithm.
+ */
 public enum HashAlgorithm {
     NONE("1.2.840.113549.2.1", 0, 0, null),
     MD2("1.2.840.113549.2.2", 128, 64, "MD2"),
@@ -29,11 +32,13 @@ public enum HashAlgorithm {
     /** OID of the hash algorithm. */
     private String hashAlgorithmIdentifierOid;
 
-    /** The length of a hash */
+    /** The length of a hash in bits. */
     private int bitLength;
 
+    /** Security strength in bits. */
     private int securityStrength;
 
+    /** Java Security Provider algorithm name. */
     private String javaName;
 
     HashAlgorithm(

@@ -13,6 +13,10 @@ import de.rub.nds.modifiablevariable.biginteger.ModifiableBigInteger;
 import de.rub.nds.modifiablevariable.bytearray.ModifiableByteArray;
 import java.math.BigInteger;
 
+/**
+ * Computation container for DSA (Digital Signature Algorithm) signatures. Stores parameters p, q,
+ * g, private key x, nonce k, and signature components r and s.
+ */
 public class DsaSignatureComputations extends SignatureComputations {
 
     private ModifiableBigInteger privateKey;

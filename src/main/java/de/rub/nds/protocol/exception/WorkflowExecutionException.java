@@ -8,7 +8,7 @@
  */
 package de.rub.nds.protocol.exception;
 
-/** Thrown when problems in the workflow appear. */
+/** Thrown when workflow execution encounters fatal errors or invalid states. */
 public class WorkflowExecutionException extends RuntimeException {
 
     /** Constructs a new WorkflowExecutionException with no detail message. */

@@ -13,6 +13,7 @@ import de.rub.nds.protocol.exception.CryptoException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/** Utility class for computing cryptographic hash digests using standard algorithms. */
 public class HashCalculator {
 
     private HashCalculator() {}
