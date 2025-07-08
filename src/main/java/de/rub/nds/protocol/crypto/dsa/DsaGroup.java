@@ -12,6 +12,10 @@ import de.rub.nds.protocol.constants.DsaParameters;
 import de.rub.nds.protocol.crypto.CyclicGroup;
 import java.math.BigInteger;
 
+/**
+ * Implementation of a cyclic group for DSA operations. Provides group operations modulo p for DSA
+ * cryptographic calculations.
+ */
 public class DsaGroup implements CyclicGroup<BigInteger> {
 
     private final DsaParameters parameters;
@@ -25,21 +29,46 @@ public class DsaGroup implements CyclicGroup<BigInteger> {
         this.parameters = parameters;
     }
 
+    /**
+     * Performs the group operation (multiplication modulo p) on two elements.
+     *
+     * @param a The first element
+     * @param b The second element
+     * @return The result of a * b mod p
+     */
     @Override
     public BigInteger groupOperation(BigInteger a, BigInteger b) {
         return a.multiply(b).mod(parameters.getP());
     }
 
+    /**
+     * Performs the group operation n times (exponentiation modulo p).
+     *
+     * @param a The base element
+     * @param scalar The exponent
+     * @return The result of a^scalar mod p
+     */
     @Override
     public BigInteger nTimesGroupOperation(BigInteger a, BigInteger scalar) {
         return a.modPow(scalar, parameters.getP());
     }
 
+    /**
+     * Returns the generator g of the DSA group.
+     *
+     * @return The generator value g
+     */
     @Override
     public BigInteger getGenerator() {
         return parameters.getG();
     }
 
+    /**
+     * Performs the group operation n times on the generator (g^scalar mod p).
+     *
+     * @param scalar The exponent
+     * @return The result of g^scalar mod p
+     */
     @Override
     public BigInteger nTimesGroupOperationOnGenerator(BigInteger scalar) {
         return nTimesGroupOperation(parameters.getG(), scalar);
