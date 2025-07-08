@@ -38,8 +38,20 @@ public class SignatureCalculator {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    /** Constructs a new SignatureCalculator instance. */
     public SignatureCalculator() {}
 
+    /**
+     * Computes a signature using the specified algorithm and parameters.
+     *
+     * @param computations the signature computations object to populate
+     * @param privateKey the private key for signing
+     * @param toBeSignedBytes the data to be signed
+     * @param signatureAlgorithm the signature algorithm to use
+     * @param hashAlgorithm the hash algorithm to use
+     * @throws IllegalArgumentException if incompatible parameters are provided
+     * @throws UnsupportedOperationException if the operation is not supported
+     */
     public void computeSignature(
             SignatureComputations computations,
             PrivateKeyContainer privateKey,
@@ -113,6 +125,15 @@ public class SignatureCalculator {
         }
     }
 
+    /**
+     * Computes an EdDSA signature.
+     *
+     * @param computations the EdDSA signature computations object to populate
+     * @param privateKey the EdDSA private key
+     * @param toBeSignedBytes the data to be signed
+     * @param hashAlgorithm the hash algorithm to use
+     * @throws UnsupportedOperationException currently not implemented
+     */
     public void computeEddsaSignature(
             EddsaSignatureComputations computations,
             EddsaPrivateKey privateKey,
@@ -121,6 +142,15 @@ public class SignatureCalculator {
         throw new UnsupportedOperationException("Unsupported operation");
     }
 
+    /**
+     * Computes an RSA-PSS signature.
+     *
+     * @param computations the RSA-PSS signature computations object to populate
+     * @param privateKey the RSA private key
+     * @param toBeSignedBytes the data to be signed
+     * @param hashAlgorithm the hash algorithm to use
+     * @param salt the salt value for PSS
+     */
     public void computeRsaPssSignature(
             RsaSsaPssSignatureComputations computations,
             RsaPrivateKey privateKey,
@@ -250,6 +280,14 @@ public class SignatureCalculator {
         return mask;
     }
 
+    /**
+     * Computes an RSA PKCS#1 v1.5 signature.
+     *
+     * @param computations the RSA PKCS#1 signature computations object to populate
+     * @param privateKey the RSA private key
+     * @param toBeSignedBytes the data to be signed
+     * @param hashAlgorithm the hash algorithm to use
+     */
     public void computeRsaPkcs1Signature(
             RsaPkcs1SignatureComputations computations,
             RsaPrivateKey privateKey,
@@ -324,6 +362,14 @@ public class SignatureCalculator {
         }
     }
 
+    /**
+     * Computes a DSA signature.
+     *
+     * @param computations the DSA signature computations object to populate
+     * @param privateKey the DSA private key
+     * @param toBeSignedBytes the data to be signed
+     * @param hashAlgorithm the hash algorithm to use
+     */
     public void computeDsaSignature(
             DsaSignatureComputations computations,
             DsaPrivateKey privateKey,
@@ -412,6 +458,14 @@ public class SignatureCalculator {
         computations.setSignatureValid(true);
     }
 
+    /**
+     * Computes a raw ECDSA signature (without ASN.1 encoding).
+     *
+     * @param computations the ECDSA signature computations object to populate
+     * @param privateKey the ECDSA private key
+     * @param toBeSignedBytes the data to be signed
+     * @param hashAlgorithm the hash algorithm to use
+     */
     public void computeRawEcdsaSignature(
             EcdsaSignatureComputations computations,
             EcdsaPrivateKey privateKey,
@@ -494,6 +548,15 @@ public class SignatureCalculator {
         computations.setSignatureValid(true);
     }
 
+    /**
+     * Computes an ECDSA signature with ASN.1 encoding.
+     *
+     * @param computations the ECDSA signature computations object to populate
+     * @param privateKey the ECDSA private key
+     * @param toBeSignedBytes the data to be signed
+     * @param hashAlgorithm the hash algorithm to use
+     * @throws CryptoException if signature encoding fails
+     */
     public void computeEcdsaSignature(
             EcdsaSignatureComputations computations,
             EcdsaPrivateKey privateKey,
@@ -582,6 +645,13 @@ public class SignatureCalculator {
         computations.setSignatureValid(true);
     }
 
+    /**
+     * Creates a SignatureComputations object for the specified signature algorithm.
+     *
+     * @param signatureAlgorithm the signature algorithm
+     * @return the appropriate SignatureComputations implementation
+     * @throws UnsupportedOperationException if the algorithm is not supported
+     */
     public SignatureComputations createSignatureComputations(
             SignatureAlgorithm signatureAlgorithm) {
         if (signatureAlgorithm == null) {

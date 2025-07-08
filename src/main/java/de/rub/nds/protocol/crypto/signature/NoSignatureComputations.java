@@ -10,5 +10,6 @@ package de.rub.nds.protocol.crypto.signature;
 
 public class NoSignatureComputations extends SignatureComputations {
 
+    /** Constructs a new NoSignatureComputations instance for cases where no signature is used. */
     public NoSignatureComputations() {}
 }

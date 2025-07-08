@@ -14,10 +14,20 @@ public class EddsaSignatureComputations extends SignatureComputations {
 
     private ModifiableBigInteger privateKey;
 
+    /**
+     * Gets the private key used for EdDSA signature computations.
+     *
+     * @return the private key as a ModifiableBigInteger
+     */
     public ModifiableBigInteger getPrivateKey() {
         return privateKey;
     }
 
+    /**
+     * Sets the private key used for EdDSA signature computations.
+     *
+     * @param privateKey the private key to set
+     */
     public void setPrivateKey(ModifiableBigInteger privateKey) {
         this.privateKey = privateKey;
     }
