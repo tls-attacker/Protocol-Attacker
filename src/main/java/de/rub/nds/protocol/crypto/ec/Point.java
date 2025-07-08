@@ -25,8 +25,7 @@ import org.apache.logging.log4j.Logger;
  * Represents a point on an elliptic curve.
  *
  * <p>Points are stored in affine coordinates (x, y) or as the special point at infinity. The point
- * at infinity serves as the identity element for the group operation. This class uses lazy
- * initialization for field elements to optimize performance.
+ * at infinity serves as the identity element for the group operation.
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
