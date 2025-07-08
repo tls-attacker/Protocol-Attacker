@@ -31,6 +31,8 @@ public class HashCalculator {
             return digest.digest(toHash);
         } catch (NoSuchAlgorithmException ex) {
             throw new CryptoException("Unknown hash algorithm: " + algorithmName, ex);
+        } catch (Exception ex) {
+            throw new CryptoException("Error computing hash with algorithm: " + algorithmName, ex);
         }
     }
 }
