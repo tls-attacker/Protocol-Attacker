@@ -60,6 +60,7 @@ public abstract class EllipticCurve implements CyclicGroup<Point> {
      *     or the point at infinity.
      * @param q A point whose coordinates are elements of the field over which the curve is defined
      *     or the point at infinity.
+     * @return The sum of the two points on the elliptic curve.
      */
     public Point add(Point p, Point q) {
         if (p.isAtInfinity()) {
@@ -85,8 +86,10 @@ public abstract class EllipticCurve implements CyclicGroup<Point> {
      * Returns k*p on this curve. If the point is not on the curve and the calculations would
      * require dividing by 0, the result will be the point at infinity.
      *
+     * @param k The scalar to multiply the point by.
      * @param p A point whose coordinates are elements of the field over which the curve is defined
      *     or the point at infinity.
+     * @return The result of scalar multiplication k*p.
      */
     public Point mult(BigInteger k, Point p) {
         if (k.compareTo(BigInteger.ZERO) < 0) {
@@ -115,6 +118,7 @@ public abstract class EllipticCurve implements CyclicGroup<Point> {
      *
      * @param p A point whose coordinates are elements of the field over which the curve is defined
      *     or the point at infinity.
+     * @return The inverse of the given point.
      */
     public Point inverse(Point p) {
         if (p.isAtInfinity()) {
@@ -132,6 +136,7 @@ public abstract class EllipticCurve implements CyclicGroup<Point> {
      *
      * @param x The x coordinate of the point.
      * @param y The y coordinate of the point.
+     * @return A point on the elliptic curve with the given coordinates.
      */
     public abstract Point getPoint(BigInteger x, BigInteger y);
 
@@ -140,6 +145,7 @@ public abstract class EllipticCurve implements CyclicGroup<Point> {
      *
      * @param p An affine point whose coordinates are elements of the field over which the curve is
      *     defined or the point at infinity.
+     * @return true if the point is on the curve, false otherwise.
      */
     public abstract boolean isOnCurve(Point p);
 

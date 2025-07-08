@@ -98,6 +98,8 @@ public class Point implements Serializable {
     /**
      * Returns true if the point is the point at infinity. Returns false if the point is an affine
      * point.
+     *
+     * @return true if this is the point at infinity, false otherwise
      */
     public boolean isAtInfinity() {
         return this.infinity;
@@ -121,6 +123,7 @@ public class Point implements Serializable {
         return this.fieldY;
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -130,6 +133,7 @@ public class Point implements Serializable {
         return hash;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -154,6 +158,7 @@ public class Point implements Serializable {
         return true;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         if (this.isAtInfinity()) {

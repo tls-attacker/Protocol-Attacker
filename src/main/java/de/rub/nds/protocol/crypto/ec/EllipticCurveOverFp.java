@@ -51,6 +51,7 @@ public class EllipticCurveOverFp extends EllipticCurve {
         this.fieldB = new FieldElementFp(b, this.getModulus());
     }
 
+    /** {@inheritDoc} */
     @Override
     public Point getPoint(BigInteger x, BigInteger y) {
         FieldElementFp elemX = new FieldElementFp(x, this.getModulus());
@@ -59,6 +60,7 @@ public class EllipticCurveOverFp extends EllipticCurve {
         return new Point(elemX, elemY);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isOnCurve(Point p) {
         if (p.isAtInfinity()) {
@@ -148,6 +150,7 @@ public class EllipticCurveOverFp extends EllipticCurve {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public FieldElement createFieldElement(BigInteger value) {
         return new FieldElementFp(value, this.getModulus());
@@ -157,6 +160,11 @@ public class EllipticCurveOverFp extends EllipticCurve {
      * Returns a point on the curve for the given x coordinate - or the basepoint if such a point
      * does not exist. Of the two possible points, the function always returns the point whose y
      * coordinate is odd.
+     *
+     * @param x The x coordinate of the point
+     * @param returnBasepointUponError If true, returns the base point when a valid point cannot be
+     *     created.
+     * @return A point on the curve with the given x-coordinate, or the base point if specified.
      */
     @Override
     public Point createAPointOnCurve(BigInteger x, boolean returnBasepointUponError) {
@@ -183,14 +191,18 @@ public class EllipticCurveOverFp extends EllipticCurve {
     }
 
     /**
-     * @return the a
+     * Returns the field element representing coefficient a in the curve equation.
+     *
+     * @return the a coefficient as a field element
      */
     public FieldElementFp getFieldA() {
         return fieldA;
     }
 
     /**
-     * @return the b
+     * Returns the field element representing coefficient b in the curve equation.
+     *
+     * @return the b coefficient as a field element
      */
     public FieldElementFp getFieldB() {
         return fieldB;
@@ -205,6 +217,13 @@ public class EllipticCurveOverFp extends EllipticCurve {
         }
     }
 
+    /**
+     * Computes the modular square root of a modulo p.
+     *
+     * @param a The value to compute the square root of
+     * @param p The modulus
+     * @return The square root of a modulo p, or null if no solution exists
+     */
     public BigInteger modSqrt(BigInteger a, BigInteger p) {
         if (legendreSymbol(a, p) != 1
                 || a.compareTo(BigInteger.ZERO) == 0

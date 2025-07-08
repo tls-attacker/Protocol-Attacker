@@ -13,7 +13,12 @@ import java.math.BigInteger;
 /** An element of the field F_p (with p being a prime number). */
 public class FieldElementFp extends FieldElement {
 
-    /** Instantiates the element data in the field F_modulus. With modulus being a prime number. */
+    /**
+     * Instantiates the element data in the field F_modulus. With modulus being a prime number.
+     *
+     * @param data The value representing the field element
+     * @param modulus The prime modulus defining the field
+     */
     public FieldElementFp(BigInteger data, BigInteger modulus) {
         super(data.mod(modulus), modulus);
     }
@@ -24,6 +29,7 @@ public class FieldElementFp extends FieldElement {
         super(null, null);
     }
 
+    /** {@inheritDoc} */
     @Override
     public FieldElement add(FieldElement f) {
         BigInteger tmp = this.getData().add(f.getData());
@@ -31,6 +37,7 @@ public class FieldElementFp extends FieldElement {
         return new FieldElementFp(tmp, this.getModulus());
     }
 
+    /** {@inheritDoc} */
     @Override
     public FieldElement mult(FieldElement f) {
         BigInteger tmp = this.getData().multiply(f.getData());
@@ -38,6 +45,7 @@ public class FieldElementFp extends FieldElement {
         return new FieldElementFp(tmp, this.getModulus());
     }
 
+    /** {@inheritDoc} */
     @Override
     public FieldElement addInv() {
         BigInteger tmp = this.getData().negate();
@@ -45,6 +53,7 @@ public class FieldElementFp extends FieldElement {
         return new FieldElementFp(tmp, this.getModulus());
     }
 
+    /** {@inheritDoc} */
     @Override
     public FieldElement multInv() {
         if (this.getData().equals(BigInteger.ZERO)) {
