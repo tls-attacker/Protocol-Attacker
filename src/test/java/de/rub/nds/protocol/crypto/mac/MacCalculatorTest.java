@@ -11,9 +11,13 @@ package de.rub.nds.protocol.crypto.mac;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import de.rub.nds.protocol.constants.MacAlgorithm;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -103,5 +107,40 @@ class MacCalculatorTest {
         MacAlgorithm algorithm = MacAlgorithm.HMAC_SHA256;
         // Should not throw an exception, but return a valid MAC
         assertNotNull(MacCalculator.compute(emptyKey, TEST_DATA, algorithm));
+    }
+
+    @Test
+    void testMacWithInvalidAlgorithm() throws Exception {
+        // This test verifies that the exception handling in computeMac works correctly
+        // We need to use reflection to call computeMac directly with an invalid algorithm name
+        java.lang.reflect.Method computeMacMethod =
+                MacCalculator.class.getDeclaredMethod(
+                        "computeMac", byte[].class, byte[].class, String.class);
+        computeMacMethod.setAccessible(true);
+
+        // Act & Assert
+        assertThrows(
+                InvocationTargetException.class,
+                () -> computeMacMethod.invoke(null, TEST_KEY, TEST_DATA, "InvalidAlgorithm"),
+                "Should throw InvocationTargetException wrapping CryptoException");
+    }
+
+    @Test
+    void testPrivateConstructor() throws Exception {
+        // This test ensures the private constructor is covered
+        Constructor<MacCalculator> constructor = MacCalculator.class.getDeclaredConstructor();
+
+        // Verify it's private
+        assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+
+        // Make it accessible and invoke it
+        constructor.setAccessible(true);
+        assertNotNull(constructor.newInstance());
+    }
+
+    private void assertTrue(boolean condition) {
+        if (!condition) {
+            throw new AssertionError("Expected true but was false");
+        }
     }
 }
