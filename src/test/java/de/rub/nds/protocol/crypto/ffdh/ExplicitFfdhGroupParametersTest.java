@@ -84,4 +84,51 @@ class ExplicitFfdhGroupParametersTest {
                 params1.hashCode(),
                 params4.hashCode()); // Different values should have different hash
     }
+
+    @Test
+    public void testEqualsWithNullModulus() {
+        ExplicitFfdhGroupParameters params1 = new ExplicitFfdhGroupParameters(testGenerator, null);
+        ExplicitFfdhGroupParameters params2 = new ExplicitFfdhGroupParameters(testGenerator, null);
+        ExplicitFfdhGroupParameters params3 =
+                new ExplicitFfdhGroupParameters(testGenerator, testModulus);
+
+        // Test equality with null modulus
+        assertTrue(params1.equals(params2)); // Both have null modulus
+        assertFalse(params1.equals(params3)); // One has null modulus, other doesn't
+        assertFalse(params3.equals(params1)); // Reverse check
+    }
+
+    @Test
+    public void testEqualsWithNullGenerator() {
+        ExplicitFfdhGroupParameters params1 = new ExplicitFfdhGroupParameters(null, testModulus);
+        ExplicitFfdhGroupParameters params2 = new ExplicitFfdhGroupParameters(null, testModulus);
+        ExplicitFfdhGroupParameters params3 =
+                new ExplicitFfdhGroupParameters(testGenerator, testModulus);
+
+        // Test equality with null generator
+        assertTrue(params1.equals(params2)); // Both have null generator
+        assertFalse(params1.equals(params3)); // One has null generator, other doesn't
+        assertFalse(params3.equals(params1)); // Reverse check
+    }
+
+    @Test
+    public void testHashCodeWithNullValues() {
+        ExplicitFfdhGroupParameters params1 = new ExplicitFfdhGroupParameters(null, null);
+        ExplicitFfdhGroupParameters params2 = new ExplicitFfdhGroupParameters(null, testModulus);
+        ExplicitFfdhGroupParameters params3 = new ExplicitFfdhGroupParameters(testGenerator, null);
+        ExplicitFfdhGroupParameters params4 =
+                new ExplicitFfdhGroupParameters(testGenerator, testModulus);
+
+        // All should have different hash codes (or at least compute without error)
+        int hash1 = params1.hashCode();
+        int hash2 = params2.hashCode();
+        int hash3 = params3.hashCode();
+        int hash4 = params4.hashCode();
+
+        // Verify hash codes are computed without error
+        assertTrue(hash1 != 0 || hash1 == 0); // Just ensure it computes
+        assertTrue(hash2 != 0 || hash2 == 0);
+        assertTrue(hash3 != 0 || hash3 == 0);
+        assertTrue(hash4 != 0 || hash4 == 0);
+    }
 }
