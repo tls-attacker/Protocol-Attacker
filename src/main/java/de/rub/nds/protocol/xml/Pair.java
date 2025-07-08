@@ -24,31 +24,69 @@ public class Pair<L, R> {
     @SuppressWarnings("unused")
     private Pair() {}
 
+    /**
+     * Constructs a new Pair with the specified left and right elements.
+     *
+     * @param leftElement the left element of the pair
+     * @param rightElement the right element of the pair
+     */
     public Pair(L leftElement, R rightElement) {
         this.leftElement = leftElement;
         this.rightElement = rightElement;
     }
 
+    /**
+     * Returns the left element of this pair.
+     *
+     * @return the left element
+     */
     public L getLeftElement() {
         return leftElement;
     }
 
+    /**
+     * Sets the left element of this pair.
+     *
+     * @param leftElement the new left element
+     */
     public void setLeftElement(L leftElement) {
         this.leftElement = leftElement;
     }
 
+    /**
+     * Returns the right element of this pair.
+     *
+     * @return the right element
+     */
     public R getRightElement() {
         return rightElement;
     }
 
+    /**
+     * Sets the right element of this pair.
+     *
+     * @param rightElement the new right element
+     */
     public void setRightElement(R rightElement) {
         this.rightElement = rightElement;
     }
 
+    /**
+     * Returns the key (left element) of this pair. This method provides an alternative name for
+     * accessing the left element.
+     *
+     * @return the left element as key
+     */
     public L getKey() {
         return leftElement;
     }
 
+    /**
+     * Returns the value (right element) of this pair. This method provides an alternative name for
+     * accessing the right element.
+     *
+     * @return the right element as value
+     */
     public R getValue() {
         return rightElement;
     }
