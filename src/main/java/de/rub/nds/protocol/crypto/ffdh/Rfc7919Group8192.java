@@ -11,8 +11,16 @@ package de.rub.nds.protocol.crypto.ffdh;
 import de.rub.nds.protocol.constants.FfdhGroupParameters;
 import java.math.BigInteger;
 
+/**
+ * Represents the 8192-bit FFDH group defined in RFC 7919 for use in TLS. This group provides a
+ * standard 8192-bit prime modulus and generator for Diffie-Hellman operations.
+ */
 public class Rfc7919Group8192 extends FfdhGroupParameters {
 
+    /**
+     * Constructs the RFC 7919 8192-bit FFDH group with predefined parameters. The generator is 2
+     * and the modulus is the 8192-bit prime specified in RFC 7919.
+     */
     public Rfc7919Group8192() {
         super(
                 new BigInteger("2", 16),
