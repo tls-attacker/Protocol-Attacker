@@ -16,6 +16,11 @@ public class DsaGroup implements CyclicGroup<BigInteger> {
 
     private final DsaParameters parameters;
 
+    /**
+     * Constructs a new DsaGroup with the specified DSA parameters.
+     *
+     * @param parameters The DSA parameters defining the group
+     */
     public DsaGroup(DsaParameters parameters) {
         this.parameters = parameters;
     }
@@ -40,14 +45,29 @@ public class DsaGroup implements CyclicGroup<BigInteger> {
         return nTimesGroupOperation(parameters.getG(), scalar);
     }
 
+    /**
+     * Returns the prime modulus p of the DSA group.
+     *
+     * @return The prime modulus p
+     */
     public BigInteger getP() {
         return parameters.getP();
     }
 
+    /**
+     * Returns the prime order q of the subgroup.
+     *
+     * @return The prime order q
+     */
     public BigInteger getQ() {
         return parameters.getQ();
     }
 
+    /**
+     * Returns the DSA parameters of this group.
+     *
+     * @return The DSA parameters
+     */
     public DsaParameters getParameters() {
         return parameters;
     }

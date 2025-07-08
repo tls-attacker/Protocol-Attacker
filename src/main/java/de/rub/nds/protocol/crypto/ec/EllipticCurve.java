@@ -162,24 +162,59 @@ public abstract class EllipticCurve implements CyclicGroup<Point> {
      */
     protected abstract Point additionFormular(Point p, Point q);
 
+    /**
+     * Returns the base point of this elliptic curve.
+     *
+     * @return The base point
+     */
     public Point getBasePoint() {
         return this.basePoint;
     }
 
+    /**
+     * Returns the order of the base point.
+     *
+     * @return The base point order
+     */
     public BigInteger getBasePointOrder() {
         return this.basePointOrder;
     }
 
+    /**
+     * Returns the modulus of the field over which the curve is defined.
+     *
+     * @return The field modulus
+     */
     public BigInteger getModulus() {
         return this.modulus;
     }
 
+    /**
+     * Creates a point on the curve with the given x-coordinate.
+     *
+     * @param x The x-coordinate
+     * @return A point on the curve with the given x-coordinate
+     */
     public Point createAPointOnCurve(BigInteger x) {
         return createAPointOnCurve(x, true);
     }
 
+    /**
+     * Creates a point on the curve with the given x-coordinate.
+     *
+     * @param x The x-coordinate
+     * @param returnBasepointUponError If true, returns the base point when no valid point can be
+     *     found
+     * @return A point on the curve with the given x-coordinate
+     */
     public abstract Point createAPointOnCurve(BigInteger x, boolean returnBasepointUponError);
 
+    /**
+     * Creates a field element with the given value.
+     *
+     * @param value The value of the field element
+     * @return A field element with the given value
+     */
     public abstract FieldElement createFieldElement(BigInteger value);
 
     @Override

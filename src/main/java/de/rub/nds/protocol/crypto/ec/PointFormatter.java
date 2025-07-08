@@ -25,6 +25,14 @@ public class PointFormatter {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    /**
+     * Formats a point to a byte array according to the specified format.
+     *
+     * @param groupParameters The group parameters defining the elliptic curve
+     * @param point The point to format
+     * @param format The desired point format (compressed or uncompressed)
+     * @return The formatted point as a byte array
+     */
     public static byte[] formatToByteArray(
             GroupParameters<?> groupParameters, Point point, PointFormat format) {
         if (point.isAtInfinity()) {
@@ -74,6 +82,12 @@ public class PointFormatter {
         }
     }
 
+    /**
+     * Converts a point to raw format (x|y coordinates concatenated).
+     *
+     * @param point The point to convert
+     * @return The point in raw format as a byte array
+     */
     public static byte[] toRawFormat(Point point) {
         if (point.isAtInfinity()) {
             return new byte[1];
@@ -126,6 +140,13 @@ public class PointFormatter {
                 .getPoint(new BigInteger(1, coordX), new BigInteger(1, coordY));
     }
 
+    /**
+     * Parses a point from a byte array, handling both compressed and uncompressed formats.
+     *
+     * @param groupParameters The group parameters defining the elliptic curve
+     * @param compressedPoint The byte array containing the encoded point
+     * @return The parsed point, or the base point if parsing fails
+     */
     public static Point formatFromByteArray(
             GroupParameters<?> groupParameters, byte[] compressedPoint) {
         CyclicGroup<?> group = groupParameters.getGroup();
@@ -205,6 +226,12 @@ public class PointFormatter {
         }
     }
 
+    /**
+     * Determines the point format from encoded point bytes.
+     *
+     * @param encodedPointBytes The encoded point bytes
+     * @return The point format (compressed or uncompressed)
+     */
     public static PointFormat getPointFormat(byte[] encodedPointBytes) {
         if (encodedPointBytes.length == 0) {
             return PointFormat.UNCOMPRESSED;

@@ -17,6 +17,14 @@ public class HashCalculator {
 
     private HashCalculator() {}
 
+    /**
+     * Computes a hash of the input data using the specified algorithm.
+     *
+     * @param toHash The data to hash
+     * @param algorithm The hash algorithm to use
+     * @return The computed hash value
+     * @throws CryptoException if the algorithm is not supported
+     */
     public static byte[] compute(byte[] toHash, HashAlgorithm algorithm) {
         if (algorithm == HashAlgorithm.NONE) {
             return toHash;
