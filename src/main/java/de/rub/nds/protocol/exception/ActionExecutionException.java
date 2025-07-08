@@ -10,12 +10,24 @@ package de.rub.nds.protocol.exception;
 
 public class ActionExecutionException extends RuntimeException {
 
+    /** Constructs a new ActionExecutionException with no detail message. */
     public ActionExecutionException() {}
 
+    /**
+     * Constructs a new ActionExecutionException with the specified detail message.
+     *
+     * @param message the detail message
+     */
     public ActionExecutionException(String message) {
         super(message);
     }
 
+    /**
+     * Constructs a new ActionExecutionException with the specified detail message and cause.
+     *
+     * @param message the detail message
+     * @param cause the cause of the exception
+     */
     public ActionExecutionException(String message, Throwable cause) {
         super(message, cause);
     }

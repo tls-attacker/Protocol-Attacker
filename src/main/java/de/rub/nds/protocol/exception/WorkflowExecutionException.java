@@ -11,18 +11,35 @@ package de.rub.nds.protocol.exception;
 /** Thrown when problems in the workflow appear. */
 public class WorkflowExecutionException extends RuntimeException {
 
+    /** Constructs a new WorkflowExecutionException with no detail message. */
     public WorkflowExecutionException() {
         super();
     }
 
+    /**
+     * Constructs a new WorkflowExecutionException with the specified detail message.
+     *
+     * @param message The detail message
+     */
     public WorkflowExecutionException(String message) {
         super(message);
     }
 
+    /**
+     * Constructs a new WorkflowExecutionException with the specified detail message and cause.
+     *
+     * @param message The detail message
+     * @param t The cause of the exception
+     */
     public WorkflowExecutionException(String message, Throwable t) {
         super(message, t);
     }
 
+    /**
+     * Constructs a new WorkflowExecutionException with the specified cause.
+     *
+     * @param throwable The cause of the exception
+     */
     public WorkflowExecutionException(Throwable throwable) {
         super(throwable);
     }

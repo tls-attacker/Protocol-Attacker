@@ -11,18 +11,35 @@ package de.rub.nds.protocol.exception;
 /** Crypto exception */
 public class CryptoException extends RuntimeException {
 
+    /** Constructs a new CryptoException with no detail message. */
     public CryptoException() {
         super();
     }
 
+    /**
+     * Constructs a new CryptoException with the specified detail message.
+     *
+     * @param message The detail message
+     */
     public CryptoException(String message) {
         super(message);
     }
 
+    /**
+     * Constructs a new CryptoException with the specified cause.
+     *
+     * @param t The cause of the exception
+     */
     public CryptoException(Throwable t) {
         super(t);
     }
 
+    /**
+     * Constructs a new CryptoException with the specified detail message and cause.
+     *
+     * @param message The detail message
+     * @param t The cause of the exception
+     */
     public CryptoException(String message, Throwable t) {
         super(message, t);
     }

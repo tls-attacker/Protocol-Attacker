@@ -10,12 +10,24 @@ package de.rub.nds.protocol.exception;
 
 public class PreparationException extends RuntimeException {
 
+    /** Constructs a new PreparationException with no detail message. */
     public PreparationException() {}
 
+    /**
+     * Constructs a new PreparationException with the specified detail message.
+     *
+     * @param message The detail message
+     */
     public PreparationException(String message) {
         super(message);
     }
 
+    /**
+     * Constructs a new PreparationException with the specified detail message and cause.
+     *
+     * @param message The detail message
+     * @param cause The cause of the exception
+     */
     public PreparationException(String message, Throwable cause) {
         super(message, cause);
     }
