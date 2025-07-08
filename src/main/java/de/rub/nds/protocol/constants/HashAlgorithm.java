@@ -47,18 +47,38 @@ public enum HashAlgorithm {
         this.javaName = javaName;
     }
 
+    /**
+     * Returns the Java provider name for this hash algorithm.
+     *
+     * @return the Java provider name, or null if not applicable
+     */
     public String getJavaName() {
         return javaName;
     }
 
+    /**
+     * Returns the OID (Object Identifier) of this hash algorithm.
+     *
+     * @return the OID string
+     */
     public String getHashAlgorithmIdentifierOid() {
         return hashAlgorithmIdentifierOid;
     }
 
+    /**
+     * Returns the output length of this hash algorithm in bits.
+     *
+     * @return the bit length of the hash output
+     */
     public int getBitLength() {
         return bitLength;
     }
 
+    /**
+     * Returns the security strength of this hash algorithm in bits.
+     *
+     * @return the security strength in bits
+     */
     public int getSecurityStrength() {
         return securityStrength;
     }

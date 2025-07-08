@@ -25,6 +25,11 @@ public enum SignatureAlgorithm {
         this.humanReadable = humanReadable;
     }
 
+    /**
+     * Returns a human-readable description of this signature algorithm.
+     *
+     * @return the human-readable description
+     */
     public String getHumanReadable() {
         return humanReadable;
     }
