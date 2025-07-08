@@ -16,6 +16,6 @@ public enum EcCurveEquationType {
     SHORT_WEIERSTRASS,
     /** Curves in the form By² = x³ + Ax² + x. */
     MONTGOMERY,
-    /** Curves in the form ax² + y² = 1 + dx²y². */
+    /** Curves in the form x² + y² = 1 + dx²y². */
     EDWARDS
 }
