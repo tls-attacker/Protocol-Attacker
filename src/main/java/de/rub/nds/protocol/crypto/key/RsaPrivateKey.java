@@ -23,15 +23,31 @@ public class RsaPrivateKey implements PrivateKeyContainer {
         this.modulus = null;
     }
 
+    /**
+     * Constructs an RSA private key with the specified private exponent and modulus.
+     *
+     * @param privateExponent the private exponent
+     * @param modulus the modulus
+     */
     public RsaPrivateKey(BigInteger privateExponent, BigInteger modulus) {
         this.privateExponent = privateExponent;
         this.modulus = modulus;
     }
 
+    /**
+     * Gets the private exponent.
+     *
+     * @return the private exponent
+     */
     public BigInteger getPrivateExponent() {
         return privateExponent;
     }
 
+    /**
+     * Gets the modulus.
+     *
+     * @return the modulus
+     */
     public BigInteger getModulus() {
         return modulus;
     }

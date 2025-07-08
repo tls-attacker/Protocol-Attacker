@@ -24,15 +24,31 @@ public class DhPrivateKey implements PrivateKeyContainer {
         this.parameters = null;
     }
 
+    /**
+     * Constructs a new DH private key with the specified private key value and group parameters.
+     *
+     * @param privateKey the private key value
+     * @param parameters the FFDH group parameters
+     */
     public DhPrivateKey(BigInteger privateKey, FfdhGroupParameters parameters) {
         this.privateKey = privateKey;
         this.parameters = parameters;
     }
 
+    /**
+     * Returns the private key value.
+     *
+     * @return the private key value
+     */
     public BigInteger getPrivateKey() {
         return privateKey;
     }
 
+    /**
+     * Returns the FFDH group parameters associated with this private key.
+     *
+     * @return the FFDH group parameters
+     */
     public FfdhGroupParameters getParameters() {
         return parameters;
     }

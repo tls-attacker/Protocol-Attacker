@@ -24,15 +24,31 @@ public class EddsaPrivateKey implements PrivateKeyContainer {
         this.parameters = null;
     }
 
+    /**
+     * Constructs an EdDSA private key with the specified private key value and curve parameters.
+     *
+     * @param privateKey the private key value
+     * @param parameters the elliptic curve parameters
+     */
     public EddsaPrivateKey(BigInteger privateKey, NamedEllipticCurveParameters parameters) {
         this.privateKey = privateKey;
         this.parameters = parameters;
     }
 
+    /**
+     * Gets the private key value.
+     *
+     * @return the private key value
+     */
     public BigInteger getPrivateKey() {
         return privateKey;
     }
 
+    /**
+     * Gets the elliptic curve parameters associated with this private key.
+     *
+     * @return the elliptic curve parameters
+     */
     public NamedEllipticCurveParameters getParameters() {
         return parameters;
     }

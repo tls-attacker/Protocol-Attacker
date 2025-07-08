@@ -54,38 +54,83 @@ public class DsaPrivateKey implements PrivateKeyContainer {
         this.K = K;
     }
 
+    /**
+     * Gets the DSA parameters associated with this private key.
+     *
+     * @return the DSA parameters
+     */
     public DsaParameters getDsaParameters() {
         return dsaParameters;
     }
 
+    /**
+     * Sets the DSA parameters for this private key.
+     *
+     * @param dsaParameters the DSA parameters to set
+     */
     public void setDsaParameters(DsaParameters dsaParameters) {
         this.dsaParameters = dsaParameters;
     }
 
+    /**
+     * Gets the modulus p from the DSA parameters.
+     *
+     * @return the modulus p
+     */
     public BigInteger getModulus() {
         return dsaParameters.getP();
     }
 
+    /**
+     * Gets the generator g from the DSA parameters.
+     *
+     * @return the generator g
+     */
     public BigInteger getGenerator() {
         return dsaParameters.getG();
     }
 
+    /**
+     * Gets the subgroup order Q from the DSA parameters.
+     *
+     * @return the subgroup order Q
+     */
     public BigInteger getQ() {
         return dsaParameters.getQ();
     }
 
+    /**
+     * Gets the private key value X.
+     *
+     * @return the private key value X
+     */
     public BigInteger getX() {
         return X;
     }
 
+    /**
+     * Sets the private key value X.
+     *
+     * @param x the private key value to set
+     */
     public void setX(BigInteger x) {
         X = x;
     }
 
+    /**
+     * Gets the nonce K used in DSA signatures.
+     *
+     * @return the nonce K
+     */
     public BigInteger getK() {
         return K;
     }
 
+    /**
+     * Sets the nonce K used in DSA signatures.
+     *
+     * @param k the nonce to set
+     */
     public void setK(BigInteger k) {
         K = k;
     }
