@@ -9,10 +9,12 @@
 package de.rub.nds.protocol.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -154,5 +156,89 @@ class DeepCopyUtilTest {
     // Helper class for testing non-serializable objects
     private static class NonSerializableObject {
         private final Object nonSerializableField = new Object();
+    }
+
+    @Test
+    void testPrivateConstructor() throws Exception {
+        // Test that the private constructor can be invoked (for coverage)
+        Constructor<DeepCopyUtil> constructor = DeepCopyUtil.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+        DeepCopyUtil instance = constructor.newInstance();
+        assertNotNull(instance);
+    }
+
+    @Test
+    void testDeepCopyWithNull() {
+        // Test deep copy with null value
+        String nullValue = null;
+        String copiedNull = DeepCopyUtil.deepCopy(nullValue);
+        assertEquals(nullValue, copiedNull);
+    }
+
+    @Test
+    void testDeepCopyWithString() {
+        // Test deep copy with String (immutable object)
+        String original = "test string";
+        String copy = DeepCopyUtil.deepCopy(original);
+        assertEquals(original, copy);
+        // Strings are immutable, so they might be the same instance
+    }
+
+    @Test
+    void testDeepCopyWithInteger() {
+        // Test deep copy with Integer
+        Integer original = 42;
+        Integer copy = DeepCopyUtil.deepCopy(original);
+        assertEquals(original, copy);
+    }
+
+    @Test
+    void testDeepCopyWithComplexNestedStructure() {
+        // Create a more complex nested structure
+        Map<String, List<TestObject>> original = new HashMap<>();
+
+        List<TestObject> list1 = new ArrayList<>();
+        TestObject obj1 = new TestObject("obj1", 10);
+        TestObject obj2 = new TestObject("obj2", 20);
+        obj1.setNestedObject(obj2);
+        list1.add(obj1);
+        list1.add(obj2);
+
+        original.put("list1", list1);
+
+        // Deep copy
+        Map<String, List<TestObject>> copy = DeepCopyUtil.deepCopy(original);
+
+        // Verify the structure is copied correctly
+        assertNotSame(original, copy);
+        assertNotSame(original.get("list1"), copy.get("list1"));
+        assertNotSame(original.get("list1").get(0), copy.get("list1").get(0));
+        assertNotSame(original.get("list1").get(1), copy.get("list1").get(1));
+
+        // Verify values are preserved
+        assertEquals(original.get("list1").size(), copy.get("list1").size());
+        assertEquals(original.get("list1").get(0).getName(), copy.get("list1").get(0).getName());
+        assertEquals(original.get("list1").get(0).getValue(), copy.get("list1").get(0).getValue());
+    }
+
+    @Test
+    void testDeepCopyWithCircularReference() {
+        // Test with objects that have circular references
+        TestObject obj1 = new TestObject("circular1", 100);
+        TestObject obj2 = new TestObject("circular2", 200);
+        obj1.setNestedObject(obj2);
+        obj2.setNestedObject(obj1); // Circular reference
+
+        // Deep copy should handle circular references
+        TestObject copy = DeepCopyUtil.deepCopy(obj1);
+
+        assertNotSame(obj1, copy);
+        assertNotSame(obj1.getNestedObject(), copy.getNestedObject());
+        assertEquals(obj1.getName(), copy.getName());
+        assertEquals(obj1.getNestedObject().getName(), copy.getNestedObject().getName());
+
+        // Verify circular reference is maintained
+        assertNotNull(copy.getNestedObject().getNestedObject());
+        assertEquals(copy.getName(), copy.getNestedObject().getNestedObject().getName());
     }
 }
