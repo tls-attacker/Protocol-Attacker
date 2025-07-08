@@ -11,8 +11,7 @@ package de.rub.nds.protocol.crypto.ec;
 import java.math.BigInteger;
 
 /**
- * NIST P-521 elliptic curve (secp521r1) - a 521-bit prime field Weierstrass curve providing maximum
- * security level.
+ * NIST P-521 elliptic curve (secp521r1)
  */
 @SuppressWarnings("SpellCheckingInspection")
 public class EllipticCurveSECP521R1 extends EllipticCurveOverFp {
