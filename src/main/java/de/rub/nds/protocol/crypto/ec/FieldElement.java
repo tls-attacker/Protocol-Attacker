@@ -74,7 +74,7 @@ public abstract class FieldElement implements Serializable {
     /**
      * Divides this element by another field element.
      *
-     * @param f field element to divide by (must be non-zero)
+     * @param f field element to divide by (the multiplicative inverse must exist in the field)
      * @return this / f
      */
     public FieldElement divide(FieldElement f) {
@@ -93,7 +93,7 @@ public abstract class FieldElement implements Serializable {
      * Computes the multiplicative inverse of this element.
      *
      * @return this^-1 such that this * this^-1 = 1
-     * @throws ArithmeticException if this is zero
+     * @throws ArithmeticException if this is not invertible (e.g., if it is zero in the field)
      */
     public abstract FieldElement multInv();
 
