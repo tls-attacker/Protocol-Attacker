@@ -687,10 +687,7 @@ public class SignatureCalculator {
         LOGGER.debug("Digest: {}", hash);
 
         // e = hash(m) interpreted as little-endian integer
-        byte[] reversedHash = new byte[hash.length];
-        for (int i = 0; i < hash.length; i++) {
-            reversedHash[i] = hash[hash.length - 1 - i];
-        }
+        byte[] reversedHash = DataConverter.reverseByteOrder(hash);
         BigInteger e = new BigInteger(1, reversedHash);
 
         // e = e mod q; if e == 0, set e = 1
@@ -735,14 +732,8 @@ public class SignatureCalculator {
         byte[] sBytes = DataConverter.bigIntegerToByteArray(s, groupSize, true);
 
         // Reverse bytes for little-endian format
-        byte[] rReversed = new byte[rBytes.length];
-        byte[] sReversed = new byte[sBytes.length];
-        for (int i = 0; i < rBytes.length; i++) {
-            rReversed[i] = rBytes[rBytes.length - 1 - i];
-        }
-        for (int i = 0; i < sBytes.length; i++) {
-            sReversed[i] = sBytes[sBytes.length - 1 - i];
-        }
+        byte[] rReversed = DataConverter.reverseByteOrder(rBytes);
+        byte[] sReversed = DataConverter.reverseByteOrder(sBytes);
 
         // Concatenate s||r (note: GOST uses s||r order, not r||s like ECDSA)
         byte[] completeSignature;
