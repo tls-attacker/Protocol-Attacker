@@ -11,7 +11,7 @@ package de.rub.nds.protocol.crypto.ec;
 import java.math.BigInteger;
 
 @SuppressWarnings("SpellCheckingInspection")
-public class EllipticCurveGost2012SetC512 extends EllipticCurveOverF2m {
+public class EllipticCurveGost2012SetC512 extends EllipticCurveOverFp {
 
     public EllipticCurveGost2012SetC512() {
         super(

@@ -10,19 +10,19 @@ package de.rub.nds.protocol.crypto.ec;
 
 import java.math.BigInteger;
 
-public class EllipticCurveGost2001SetC extends EllipticCurveOverF2m {
+public class EllipticCurveGost2001SetC extends EllipticCurveOverFp {
 
     public EllipticCurveGost2001SetC() {
         super(
                 new BigInteger(
-                        "70390085352083305199547718019018437841079516630045180471284346843705633502616"),
-                new BigInteger("32858"),
+                        "9B9F605F5A858107AB1EC85E6B41C8AACF846E86789051D37998F7B9022D7598", 16),
+                new BigInteger("805A", 16),
                 new BigInteger(
-                        "70390085352083305199547718019018437841079516630045180471284346843705633502619"),
+                        "9B9F605F5A858107AB1EC85E6B41C8AACF846E86789051D37998F7B9022D759B", 16),
                 BigInteger.ZERO,
                 new BigInteger(
-                        "29818893917731240733471273240314769927240550812383695689146495261604565990247"),
+                        "41ECE55743711A8C3CBF3783CD08C0EE4D4DC440D4641A8F366E550DFDB3BB67", 16),
                 new BigInteger(
-                        "70390085352083305199547718019018437840920882647164081035322601458352298396601"));
+                        "9B9F605F5A858107AB1EC85E6B41C8AA582CA3511EDDFB74F02F3A6598980BB9", 16));
     }
 }

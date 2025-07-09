@@ -8,12 +8,10 @@
  */
 package de.rub.nds.protocol.crypto.signature;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
+import de.rub.nds.modifiablevariable.util.BadRandom;
 import de.rub.nds.modifiablevariable.util.DataConverter;
 import de.rub.nds.modifiablevariable.util.Modifiable;
 import de.rub.nds.protocol.constants.HashAlgorithm;
@@ -21,6 +19,7 @@ import de.rub.nds.protocol.constants.NamedEllipticCurveParameters;
 import de.rub.nds.protocol.constants.SignatureAlgorithm;
 import de.rub.nds.protocol.crypto.key.DsaPrivateKey;
 import de.rub.nds.protocol.crypto.key.EcdsaPrivateKey;
+import de.rub.nds.protocol.crypto.key.GostPrivateKey;
 import de.rub.nds.protocol.crypto.key.RsaPrivateKey;
 import java.math.BigInteger;
 import java.security.KeyFactory;
@@ -41,21 +40,37 @@ import java.security.spec.KeySpec;
 import java.security.spec.MGF1ParameterSpec;
 import java.security.spec.PSSParameterSpec;
 import java.security.spec.RSAPublicKeySpec;
+import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bouncycastle.crypto.params.ECDomainParameters;
+import org.bouncycastle.crypto.params.ECPublicKeyParameters;
+import org.bouncycastle.crypto.signers.ECGOST3410Signer;
+import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class SignatureCalculatorTest {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private SignatureCalculator instance;
+
     @BeforeAll
-    static void setup() {
+    static void setUpClass() {
         Security.addProvider(new BouncyCastleProvider());
+    }
+
+    @BeforeEach
+    void setUp() {
+        instance = new SignatureCalculator();
     }
 
     /** Test of computeRsaPkcs1Signature method, of class SignatureCalculator. */
@@ -74,7 +89,6 @@ class SignatureCalculatorTest {
                                 "61a4eb153f3f2a9be18303a7a8f964366074fe9b15756e97fad48c19a8374b870589dde72e4377f3837ab59fa76b55563642f2df635da71a3aa50ab835201b61"));
         byte[] toBeSignedBytes = "abcdefghijklmnopqrstuvwxyz\n".getBytes();
         HashAlgorithm hashAlgorithm = HashAlgorithm.SHA1;
-        SignatureCalculator instance = new SignatureCalculator();
         instance.computeRsaPkcs1Signature(
                 computations,
                 new RsaPrivateKey(privateKey, modulus),
@@ -109,13 +123,7 @@ class SignatureCalculatorTest {
         assertTrue(computations.getSignatureValid());
     }
 
-    /**
-     * Test of computeDsaSignature method, of class SignatureCalculator.
-     *
-     * @throws SignatureException
-     * @throws InvalidKeyException
-     * @throws NoSuchAlgorithmException
-     */
+    /** Test of computeDsaSignature method, of class SignatureCalculator. */
     @Test
     void testComputeDsaSignature() throws Exception {
         DsaSignatureComputations computations = new DsaSignatureComputations();
@@ -146,7 +154,6 @@ class SignatureCalculatorTest {
                         DataConverter.hexStringToByteArray(
                                 "E0A67598CD1B763BC98C8ABB333E5DDA0CD3AA0E5E1FB5BA8A7B4EABC10BA338FAE06DD4B90FDA70D7CF0CB0C638BE3341BEC0AF8A7330A3307DED2299A0EE606DF035177A239C34A912C202AA5F83B9C4A7CF0235B5316BFC6EFB9A248411258B30B839AF172440F32563056CB67A861158DDD90E6A894C72A5BBEF9E286C6B"));
         HashAlgorithm hashAlgorithm = HashAlgorithm.SHA1;
-        SignatureCalculator instance = new SignatureCalculator();
         instance.computeDsaSignature(
                 computations,
                 new DsaPrivateKey(q, privateKey, nonce, g, p),
@@ -257,7 +264,6 @@ class SignatureCalculatorTest {
                                 "94a1bbb14b906a61a280f245f9e93c7f3b4a6247824f5d33b9670787642a68de"));
         NamedEllipticCurveParameters ecParameters = NamedEllipticCurveParameters.SECP256R1;
         HashAlgorithm hashAlgorithm = HashAlgorithm.SHA256;
-        SignatureCalculator instance = new SignatureCalculator();
         instance.computeEcdsaSignature(
                 computations,
                 new EcdsaPrivateKey(privateKey, nonce, ecParameters),
@@ -311,7 +317,6 @@ class SignatureCalculatorTest {
     @Test
     void testRsaSsaPssSignatureComputation() throws Exception {
         byte[] originalData = "test".getBytes();
-        SignatureCalculator signatureCalculator = new SignatureCalculator();
         RsaSsaPssSignatureComputations computations = new RsaSsaPssSignatureComputations();
         BigInteger modulus =
                 new BigInteger(
@@ -325,8 +330,8 @@ class SignatureCalculatorTest {
                                 "61a4eb153f3f2a9be18303a7a8f964366074fe9b15756e97fad48c19a8374b870589dde72e4377f3837ab59fa76b55563642f2df635da71a3aa50ab835201b61"));
         BigInteger publicExponent = new BigInteger("65537");
         RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(privateKey, modulus);
-        computations.setSalt(new byte[] {01, 02});
-        signatureCalculator.computeRsaPssSignature(
+        computations.setSalt(new byte[] {0x01, 0x02});
+        instance.computeRsaPssSignature(
                 computations,
                 rsaPrivateKey,
                 originalData,
@@ -354,58 +359,54 @@ class SignatureCalculatorTest {
 
     @Test
     void testCreateSignatureComputations() {
-        SignatureCalculator calculator = new SignatureCalculator();
-
         // Test RSA-PKCS1
         SignatureComputations rsaPkcs1 =
-                calculator.createSignatureComputations(SignatureAlgorithm.RSA_PKCS1);
-        assertTrue(rsaPkcs1 instanceof RsaPkcs1SignatureComputations);
+                instance.createSignatureComputations(SignatureAlgorithm.RSA_PKCS1);
+        assertInstanceOf(RsaPkcs1SignatureComputations.class, rsaPkcs1);
 
         // Test RSA-PSS
         SignatureComputations rsaPss =
-                calculator.createSignatureComputations(SignatureAlgorithm.RSA_SSA_PSS);
-        assertTrue(rsaPss instanceof RsaSsaPssSignatureComputations);
+                instance.createSignatureComputations(SignatureAlgorithm.RSA_SSA_PSS);
+        assertInstanceOf(RsaSsaPssSignatureComputations.class, rsaPss);
 
         // Test DSA
-        SignatureComputations dsa = calculator.createSignatureComputations(SignatureAlgorithm.DSA);
-        assertTrue(dsa instanceof DsaSignatureComputations);
+        SignatureComputations dsa = instance.createSignatureComputations(SignatureAlgorithm.DSA);
+        assertInstanceOf(DsaSignatureComputations.class, dsa);
 
         // Test ECDSA
         SignatureComputations ecdsa =
-                calculator.createSignatureComputations(SignatureAlgorithm.ECDSA);
-        assertTrue(ecdsa instanceof EcdsaSignatureComputations);
+                instance.createSignatureComputations(SignatureAlgorithm.ECDSA);
+        assertInstanceOf(EcdsaSignatureComputations.class, ecdsa);
 
         // Test EdDSA
         SignatureComputations ed25519 =
-                calculator.createSignatureComputations(SignatureAlgorithm.ED25519);
-        assertTrue(ed25519 instanceof EddsaSignatureComputations);
+                instance.createSignatureComputations(SignatureAlgorithm.ED25519);
+        assertInstanceOf(EddsaSignatureComputations.class, ed25519);
 
         SignatureComputations ed448 =
-                calculator.createSignatureComputations(SignatureAlgorithm.ED448);
-        assertTrue(ed448 instanceof EddsaSignatureComputations);
+                instance.createSignatureComputations(SignatureAlgorithm.ED448);
+        assertInstanceOf(EddsaSignatureComputations.class, ed448);
 
         // Test GOST
         SignatureComputations gost1 =
-                calculator.createSignatureComputations(SignatureAlgorithm.GOSTR34102001);
-        assertTrue(gost1 instanceof GostSignatureComputations);
+                instance.createSignatureComputations(SignatureAlgorithm.GOSTR34102001);
+        assertInstanceOf(GostSignatureComputations.class, gost1);
 
         SignatureComputations gost256 =
-                calculator.createSignatureComputations(SignatureAlgorithm.GOSTR34102012_256);
-        assertTrue(gost256 instanceof GostSignatureComputations);
+                instance.createSignatureComputations(SignatureAlgorithm.GOSTR34102012_256);
+        assertInstanceOf(GostSignatureComputations.class, gost256);
 
         SignatureComputations gost512 =
-                calculator.createSignatureComputations(SignatureAlgorithm.GOSTR34102012_512);
-        assertTrue(gost512 instanceof GostSignatureComputations);
+                instance.createSignatureComputations(SignatureAlgorithm.GOSTR34102012_512);
+        assertInstanceOf(GostSignatureComputations.class, gost512);
 
         // Test null
-        SignatureComputations noSig = calculator.createSignatureComputations(null);
-        assertTrue(noSig instanceof NoSignatureComputations);
+        SignatureComputations noSig = instance.createSignatureComputations(null);
+        assertInstanceOf(NoSignatureComputations.class, noSig);
     }
 
     @Test
     void testComputeSignatureWithWrongKeyType() {
-        SignatureCalculator calculator = new SignatureCalculator();
-
         // Test RSA computations with wrong key type
         RsaPkcs1SignatureComputations rsaComputations = new RsaPkcs1SignatureComputations();
         DsaPrivateKey dsaKey =
@@ -419,7 +420,7 @@ class SignatureCalculatorTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () ->
-                        calculator.computeSignature(
+                        instance.computeSignature(
                                 rsaComputations,
                                 dsaKey,
                                 "test".getBytes(),
@@ -433,7 +434,7 @@ class SignatureCalculatorTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () ->
-                        calculator.computeSignature(
+                        instance.computeSignature(
                                 dsaComputations,
                                 rsaKey,
                                 "test".getBytes(),
@@ -446,7 +447,7 @@ class SignatureCalculatorTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () ->
-                        calculator.computeSignature(
+                        instance.computeSignature(
                                 ecdsaComputations,
                                 rsaKey,
                                 "test".getBytes(),
@@ -471,10 +472,9 @@ class SignatureCalculatorTest {
 
         byte[] message = "Test message for different hash algorithms".getBytes();
 
-        SignatureCalculator calculator = new SignatureCalculator();
         RsaPkcs1SignatureComputations computations = new RsaPkcs1SignatureComputations();
 
-        calculator.computeRsaPkcs1Signature(computations, protocolPrivKey, message, hashAlgorithm);
+        instance.computeRsaPkcs1Signature(computations, protocolPrivKey, message, hashAlgorithm);
 
         // Verify with BouncyCastle
         String signatureAlgo = hashAlgorithm.getJavaName() + "withRSA";
@@ -487,7 +487,6 @@ class SignatureCalculatorTest {
 
     @Test
     void testRsaPkcs1WithEmptyMessage() throws Exception {
-        SignatureCalculator calculator = new SignatureCalculator();
         RsaPkcs1SignatureComputations computations = new RsaPkcs1SignatureComputations();
 
         BigInteger modulus =
@@ -504,7 +503,7 @@ class SignatureCalculatorTest {
         RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(privateKey, modulus);
         byte[] emptyMessage = new byte[0];
 
-        calculator.computeRsaPkcs1Signature(
+        instance.computeRsaPkcs1Signature(
                 computations, rsaPrivateKey, emptyMessage, HashAlgorithm.SHA256);
 
         assertNotNull(computations.getSignatureBytes().getValue());
@@ -525,7 +524,6 @@ class SignatureCalculatorTest {
 
     @Test
     void testRsaPkcs1WithLargeMessage() throws Exception {
-        SignatureCalculator calculator = new SignatureCalculator();
         RsaPkcs1SignatureComputations computations = new RsaPkcs1SignatureComputations();
 
         // Generate RSA key pair
@@ -542,7 +540,7 @@ class SignatureCalculatorTest {
         byte[] largeMessage = new byte[10 * 1024];
         new SecureRandom().nextBytes(largeMessage);
 
-        calculator.computeRsaPkcs1Signature(
+        instance.computeRsaPkcs1Signature(
                 computations, protocolPrivKey, largeMessage, HashAlgorithm.SHA256);
 
         assertNotNull(computations.getSignatureBytes().getValue());
@@ -558,7 +556,6 @@ class SignatureCalculatorTest {
 
     @Test
     void testRsaPkcs1WithHashAlgorithmNone() {
-        SignatureCalculator calculator = new SignatureCalculator();
         RsaPkcs1SignatureComputations computations = new RsaPkcs1SignatureComputations();
 
         BigInteger modulus =
@@ -575,8 +572,7 @@ class SignatureCalculatorTest {
         RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(privateKey, modulus);
         byte[] message = "Test message without hashing".getBytes();
 
-        calculator.computeRsaPkcs1Signature(
-                computations, rsaPrivateKey, message, HashAlgorithm.NONE);
+        instance.computeRsaPkcs1Signature(computations, rsaPrivateKey, message, HashAlgorithm.NONE);
 
         assertNotNull(computations.getSignatureBytes().getValue());
         assertTrue(computations.getSignatureValid());
@@ -606,11 +602,10 @@ class SignatureCalculatorTest {
         byte[] salt = new byte[saltLength];
         new SecureRandom().nextBytes(salt);
 
-        SignatureCalculator calculator = new SignatureCalculator();
         RsaSsaPssSignatureComputations computations = new RsaSsaPssSignatureComputations();
         computations.setSalt(salt);
 
-        calculator.computeRsaPssSignature(
+        instance.computeRsaPssSignature(
                 computations, protocolPrivKey, message, hashAlgorithm, salt);
 
         // Verify with BouncyCastle
@@ -627,7 +622,6 @@ class SignatureCalculatorTest {
 
     @Test
     void testRsaPssWithoutSalt() {
-        SignatureCalculator calculator = new SignatureCalculator();
         RsaSsaPssSignatureComputations computations = new RsaSsaPssSignatureComputations();
 
         BigInteger modulus = new BigInteger("12345");
@@ -638,7 +632,7 @@ class SignatureCalculatorTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () ->
-                        calculator.computeSignature(
+                        instance.computeSignature(
                                 computations,
                                 rsaPrivateKey,
                                 "test".getBytes(),
@@ -648,7 +642,6 @@ class SignatureCalculatorTest {
 
     @Test
     void testDsaWithEmptyMessage() throws Exception {
-        SignatureCalculator calculator = new SignatureCalculator();
         DsaSignatureComputations computations = new DsaSignatureComputations();
 
         // Generate DSA parameters
@@ -669,7 +662,7 @@ class SignatureCalculatorTest {
 
         byte[] emptyMessage = new byte[0];
 
-        calculator.computeDsaSignature(
+        instance.computeDsaSignature(
                 computations, protocolPrivKey, emptyMessage, HashAlgorithm.SHA1);
 
         assertNotNull(computations.getSignatureBytes().getValue());
@@ -692,7 +685,6 @@ class SignatureCalculatorTest {
         };
 
         for (NamedEllipticCurveParameters curve : curves) {
-            SignatureCalculator calculator = new SignatureCalculator();
             EcdsaSignatureComputations computations = new EcdsaSignatureComputations();
 
             // Generate ECDSA key pair for the curve
@@ -711,7 +703,7 @@ class SignatureCalculatorTest {
 
             byte[] message = ("Test message for curve " + curve.name()).getBytes();
 
-            calculator.computeEcdsaSignature(
+            instance.computeEcdsaSignature(
                     computations, protocolPrivKey, message, HashAlgorithm.SHA256);
 
             assertNotNull(computations.getSignatureBytes().getValue());
@@ -730,7 +722,6 @@ class SignatureCalculatorTest {
 
     @Test
     void testComputeRawEcdsaSignature() {
-        SignatureCalculator calculator = new SignatureCalculator();
         EcdsaSignatureComputations computations = new EcdsaSignatureComputations();
 
         BigInteger privateKey =
@@ -748,7 +739,7 @@ class SignatureCalculatorTest {
         EcdsaPrivateKey protocolPrivKey = new EcdsaPrivateKey(privateKey, nonce, ecParameters);
         byte[] message = "Test raw ECDSA signature".getBytes();
 
-        calculator.computeRawEcdsaSignature(
+        instance.computeRawEcdsaSignature(
                 computations, protocolPrivKey, message, HashAlgorithm.SHA256);
 
         assertNotNull(computations.getSignatureBytes().getValue());
@@ -758,30 +749,12 @@ class SignatureCalculatorTest {
     }
 
     @Test
-    void testComputeSignatureWithGostAlgorithm() {
-        SignatureCalculator calculator = new SignatureCalculator();
-        GostSignatureComputations computations = new GostSignatureComputations();
-        RsaPrivateKey dummyKey = new RsaPrivateKey(new BigInteger("123"), new BigInteger("456"));
-
-        assertThrows(
-                UnsupportedOperationException.class,
-                () ->
-                        calculator.computeSignature(
-                                computations,
-                                dummyKey,
-                                "test".getBytes(),
-                                SignatureAlgorithm.GOSTR34102001,
-                                HashAlgorithm.SHA256));
-    }
-
-    @Test
     void testComputeSignatureWithNoSignatureComputations() {
-        SignatureCalculator calculator = new SignatureCalculator();
         NoSignatureComputations computations = new NoSignatureComputations();
         RsaPrivateKey dummyKey = new RsaPrivateKey(new BigInteger("123"), new BigInteger("456"));
 
         // Should not throw exception, just do nothing
-        calculator.computeSignature(
+        instance.computeSignature(
                 computations,
                 dummyKey,
                 "test".getBytes(),
@@ -791,7 +764,6 @@ class SignatureCalculatorTest {
 
     @Test
     void testInverseNonceCalculationInEcdsa() {
-        SignatureCalculator calculator = new SignatureCalculator();
         EcdsaSignatureComputations computations = new EcdsaSignatureComputations();
 
         BigInteger privateKey =
@@ -812,7 +784,7 @@ class SignatureCalculatorTest {
         NamedEllipticCurveParameters ecParameters = NamedEllipticCurveParameters.SECP256R1;
 
         // First computation uses nonce for inverse calculation
-        calculator.computeEcdsaSignature(
+        instance.computeEcdsaSignature(
                 computations,
                 new EcdsaPrivateKey(privateKey, nonce, ecParameters),
                 toBeSignedBytes,
@@ -830,7 +802,7 @@ class SignatureCalculatorTest {
         computations2.setDigestBytes(Modifiable.explicit(toBeSignedBytes));
         computations2.setTruncatedHashBytes(Modifiable.explicit(toBeSignedBytes));
 
-        calculator.computeRawEcdsaSignature(
+        instance.computeRawEcdsaSignature(
                 computations2,
                 new EcdsaPrivateKey(privateKey, nonce, ecParameters),
                 toBeSignedBytes,
@@ -841,5 +813,218 @@ class SignatureCalculatorTest {
         // Verify that inverseNonce * privateKey = 1 (mod order)
         BigInteger product2 = secondInverseNonce.multiply(privateKey).mod(order);
         assertEquals(BigInteger.ONE, product2);
+    }
+
+    @Test
+    void testGostSignatureWithWrongKeyType() {
+        GostSignatureComputations computations = new GostSignatureComputations();
+        RsaPrivateKey wrongKey = new RsaPrivateKey(BigInteger.TEN, BigInteger.TEN);
+        byte[] toBeSignedBytes = new byte[] {0x01, 0x02, 0x03};
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        instance.computeSignature(
+                                computations,
+                                wrongKey,
+                                toBeSignedBytes,
+                                SignatureAlgorithm.GOSTR34102001,
+                                HashAlgorithm.SHA256));
+    }
+
+    static Stream<Arguments> provideGostSignatureTestVectors() {
+        BadRandom random = new BadRandom();
+        byte[] message = new byte[32];
+        random.nextBytes(message);
+        return Stream.of(
+                Arguments.of(
+                        NamedEllipticCurveParameters.GOST2001_SETA,
+                        HashAlgorithm.GOST_R3411_12,
+                        message,
+                        new BigInteger(256, random),
+                        new BigInteger(256, random),
+                        "GostR3410-2001-CryptoPro-A"),
+                Arguments.of(
+                        NamedEllipticCurveParameters.GOST2001_SETB,
+                        HashAlgorithm.GOST_R3411_12,
+                        message,
+                        new BigInteger(256, random),
+                        new BigInteger(256, random),
+                        "GostR3410-2001-CryptoPro-B"),
+                Arguments.of(
+                        NamedEllipticCurveParameters.GOST2001_SETC,
+                        HashAlgorithm.GOST_R3411_12,
+                        message,
+                        new BigInteger(256, random),
+                        new BigInteger(256, random),
+                        "GostR3410-2001-CryptoPro-C"),
+                Arguments.of(
+                        NamedEllipticCurveParameters.GOST2001_SETXCHA,
+                        HashAlgorithm.GOST_R3411_12,
+                        message,
+                        new BigInteger(256, random),
+                        new BigInteger(256, random),
+                        "GostR3410-2001-CryptoPro-XchA"),
+                Arguments.of(
+                        NamedEllipticCurveParameters.GOST2001_SETXCHB,
+                        HashAlgorithm.GOST_R3411_12,
+                        message,
+                        new BigInteger(256, random),
+                        new BigInteger(256, random),
+                        "GostR3410-2001-CryptoPro-XchB"),
+                Arguments.of(
+                        NamedEllipticCurveParameters.GOST2012_SETA256,
+                        HashAlgorithm.GOST_R3411_12,
+                        message,
+                        new BigInteger(256, random),
+                        new BigInteger(256, random),
+                        "Tc26-Gost-3410-12-256-paramSetA"),
+                Arguments.of(
+                        NamedEllipticCurveParameters.GOST2012_SETB256,
+                        HashAlgorithm.GOST_R3411_12,
+                        message,
+                        new BigInteger(256, random),
+                        new BigInteger(256, random),
+                        "Tc26-Gost-3410-12-256-paramSetB"),
+                Arguments.of(
+                        NamedEllipticCurveParameters.GOST2012_SETC256,
+                        HashAlgorithm.GOST_R3411_12,
+                        message,
+                        new BigInteger(256, random),
+                        new BigInteger(256, random),
+                        "Tc26-Gost-3410-12-256-paramSetC"),
+                Arguments.of(
+                        NamedEllipticCurveParameters.GOST2012_SETD256,
+                        HashAlgorithm.GOST_R3411_12,
+                        message,
+                        new BigInteger(256, random),
+                        new BigInteger(256, random),
+                        "Tc26-Gost-3410-12-256-paramSetD"),
+                Arguments.of(
+                        NamedEllipticCurveParameters.GOST2012_SETA512,
+                        HashAlgorithm.GOST_R3411_12,
+                        message,
+                        new BigInteger(512, random),
+                        new BigInteger(512, random),
+                        "Tc26-Gost-3410-12-512-paramSetA"),
+                Arguments.of(
+                        NamedEllipticCurveParameters.GOST2012_SETB512,
+                        HashAlgorithm.GOST_R3411_12,
+                        message,
+                        new BigInteger(512, random),
+                        new BigInteger(512, random),
+                        "Tc26-Gost-3410-12-512-paramSetB"),
+                Arguments.of(
+                        NamedEllipticCurveParameters.GOST2012_SETC512,
+                        HashAlgorithm.GOST_R3411_12,
+                        message,
+                        new BigInteger(512, random),
+                        new BigInteger(512, random),
+                        "Tc26-Gost-3410-12-512-paramSetC"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideGostSignatureTestVectors")
+    void testGostSignatureVerifies(
+            NamedEllipticCurveParameters curve,
+            HashAlgorithm hashAlgorithm,
+            byte[] message,
+            BigInteger privateKey,
+            BigInteger nonce,
+            String bcCurveName) {
+        GostPrivateKey gostKey = new GostPrivateKey(privateKey, nonce, curve);
+        GostSignatureComputations computations = new GostSignatureComputations();
+
+        instance.computeGostSignature(computations, gostKey, message, HashAlgorithm.GOST_R3411_12);
+
+        assertNotNull(computations.getSignatureBytes());
+        assertEquals(
+                2 * curve.getElementSizeBytes(),
+                computations.getSignatureBytes().getValue().length);
+        assertTrue(computations.getSignatureValid());
+        assertNotNull(computations.getrX());
+        assertNotNull(computations.getS());
+        assertNotNull(computations.getDigestBytes());
+        assertEquals(
+                hashAlgorithm.getBitLength() / 8, computations.getDigestBytes().getValue().length);
+
+        // Verify signature against BouncyCastle's GOST implementation
+        ECNamedCurveParameterSpec ecParameterSpec = ECNamedCurveTable.getParameterSpec(bcCurveName);
+        ECPublicKeyParameters publicKeyParams =
+                new ECPublicKeyParameters(
+                        ecParameterSpec.getG().multiply(privateKey),
+                        new ECDomainParameters(
+                                ecParameterSpec.getCurve(),
+                                ecParameterSpec.getG(),
+                                ecParameterSpec.getN(),
+                                ecParameterSpec.getH()));
+        ECGOST3410Signer signer = new ECGOST3410Signer();
+        signer.init(false, publicKeyParams);
+        assertTrue(
+                signer.verifySignature(
+                        computations.getDigestBytes().getValue(),
+                        computations.getrX().getValue(),
+                        computations.getS().getValue()));
+    }
+
+    @Test
+    void testGostSignatureZeroHashHandling() {
+        // Test the special case where e = 0 (should be set to 1)
+        BigInteger privateKey = BigInteger.ONE;
+        BigInteger nonce = BigInteger.valueOf(2);
+
+        GostPrivateKey gostKey =
+                new GostPrivateKey(privateKey, nonce, NamedEllipticCurveParameters.GOST2001_SETA);
+
+        GostSignatureComputations computations = new GostSignatureComputations();
+        // A message that would produce hash = 0 (simulated with NONE hash)
+        byte[] message = new byte[32]; // All zeros
+
+        instance.computeGostSignature(computations, gostKey, message, HashAlgorithm.NONE);
+
+        // When e = 0, it should be set to 1
+        assertEquals(BigInteger.ONE, computations.getTruncatedHash().getValue());
+        assertNotNull(computations.getSignatureBytes());
+        assertTrue(computations.getSignatureValid());
+    }
+
+    @Test
+    void testGostSignatureLittleEndianFormat() {
+        // Test that the signature is properly formatted in little-endian
+        BigInteger privateKey = BigInteger.valueOf(12345);
+        BigInteger nonce = BigInteger.valueOf(67890);
+
+        GostPrivateKey gostKey =
+                new GostPrivateKey(privateKey, nonce, NamedEllipticCurveParameters.GOST2001_SETA);
+
+        GostSignatureComputations computations = new GostSignatureComputations();
+        byte[] message = "Test little-endian format".getBytes();
+
+        instance.computeGostSignature(computations, gostKey, message, HashAlgorithm.SHA256);
+
+        byte[] signature = computations.getSignatureBytes().getValue();
+        assertNotNull(signature);
+        assertEquals(64, signature.length); // 32 bytes for s + 32 bytes for r
+
+        // The signature should be s||r in little-endian format
+        byte[] sBytes = new byte[32];
+        byte[] rBytes = new byte[32];
+        System.arraycopy(signature, 0, sBytes, 0, 32);
+        System.arraycopy(signature, 32, rBytes, 0, 32);
+
+        // Verify that we can reconstruct s and r
+        // Reverse bytes for big-endian interpretation
+        byte[] sReversed = new byte[32];
+        byte[] rReversed = new byte[32];
+        for (int i = 0; i < 32; i++) {
+            sReversed[i] = sBytes[31 - i];
+            rReversed[i] = rBytes[31 - i];
+        }
+
+        BigInteger sRecovered = new BigInteger(1, sReversed);
+        BigInteger rRecovered = new BigInteger(1, rReversed);
+
+        assertEquals(computations.getS().getValue(), sRecovered);
+        assertEquals(computations.getrX().getValue(), rRecovered);
     }
 }
