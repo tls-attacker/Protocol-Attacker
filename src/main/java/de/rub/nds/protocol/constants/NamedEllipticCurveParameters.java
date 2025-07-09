@@ -8,67 +8,7 @@
  */
 package de.rub.nds.protocol.constants;
 
-import de.rub.nds.protocol.crypto.ec.EllipticCurve;
-import de.rub.nds.protocol.crypto.ec.EllipticCurve25519;
-import de.rub.nds.protocol.crypto.ec.EllipticCurve448;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP160R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP160T1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP192R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP192T1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP224R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP224T1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP256R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP256T1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP320R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP320T1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP384R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP384T1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP512R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveBrainpoolP512T1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2001SetA;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2001SetB;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2001SetC;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2001SetXchA;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2001SetXchB;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2012SetA256;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2012SetA512;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2012SetB512;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveGost2012SetC512;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP112R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP112R2;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP128R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP128R2;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP160K1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP160R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP160R2;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP192K1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP192R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP224K1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP224R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP256K1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP256R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP384R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECP521R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT113R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT113R2;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT131R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT131R2;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT163K1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT163R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT163R2;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT193R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT193R2;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT233K1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT233R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT239K1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT283K1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT283R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT409K1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT409R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT571K1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSECT571R1;
-import de.rub.nds.protocol.crypto.ec.EllipticCurveSM2;
-import de.rub.nds.protocol.crypto.ec.Point;
+import de.rub.nds.protocol.crypto.ec.*;
 
 /**
  * Enumeration of named elliptic curve parameters. Provides standard curve definitions including
@@ -537,7 +477,7 @@ public enum NamedEllipticCurveParameters implements GroupParameters<Point> {
             null,
             EcCurveEquationType.SHORT_WEIERSTRASS,
             256,
-            new EllipticCurveGost2001SetXchA()),
+            new EllipticCurveGost2001SetA()),
     GOST2001_SETXCHB(
             "GOST2001SetXchB",
             null,
@@ -545,7 +485,7 @@ public enum NamedEllipticCurveParameters implements GroupParameters<Point> {
             null,
             EcCurveEquationType.SHORT_WEIERSTRASS,
             256,
-            new EllipticCurveGost2001SetXchB()),
+            new EllipticCurveGost2001SetC()),
     GOST2012_SETA256(
             "GOST2012SetA256",
             null,
@@ -554,6 +494,30 @@ public enum NamedEllipticCurveParameters implements GroupParameters<Point> {
             EcCurveEquationType.SHORT_WEIERSTRASS,
             256,
             new EllipticCurveGost2012SetA256()),
+    GOST2012_SETB256(
+            "GOST2012SetB256",
+            null,
+            null,
+            null,
+            EcCurveEquationType.SHORT_WEIERSTRASS,
+            256,
+            new EllipticCurveGost2001SetA()),
+    GOST2012_SETC256(
+            "GOST2012SetC256",
+            null,
+            null,
+            null,
+            EcCurveEquationType.SHORT_WEIERSTRASS,
+            256,
+            new EllipticCurveGost2001SetB()),
+    GOST2012_SETD256(
+            "GOST2012SetD256",
+            null,
+            null,
+            null,
+            EcCurveEquationType.SHORT_WEIERSTRASS,
+            256,
+            new EllipticCurveGost2001SetC()),
     GOST2012_SETA512(
             "GOST2012SetA512",
             null,
