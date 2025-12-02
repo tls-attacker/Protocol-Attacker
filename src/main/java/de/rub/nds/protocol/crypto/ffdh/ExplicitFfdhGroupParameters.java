@@ -23,6 +23,12 @@ public class ExplicitFfdhGroupParameters extends FfdhGroupParameters {
      * @param generator the generator element of the group
      * @param modulus the modulus (prime p) of the group
      */
+    /** Default constructor for deserialization. */
+    @SuppressWarnings("unused")
+    private ExplicitFfdhGroupParameters() {
+        super(null, null);
+    }
+
     public ExplicitFfdhGroupParameters(BigInteger generator, BigInteger modulus) {
         super(generator, modulus);
     }

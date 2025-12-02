@@ -8,6 +8,7 @@
  */
 package de.rub.nds.protocol.constants;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.rub.nds.protocol.crypto.CyclicGroup;
 import de.rub.nds.protocol.crypto.ffdh.FfdhGroup;
 import java.math.BigInteger;
@@ -16,6 +17,7 @@ import java.math.BigInteger;
  * Abstract base class for Finite Field Diffie-Hellman group parameters. Provides generator and
  * modulus for FFDH operations.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public abstract class FfdhGroupParameters implements GroupParameters<BigInteger> {
 
     /** The generator element of the group. */

@@ -21,6 +21,12 @@ public class Rfc7919Group6144 extends FfdhGroupParameters {
      * Constructs the RFC 7919 6144-bit FFDH group with predefined parameters. The generator is 2
      * and the modulus is the 6144-bit prime specified in RFC 7919.
      */
+    /** Default constructor for deserialization. */
+    @SuppressWarnings("unused")
+    private Rfc7919Group6144(boolean unused) {
+        super(null, null);
+    }
+
     public Rfc7919Group6144() {
         super(
                 new BigInteger("2", 16),

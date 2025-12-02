@@ -21,6 +21,12 @@ public class Rfc7919Group8192 extends FfdhGroupParameters {
      * Constructs the RFC 7919 8192-bit FFDH group with predefined parameters. The generator is 2
      * and the modulus is the 8192-bit prime specified in RFC 7919.
      */
+    /** Default constructor for deserialization. */
+    @SuppressWarnings("unused")
+    private Rfc7919Group8192(boolean unused) {
+        super(null, null);
+    }
+
     public Rfc7919Group8192() {
         super(
                 new BigInteger("2", 16),
