@@ -400,6 +400,44 @@ class SignatureCalculatorTest {
         assertTrue(signature.verify(computations.getSignatureBytes().getValue()));
     }
 
+    /**
+     * The message below makes the signature integer fall below the modulus byte boundary, so its
+     * minimal big-endian encoding is one byte short of the modulus length. The signature must still
+     * be left-padded to the modulus length, otherwise it is malformed and rejected by verifiers
+     * expecting a fixed-length RSA signature.
+     */
+    @Test
+    void testRsaPkcs1SignatureIsPaddedToModulusLength() throws Exception {
+        byte[] message = "373".getBytes();
+        RsaPkcs1SignatureComputations computations = new RsaPkcs1SignatureComputations();
+        BigInteger modulus =
+                new BigInteger(
+                        1,
+                        DataConverter.hexStringToByteArray(
+                                "00cbfb45e6b09f1af40df60ddc865b6f98a1fd724678b583bfb5ae8539627bffdcd930d7c3f996f75e15172a017f143101ecd28fc629b800e24f0a83665d77c0a3"));
+        BigInteger privateKey =
+                new BigInteger(
+                        1,
+                        DataConverter.hexStringToByteArray(
+                                "61a4eb153f3f2a9be18303a7a8f964366074fe9b15756e97fad48c19a8374b870589dde72e4377f3837ab59fa76b55563642f2df635da71a3aa50ab835201b61"));
+        BigInteger publicExponent = new BigInteger("65537");
+        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(privateKey, modulus);
+        instance.computeRsaPkcs1Signature(
+                computations, rsaPrivateKey, message, HashAlgorithm.SHA256);
+
+        int modLength = DataConverter.bigIntegerToByteArray(modulus).length;
+        assertEquals(modLength, computations.getSignatureBytes().getValue().length);
+        assertTrue(computations.getSignatureValid());
+
+        RSAPublicKeySpec spec = new RSAPublicKeySpec(modulus, publicExponent);
+        KeyFactory factory = KeyFactory.getInstance("RSA");
+        PublicKey pubKey = factory.generatePublic(spec);
+        Signature verifier = Signature.getInstance("SHA256withRSA");
+        verifier.initVerify(pubKey);
+        verifier.update(message);
+        assertTrue(verifier.verify(computations.getSignatureBytes().getValue()));
+    }
+
     @Test
     void testCreateSignatureComputations() {
         // Test RSA-PKCS1
