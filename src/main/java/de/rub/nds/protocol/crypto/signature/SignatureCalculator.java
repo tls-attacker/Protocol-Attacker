@@ -245,7 +245,10 @@ public class SignatureCalculator {
                 emInteger.modPow(
                         computations.getPrivateKey().getValue(),
                         computations.getModulus().getValue());
-        computations.setSignatureBytes(DataConverter.bigIntegerToByteArray(signature));
+        int modLength =
+                DataConverter.bigIntegerToByteArray(computations.getModulus().getValue()).length;
+        computations.setSignatureBytes(
+                DataConverter.bigIntegerToByteArray(signature, modLength, true));
         computations.setSignatureValid(true);
     }
 
