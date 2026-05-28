@@ -60,6 +60,20 @@ class SignatureCalculatorTest {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
+    private static final BigInteger RSA_MODULUS_512 =
+            new BigInteger(
+                    1,
+                    DataConverter.hexStringToByteArray(
+                            "00cbfb45e6b09f1af40df60ddc865b6f98a1fd724678b583bfb5ae8539627bffdcd930d7c3f996f75e15172a017f143101ecd28fc629b800e24f0a83665d77c0a3"));
+
+    private static final BigInteger RSA_PRIVATE_KEY_512 =
+            new BigInteger(
+                    1,
+                    DataConverter.hexStringToByteArray(
+                            "61a4eb153f3f2a9be18303a7a8f964366074fe9b15756e97fad48c19a8374b870589dde72e4377f3837ab59fa76b55563642f2df635da71a3aa50ab835201b61"));
+
+    private static final BigInteger RSA_PUBLIC_EXPONENT = new BigInteger("65537");
+
     private SignatureCalculator instance;
 
     @BeforeAll
@@ -76,21 +90,11 @@ class SignatureCalculatorTest {
     @Test
     void testComputeRsaPkcs1Signature() {
         RsaPkcs1SignatureComputations computations = new RsaPkcs1SignatureComputations();
-        BigInteger modulus =
-                new BigInteger(
-                        1,
-                        DataConverter.hexStringToByteArray(
-                                "00cbfb45e6b09f1af40df60ddc865b6f98a1fd724678b583bfb5ae8539627bffdcd930d7c3f996f75e15172a017f143101ecd28fc629b800e24f0a83665d77c0a3"));
-        BigInteger privateKey =
-                new BigInteger(
-                        1,
-                        DataConverter.hexStringToByteArray(
-                                "61a4eb153f3f2a9be18303a7a8f964366074fe9b15756e97fad48c19a8374b870589dde72e4377f3837ab59fa76b55563642f2df635da71a3aa50ab835201b61"));
         byte[] toBeSignedBytes = "abcdefghijklmnopqrstuvwxyz\n".getBytes();
         HashAlgorithm hashAlgorithm = HashAlgorithm.SHA1;
         instance.computeRsaPkcs1Signature(
                 computations,
-                new RsaPrivateKey(privateKey, modulus),
+                new RsaPrivateKey(RSA_PRIVATE_KEY_512, RSA_MODULUS_512),
                 toBeSignedBytes,
                 hashAlgorithm);
         assertArrayEquals(toBeSignedBytes, computations.getToBeSignedBytes().getValue());
@@ -117,8 +121,8 @@ class SignatureCalculatorTest {
                         "9139be98f16cf53d22da63cb559bb06a93338da6a344e28a4285c2da33facb7080d26e7a09483779a016eebc207602fc3f90492c2f2fb8143f0fe30fd855593d"),
                 computations.getSignatureBytes().getValue());
         assertArrayEquals(toBeSignedBytes, computations.getToBeSignedBytes().getValue());
-        assertEquals(modulus, computations.getModulus().getValue());
-        assertEquals(privateKey, computations.getPrivateKey().getValue());
+        assertEquals(RSA_MODULUS_512, computations.getModulus().getValue());
+        assertEquals(RSA_PRIVATE_KEY_512, computations.getPrivateKey().getValue());
         assertTrue(computations.getSignatureValid());
     }
 
@@ -317,18 +321,7 @@ class SignatureCalculatorTest {
     void testRsaSsaPssSignatureComputation() throws Exception {
         byte[] originalData = "test".getBytes();
         RsaSsaPssSignatureComputations computations = new RsaSsaPssSignatureComputations();
-        BigInteger modulus =
-                new BigInteger(
-                        1,
-                        DataConverter.hexStringToByteArray(
-                                "00cbfb45e6b09f1af40df60ddc865b6f98a1fd724678b583bfb5ae8539627bffdcd930d7c3f996f75e15172a017f143101ecd28fc629b800e24f0a83665d77c0a3"));
-        BigInteger privateKey =
-                new BigInteger(
-                        1,
-                        DataConverter.hexStringToByteArray(
-                                "61a4eb153f3f2a9be18303a7a8f964366074fe9b15756e97fad48c19a8374b870589dde72e4377f3837ab59fa76b55563642f2df635da71a3aa50ab835201b61"));
-        BigInteger publicExponent = new BigInteger("65537");
-        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(privateKey, modulus);
+        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(RSA_PRIVATE_KEY_512, RSA_MODULUS_512);
         computations.setSalt(new byte[] {0x01, 0x02});
         instance.computeRsaPssSignature(
                 computations,
@@ -345,7 +338,7 @@ class SignatureCalculatorTest {
         PSSParameterSpec pssParameterSpec =
                 new PSSParameterSpec("SHA-256", "MGF1", mgf1ParameterSpec, 2, 1);
         signature.setParameter(pssParameterSpec);
-        RSAPublicKeySpec spec2 = new RSAPublicKeySpec(modulus, publicExponent);
+        RSAPublicKeySpec spec2 = new RSAPublicKeySpec(RSA_MODULUS_512, RSA_PUBLIC_EXPONENT);
         KeyFactory factory = KeyFactory.getInstance("RSA");
         PublicKey pubKey = factory.generatePublic(spec2);
         signature.initVerify(pubKey);
@@ -366,24 +359,13 @@ class SignatureCalculatorTest {
     void testRsaPssSignatureIsPaddedToModulusLength() throws Exception {
         byte[] originalData = "test".getBytes();
         RsaSsaPssSignatureComputations computations = new RsaSsaPssSignatureComputations();
-        BigInteger modulus =
-                new BigInteger(
-                        1,
-                        DataConverter.hexStringToByteArray(
-                                "00cbfb45e6b09f1af40df60ddc865b6f98a1fd724678b583bfb5ae8539627bffdcd930d7c3f996f75e15172a017f143101ecd28fc629b800e24f0a83665d77c0a3"));
-        BigInteger privateKey =
-                new BigInteger(
-                        1,
-                        DataConverter.hexStringToByteArray(
-                                "61a4eb153f3f2a9be18303a7a8f964366074fe9b15756e97fad48c19a8374b870589dde72e4377f3837ab59fa76b55563642f2df635da71a3aa50ab835201b61"));
-        BigInteger publicExponent = new BigInteger("65537");
-        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(privateKey, modulus);
+        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(RSA_PRIVATE_KEY_512, RSA_MODULUS_512);
         byte[] salt = new byte[] {0x00, 0x15};
         computations.setSalt(salt);
         instance.computeRsaPssSignature(
                 computations, rsaPrivateKey, originalData, HashAlgorithm.SHA256, salt);
 
-        int modLength = DataConverter.bigIntegerToByteArray(modulus).length;
+        int modLength = DataConverter.bigIntegerToByteArray(RSA_MODULUS_512).length;
         assertEquals(modLength, computations.getSignatureBytes().getValue().length);
         assertTrue(computations.getSignatureValid());
 
@@ -392,7 +374,7 @@ class SignatureCalculatorTest {
         PSSParameterSpec pssParameterSpec =
                 new PSSParameterSpec("SHA-256", "MGF1", mgf1ParameterSpec, salt.length, 1);
         signature.setParameter(pssParameterSpec);
-        RSAPublicKeySpec spec = new RSAPublicKeySpec(modulus, publicExponent);
+        RSAPublicKeySpec spec = new RSAPublicKeySpec(RSA_MODULUS_512, RSA_PUBLIC_EXPONENT);
         KeyFactory factory = KeyFactory.getInstance("RSA");
         PublicKey pubKey = factory.generatePublic(spec);
         signature.initVerify(pubKey);
@@ -410,26 +392,15 @@ class SignatureCalculatorTest {
     void testRsaPkcs1SignatureIsPaddedToModulusLength() throws Exception {
         byte[] message = "373".getBytes();
         RsaPkcs1SignatureComputations computations = new RsaPkcs1SignatureComputations();
-        BigInteger modulus =
-                new BigInteger(
-                        1,
-                        DataConverter.hexStringToByteArray(
-                                "00cbfb45e6b09f1af40df60ddc865b6f98a1fd724678b583bfb5ae8539627bffdcd930d7c3f996f75e15172a017f143101ecd28fc629b800e24f0a83665d77c0a3"));
-        BigInteger privateKey =
-                new BigInteger(
-                        1,
-                        DataConverter.hexStringToByteArray(
-                                "61a4eb153f3f2a9be18303a7a8f964366074fe9b15756e97fad48c19a8374b870589dde72e4377f3837ab59fa76b55563642f2df635da71a3aa50ab835201b61"));
-        BigInteger publicExponent = new BigInteger("65537");
-        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(privateKey, modulus);
+        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(RSA_PRIVATE_KEY_512, RSA_MODULUS_512);
         instance.computeRsaPkcs1Signature(
                 computations, rsaPrivateKey, message, HashAlgorithm.SHA256);
 
-        int modLength = DataConverter.bigIntegerToByteArray(modulus).length;
+        int modLength = DataConverter.bigIntegerToByteArray(RSA_MODULUS_512).length;
         assertEquals(modLength, computations.getSignatureBytes().getValue().length);
         assertTrue(computations.getSignatureValid());
 
-        RSAPublicKeySpec spec = new RSAPublicKeySpec(modulus, publicExponent);
+        RSAPublicKeySpec spec = new RSAPublicKeySpec(RSA_MODULUS_512, RSA_PUBLIC_EXPONENT);
         KeyFactory factory = KeyFactory.getInstance("RSA");
         PublicKey pubKey = factory.generatePublic(spec);
         Signature verifier = Signature.getInstance("SHA256withRSA");
@@ -570,18 +541,7 @@ class SignatureCalculatorTest {
     void testRsaPkcs1WithEmptyMessage() throws Exception {
         RsaPkcs1SignatureComputations computations = new RsaPkcs1SignatureComputations();
 
-        BigInteger modulus =
-                new BigInteger(
-                        1,
-                        DataConverter.hexStringToByteArray(
-                                "00cbfb45e6b09f1af40df60ddc865b6f98a1fd724678b583bfb5ae8539627bffdcd930d7c3f996f75e15172a017f143101ecd28fc629b800e24f0a83665d77c0a3"));
-        BigInteger privateKey =
-                new BigInteger(
-                        1,
-                        DataConverter.hexStringToByteArray(
-                                "61a4eb153f3f2a9be18303a7a8f964366074fe9b15756e97fad48c19a8374b870589dde72e4377f3837ab59fa76b55563642f2df635da71a3aa50ab835201b61"));
-
-        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(privateKey, modulus);
+        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(RSA_PRIVATE_KEY_512, RSA_MODULUS_512);
         byte[] emptyMessage = new byte[0];
 
         instance.computeRsaPkcs1Signature(
@@ -591,8 +551,7 @@ class SignatureCalculatorTest {
         assertTrue(computations.getSignatureValid());
 
         // Verify with BouncyCastle
-        BigInteger publicExponent = new BigInteger("65537");
-        RSAPublicKeySpec pubKeySpec = new RSAPublicKeySpec(modulus, publicExponent);
+        RSAPublicKeySpec pubKeySpec = new RSAPublicKeySpec(RSA_MODULUS_512, RSA_PUBLIC_EXPONENT);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         PublicKey pubKey = keyFactory.generatePublic(pubKeySpec);
 
@@ -639,18 +598,7 @@ class SignatureCalculatorTest {
     void testRsaPkcs1WithHashAlgorithmNone() {
         RsaPkcs1SignatureComputations computations = new RsaPkcs1SignatureComputations();
 
-        BigInteger modulus =
-                new BigInteger(
-                        1,
-                        DataConverter.hexStringToByteArray(
-                                "00cbfb45e6b09f1af40df60ddc865b6f98a1fd724678b583bfb5ae8539627bffdcd930d7c3f996f75e15172a017f143101ecd28fc629b800e24f0a83665d77c0a3"));
-        BigInteger privateKey =
-                new BigInteger(
-                        1,
-                        DataConverter.hexStringToByteArray(
-                                "61a4eb153f3f2a9be18303a7a8f964366074fe9b15756e97fad48c19a8374b870589dde72e4377f3837ab59fa76b55563642f2df635da71a3aa50ab835201b61"));
-
-        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(privateKey, modulus);
+        RsaPrivateKey rsaPrivateKey = new RsaPrivateKey(RSA_PRIVATE_KEY_512, RSA_MODULUS_512);
         byte[] message = "Test message without hashing".getBytes();
 
         instance.computeRsaPkcs1Signature(computations, rsaPrivateKey, message, HashAlgorithm.NONE);
